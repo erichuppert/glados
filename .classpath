@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Chassis/src"/>
+	<classpathentry kind="src" path="MotorControl/src"/>
+	<classpathentry kind="src" path="lab4"/>
+	<classpathentry kind="src" path="odometry"/>
+	<classpathentry kind="src" path="orc_utils"/>
+	<classpathentry kind="src" path="roscv"/>
+	<classpathentry kind="src" path="rss_msgs"/>
+	<classpathentry kind="src" path="uorc_listener"/>
+	<classpathentry kind="src" path="uorc_publisher"/>
+	<classpathentry kind="lib" path="uORCInterface.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="MotorControl/bin"/>
+</classpath>
