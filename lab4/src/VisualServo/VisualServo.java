@@ -98,6 +98,7 @@ public class VisualServo implements NodeMain, Runnable {
 	@Override
 	public void onStart(Node node) {
 	    blobTrack = new BlobTracking(width, height, node);
+	    gui.onStart(node);
 
 		// Begin Student Code
 

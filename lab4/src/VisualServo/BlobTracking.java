@@ -223,31 +223,42 @@ public class BlobTracking {
 	centroid[1] /= pixelCount;
 	if (pixelCount > pixThresh) {
 	    float area = pixelCount;
-	    int diameter = (int)((double) 2.0*Math.sqrt(area/Math.PI));
-	    System.out.printf("%d\n", pixelCount);
+	    // int diameter = (int)((double) 2.0*Math.sqrt(area/Math.PI));
 	    int height = im.getHeight();
 	    int width = im.getWidth();
-	    int lx = (int)centroid[0]-diameter/2;
-	    int ly = (int)centroid[1]-diameter/2;
-	    for (int dx=0; dx < diameter; ++dx) {
-	    	for (int dy=0; dy < diameter; ++dy) {
-		    if(ly+dy < height)
-			dest.setPixel(lx,ly+dy,(byte)255,(byte)0,(byte)0);
-		    if(lx+dx < width)
-			dest.setPixel(lx+dx,ly,(byte)255,(byte)0,(byte)0);
-		    if(lx+diameter < width && ly+dy < height)
-			dest.setPixel(lx+diameter,ly+dy,(byte)255,(byte)0,(byte)0);
-		    if(lx+diameter-dx < width && ly+diameter < height)
-			dest.setPixel(lx+diameter-dx,ly+diameter,(byte)255,(byte)0,(byte)0);
-	    	}
-	    }
+	    // int lx = (int)centroid[0]-diameter/2;
+	    // int ly = (int)centroid[1]-diameter/2;
+	    // for (int dx=0; dx < diameter; ++dx) {
+	    // 	for (int dy=0; dy < diameter; ++dy) {
+	    // 	    if(ly+dy < height)
+	    // 		dest.setPixel(lx,ly+dy,(byte)255,(byte)0,(byte)0);
+	    // 	    if(lx+dx < width)
+	    // 		dest.setPixel(lx+dx,ly,(byte)255,(byte)0,(byte)0);
+	    // 	    if(lx+diameter < width && ly+dy < height)
+	    // 		dest.setPixel(lx+diameter,ly+dy,(byte)255,(byte)0,(byte)0);
+	    // 	    if(lx+diameter-dx < width && ly+diameter < height)
+	    // 		dest.setPixel(lx+diameter-dx,ly+diameter,(byte)255,(byte)0,(byte)0);
+	    // 	}
+	    // }
 	    for (int delta=-3; delta <= 3; ++delta) {
 		dest.setPixel((int)centroid[0], (int)centroid[1]+delta,(byte)255,(byte)0,(byte)0);
 		dest.setPixel((int)centroid[0]+delta, (int)centroid[1],(byte)255,(byte)0,(byte)0);
 	    }
 
+	    double m = 202.602532;
+	    double b = -0.202548;
+	    double d = Math.sqrt(m*1.0/area + b);
+	    System.out.printf("Distance: %.2f\n", d);
+	    double desired_distance = 0.5;
+	    double speed_gain = -1.0;
+	    tv = (desired_distance-d)*speed_gain;
+
+	    int desired_angle = width/2;
+	    double angle_gain = 0.001;
+	    rv = (desired_angle-centroid[0])*angle_gain;
 	}
-	
+
+	System.out.printf("FV: %.2f\tRV:%.2f\n", tv, rv);
 	MotionMsg msg= new MotionMsg();
 	msg.translationalVelocity = tv;
 	msg.rotationalVelocity = rv;
