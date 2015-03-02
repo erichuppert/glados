@@ -12,6 +12,7 @@ import org.ros.message.MessageListener;
 
 import org.ros.message.rss_msgs.*;
 import org.ros.message.std_msgs.*;
+org.ros.message.lab5_msgs.*;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
@@ -36,10 +37,10 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public Subscriber<org.ros.message.rss_msgs.BumpMsg> bumpSub;
 	public Subscriber<org.ros.message.rss_msgs.OdometryMsg> odoSub;
 	public Publisher<org.ros.message.rss_msgs.MotionMsg> motorPub;
-	public Publisher<org.ros.message.rss_msgs.GUIPointMsg> pointPub;
+	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub;
 	public Publisher<org.ros.message.std_msgs.String> statePub;
-	public Publisher<org.ros.message.std_msgs.GUILineMsg> linePub;
-	public Publisher<org.ros.message.std_msgs.GUISMsg> segmentPub;
+	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub;
+	public Publisher<org.ros.message.lab5_msgs.GUISegmentMessage> segmentPub;
 	
 	// below are dummy values that will need to be tuned based on experimentation
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
@@ -60,7 +61,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.println(message);
-					handleSonar(message);
+//					handleSonar(message);
 				}
 			});
 
