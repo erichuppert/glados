@@ -12,7 +12,7 @@ import org.ros.message.MessageListener;
 
 import org.ros.message.rss_msgs.*;
 import org.ros.message.std_msgs.*;
-org.ros.message.lab5_msgs.*;
+import org.ros.message.lab5_msgs.*;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
