@@ -19,7 +19,7 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.namespace.GraphName;
 
-public class RobotState extends java.lang.String {}
+class RobotState extends java.lang.String {}
 
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
@@ -40,13 +40,13 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// Subscribers
 	//
-	public Subscriber<org.ros.message.rss_msgs.SonarMsg> sonarFrontSub, sonarBackSub; // Sonars
-	public Subscriber<org.ros.message.rss_msgs.BumpMsg> bumpSub; // Bump sensors
-	//public Subscriber<org.ros.message.rss_msgs.OdometryMsg> odoSub; // Odometry, don't care for now
+	public Subscriber<SonarMsg> sonarFrontSub, sonarBackSub; // Sonars
+	public Subscriber<BumpMsg> bumpSub; // Bump sensors
+	//public Subscriber<OdometryMsg> odoSub; // Odometry, don't care for now
 
 	// Message Publishers
 	//
-	public Publisher<org.ros.message.rss_msgs.MotionMsg> motorPub; // motors for velocity
+	public Publisher<MotionMsg> motorPub; // motors for velocity
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
 	//public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Don't care for now
 	//public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Don't care for now
@@ -70,17 +70,17 @@ public class LocalNavigation implements NodeMain,Runnable{
 		// initialize the ROS subscriptions to rss/Sonars
 		//
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
-		sonarFrontSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					System.out.println(message);
 					//handleSonar(message);
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
-		sonarBackSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					//handleSonar(message);
 				}
@@ -89,9 +89,9 @@ public class LocalNavigation implements NodeMain,Runnable{
 		// initialize the ROS subscription to rss/BumpSensors
 		//
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
-		bumpSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.BumpMsg>() {
+		bumpSub.addMessageListener(new MessageListener<BumpMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.BumpMsg message) {
+				public void onNewMessage(BumpMsg message) {
 					System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
 					//handleBump(message);
 				}
@@ -100,9 +100,9 @@ public class LocalNavigation implements NodeMain,Runnable{
 		// Don't need it right now
 		//
 		// odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
-		// odoSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.OdometryMsg>() {
+		// odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
 		// 		@Override
-		// 		public void onNewMessage(org.ros.message.rss_msgs.OdometryMsg message) {
+		// 		public void onNewMessage(OdometryMsg message) {
 		// 			System.out.println(message);
 		// 			//handleOdometry(message);
 		// 		}
@@ -137,7 +137,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 	 * Processes and prescribes response to a message from the bump sensor
 	 * @param message an OdometryMsg containing details about a bump sensor event
 	 */
-	public void handleBump(org.ros.message.rss_msgs.BumpMsg message) {
+	public void handleBump(BumpMsg message) {
 		MotionMsg motorControlMsg;
 		motorControlMsg = new MotionMsg();
 		if (state == STOP_ON_BUMP) {
