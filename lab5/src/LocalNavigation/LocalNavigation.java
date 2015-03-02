@@ -26,7 +26,19 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public static final int ALIGN_ON_BUMP        =  1;
 	public static final int ALIGNING             =  2;
 	public static final int ALIGNED              =  3;
-
+	private int state = ALIGN_ON_BUMP;
+	
+	public Subscriber<org.ros.message.rss_msgs.SonarMsg> sonarFrontSub, sonarBackSub;
+	public Subscriber<org.ros.message.rss_msgs.BumpMsg> bumpSub;
+	public Subscriber<org.ros.message.rss_msgs.OdometryMsg> odoSub;
+	public Publisher<org.ros.message.rss_msgs.MotionMsg> motorPub;
+	public Publisher<org.ros.message.rss_msgs.GUIPointMsg> pointPub;
+	Publisher<org.ros.message.std_msgs.String> statePub;
+	
+	// below are dummy values that will need to be tuned based on experimentation
+	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
+ 
 	public void onStart(Node node) {
 
 		logNode = node;
@@ -41,6 +53,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarFrontSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+					System.out.println(message);
 					handleSonar(message);
 				}
 			});
@@ -49,6 +62,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarBackSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+					System.out.println(message);
 					handleSonar(message);
 				}
 			});
@@ -58,6 +72,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		bumpSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.BumpMsg>() {
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.BumpMsg message) {
+					System.out.println(message);
 					handleBump(message);
 				}
 			});
@@ -66,13 +81,13 @@ public class LocalNavigation implements NodeMain,Runnable{
 		odoSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.OdometryMsg>() {
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.OdometryMsg message) {
+					System.out.println(message);
 					handleOdometry(message);
 				}
 			});
 
 		// initialize the ROS publication to command/Motors
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
-		commandMotors = new MotionMsg();
 		
 		// initialize the ROS publication to graph points
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
@@ -91,7 +106,8 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 		// initialize the ROS publication to rss/state
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
-		stateMsg = new org.ros.message.std_msgs.String();
+		org.ros.message.std_msgs.String stateMsg = new org.ros.message.std_msgs.String();
+		
 
 		Thread runningStuff = new Thread(this);
 		runningStuff.start();
@@ -101,6 +117,37 @@ public class LocalNavigation implements NodeMain,Runnable{
 		if(node != null){
 			node.shutdown();
 		} 
+	}
+	
+	/**
+	 * Processes and prescribes response to a message from the bump sensor
+	 * @param message an OdometryMsg containing details about a bump sensor event
+	 */
+	public void handleBump(org.ros.message.rss_msgs.BumpMsg message) {
+		MotionMsg motorControlMsg;
+		motorControlMsg = new MotionMsg();
+		if (state == STOP_ON_BUMP) {
+			motorControlMsg.translationalVelocity = 0;
+			motorControlMsg.rotationalVelocity = 0;
+		} else if (state == ALIGN_ON_BUMP || state == ALIGNING) {
+			state = ALIGNING;
+			// if both sensors are depressed, then we are aligned
+			if (message.right && message.left) {
+				state = ALIGNED;
+			} else if (message.right || message.left) {
+				// if one bumper is depressed, then we need to rotate so that they are both depressed
+				motorControlMsg.translationalVelocity = 0;
+				// based on which bumper is hit, we need to choose the rotation direction
+				int rotationalFactor = (message.right ? 1 : -1);
+				motorControlMsg.rotationalVelocity = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
+				state = ALIGNING;
+			} else {
+				// if neither is depressed, we need to move forward to make at least one become depressed
+				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
+				state = ALIGN_ON_BUMP;
+			}
+		}
+		motorPub.publish(motorControlMsg);
 	}
 
 	
@@ -115,6 +162,9 @@ public class LocalNavigation implements NodeMain,Runnable{
 	private void changeState(int newState){
 		state = newState;
 	}
+	
+	
+}
 
 
 
