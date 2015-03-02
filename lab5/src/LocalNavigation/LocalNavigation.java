@@ -60,7 +60,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
-					System.out.printf("isFront: %b\tRange: %.3f\n",message.isFront,message.range);
+					//System.out.printf("isFront: %b\tRange: %.3f\n",message.isFront,message.range);
 					//handleSonar(message);
 				}
 			});
@@ -68,7 +68,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
-					System.out.printf("isFront: %b\Range: %.3f\n",message.isFront,message.range);
+					//System.out.printf("isFront: %b\Range: %.3f\n",message.isFront,message.range);
 					//handleSonar(message);
 				}
 			});
@@ -79,7 +79,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		bumpSub.addMessageListener(new MessageListener<BumpMsg>() {
 				@Override
 				public void onNewMessage(BumpMsg message) {
-					System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
+					//System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
 					//handleBump(message);
 				}
 			});
@@ -89,7 +89,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
 				@Override
 				public void onNewMessage(OdometryMsg message) {
-					System.out.println("X: %.2f\tY: %.2f\ttheta: %.2f",message.x,message.y,message.theta);
+					//System.out.printf("X: %.2f\tY: %.2f\ttheta: %.2f\n",message.x,message.y,message.theta);
 					//handleOdometry(message);
 				}
 			});
@@ -124,35 +124,52 @@ public class LocalNavigation implements NodeMain,Runnable{
 	 * @param message an OdometryMsg containing details about a bump sensor event
 	 */
 	public void handleBump(BumpMsg message) {
-		MotionMsg motorControlMsg;
-		motorControlMsg = new MotionMsg();
+		// Translational, and rotational velocities
+		//
+		double tv = 0;
+		double rv = 0;
+
 		if (state == STOP_ON_BUMP) {
+			// If we see a bump, then stop, otherwise we are controlled externally
+			//
 			if (message.right || message.left) {
-				motorControlMsg.translationalVelocity = 0;
-				motorControlMsg.rotationalVelocity = 0;
+				tv = rv = 0;
 			} else {
-				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
-				motorControlMsg.rotationalVelocity = 0;
+				return;
 			}
-		} else if (state == ALIGN_ON_BUMP || state == ALIGNING) {
-			state = ALIGNING;
-			// if both sensors are depressed, then we are aligned
-			if (message.right && message.left) {
-				state = ALIGNED;
-			} else if (message.right || message.left) {
-				// if one bumper is depressed, then we need to rotate so that they are both depressed
-				motorControlMsg.translationalVelocity = 0;
-				// based on which bumper is hit, we need to choose the rotation direction
-				int rotationalFactor = (message.left ? 1 : -1);
-				motorControlMsg.rotationalVelocity = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
-				state = ALIGNING;
-			} else {
-				// if neither is depressed, we need to move forward to make at least one become depressed
-				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
-				state = ALIGN_ON_BUMP;
+		} else if (state == ALIGN_ON_BUMP) {
+			// Start aligning if a bump is pressed, otherwise we are controlled externally
+			//
+			if (message.right || message.left) {
+				changeState(ALIGNING);
+			}
+			else {
+				return;
 			}
 		}
-		motorPub.publish(motorControlMsg);
+		else if (state == ALIGNING) {
+			if (message.right && message.left) {
+				// if both sensors are depressed, then we are aligned
+				//
+				changeState(ALIGNED);
+				tv = rv = 0;
+			} else if (message.right || message.left) {
+				// If one bumper is depressed, then we need to rotate so that they are both depressed
+				// based on which bumper is hit, we need to choose the rotation direction
+				// We also have a small forward velocity to make sure the bumper that was depressed does not get undepressed
+				//
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+				int rotationalFactor = (message.left ? 1 : -1);
+				rv = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
+			} else {
+				// If neither is depressed, we move slowly forward.
+				//
+				rv = 0;
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
+			}
+		}
+		setMotorVelocities(tv,rv);
 	}
 
 	public void onShutdownComplete(Node node) {
