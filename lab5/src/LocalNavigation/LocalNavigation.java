@@ -35,7 +35,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
 	public Subscriber<SonarMsg> sonarBackSub;
 	public Subscriber<BumpMsg> bumpSub; // Bump sensors
-	//public Subscriber<OdometryMsg> odoSub; // Odometry, don't care for now
+	public Subscriber<OdometryMsg> odoSub; // Odometry
 
 	// Message Publishers
 	//
@@ -60,7 +60,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
-					System.out.printf("Front Sonar Range: %.3f\n",message.range);
+					System.out.printf("isFront: %b\tRange: %.3f\n",message.isFront,message.range);
 					//handleSonar(message);
 				}
 			});
@@ -68,7 +68,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
-					System.out.printf("isFront: %b\tBack Sonar Range: %.3f\n",message.isFront,message.range);
+					System.out.printf("isFront: %b\Range: %.3f\n",message.isFront,message.range);
 					//handleSonar(message);
 				}
 			});
@@ -84,16 +84,15 @@ public class LocalNavigation implements NodeMain,Runnable{
 				}
 			});
 		// initialize the ROS subscription to rss/odometry
-		// Don't need it right now
-		//
-		// odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
-		// odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
-		// 		@Override
-		// 		public void onNewMessage(OdometryMsg message) {
-		// 			System.out.println(message);
-		// 			//handleOdometry(message);
-		// 		}
-		// 	});
+
+		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
+		odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
+				@Override
+				public void onNewMessage(OdometryMsg message) {
+					System.out.println("X: %.2f\tY: %.2f\ttheta: %.2f",message.x,message.y,message.theta);
+					//handleOdometry(message);
+				}
+			});
 
 		// initialize the ROS publication to command/Motors
 		//
