@@ -59,6 +59,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
+					System.out.printf("Something stupid\n");
 					System.out.printf("Front Sonar Range: %.3f\n",message.range);
 					//handleSonar(message);
 				}
@@ -67,6 +68,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
+					System.out.printf("Something stupid2\n");
 					System.out.printf("Back Sonar Range: %.3f\n",message.range);
 					//handleSonar(message);
 				}
