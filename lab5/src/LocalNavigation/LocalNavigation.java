@@ -31,7 +31,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public static final int ALIGN_ON_BUMP        =  1;
 	public static final int ALIGNING             =  2;
 	public static final int ALIGNED              =  3;
-	private int state = ALIGN_ON_BUMP;
+	private int state = STOP_ON_BUMP;
 	
 	public Subscriber<org.ros.message.rss_msgs.SonarMsg> sonarFrontSub, sonarBackSub;
 	public Subscriber<org.ros.message.rss_msgs.BumpMsg> bumpSub;
@@ -44,7 +44,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 	
 	// below are dummy values that will need to be tuned based on experimentation
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
  
 	public void onStart(Node node) {
 
