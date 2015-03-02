@@ -40,7 +40,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub;
 	public Publisher<org.ros.message.std_msgs.String> statePub;
 	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub;
-	public Publisher<org.ros.message.lab5_msgs.GUISegmentMessage> segmentPub;
+	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub;
 	
 	// below are dummy values that will need to be tuned based on experimentation
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
