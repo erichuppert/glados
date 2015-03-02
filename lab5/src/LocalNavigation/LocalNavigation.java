@@ -126,8 +126,13 @@ public class LocalNavigation implements NodeMain,Runnable{
 		MotionMsg motorControlMsg;
 		motorControlMsg = new MotionMsg();
 		if (state == STOP_ON_BUMP) {
-			motorControlMsg.translationalVelocity = 0;
-			motorControlMsg.rotationalVelocity = 0;
+			if (message.right || message.left) {
+				motorControlMsg.translationalVelocity = 0;
+				motorControlMsg.rotationalVelocity = 0;				
+			} else {
+				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
+				motorControlMsg.rotationalVelocity = 0;	
+			}
 		} else if (state == ALIGN_ON_BUMP || state == ALIGNING) {
 			state = ALIGNING;
 			// if both sensors are depressed, then we are aligned
