@@ -9,12 +9,14 @@ import java.util.Scanner;
 import java.awt.Color;//for color from SonarGUI
 
 import org.ros.message.MessageListener;
+
 import org.ros.message.rss_msgs.*;
 import org.ros.message.std_msgs.*;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscribe;
+import org.ros.node.topic.Subscriber;
+import org.ros.namespace.GraphName
 
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
@@ -67,7 +69,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.println(message);
-					handleSonar(message);
+//					handleSonar(message);
 				}
 			});
 
@@ -86,7 +88,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.OdometryMsg message) {
 					System.out.println(message);
-					handleOdometry(message);
+//					handleOdometry(message);
 				}
 			});
 
@@ -94,19 +96,11 @@ public class LocalNavigation implements NodeMain,Runnable{
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		
 		// initialize the ROS publication to graph points
-		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
-//		pointPlot = new GUIPointMsg();
-//		pointPlotColor = new ColorMsg();
-
+//		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
 		// initialize the ROS publication to graph lines
-		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
-//		linePlot = new GUILineMsg();
-//		linePlotColor = new ColorMsg();
-
+//		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
 		// initialize the ROS publication to graph line segments
-		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
-//		segmentPlot = new GUISegmentMsg();
-//		segmentPlotColor = new ColorMsg();
+//		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
 		// initialize the ROS publication to rss/state
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
@@ -167,6 +161,9 @@ public class LocalNavigation implements NodeMain,Runnable{
 		state = newState;
 	}
 	
+	public void run() {
+		
+	}
 	
 }
 
