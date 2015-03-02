@@ -22,12 +22,6 @@ import org.ros.namespace.GraphName;
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
 
-	// Sonar GUI
-	// Allows us to control the robot, and see the sonars
-	//
-	private static final boolean RUN_SONAR_GUI = true;
-	public SonarGUI gui;
-
 	// State machine states, and state variable
 	//
 	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
@@ -58,13 +52,6 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public void onStart(Node node) {
 
 		logNode = node;
-
-		// Sonar GUI - it allows us to control the robot, and see sonar output
-		//
-		if (RUN_SONAR_GUI) {
-			gui = new SonarGUI();
-			gui.onStart(node);
-		}
 
 		// initialize the ROS subscriptions to rss/Sonars
 		//
