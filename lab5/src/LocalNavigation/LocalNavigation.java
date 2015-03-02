@@ -142,7 +142,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 				// if one bumper is depressed, then we need to rotate so that they are both depressed
 				motorControlMsg.translationalVelocity = 0;
 				// based on which bumper is hit, we need to choose the rotation direction
-				int rotationalFactor = (message.right ? 1 : -1);
+				int rotationalFactor = (message.left ? 1 : -1);
 				motorControlMsg.rotationalVelocity = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
 				state = ALIGNING;
 			} else {
