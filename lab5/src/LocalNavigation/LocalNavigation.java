@@ -19,8 +19,6 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.namespace.GraphName;
 
-class RobotState extends java.lang.String {}
-
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
 
@@ -32,11 +30,11 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// State machine states, and state variable
 	//
-	public static final RobotState STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
-	public static final RobotState ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
-	public static final RobotState ALIGNING          = "Currently aligining the robot";
-	public static final RobotState ALIGNED           = "Currently aligned";
-	private RobotState state = ALIGN_ON_BUMP;
+	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
+	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
+	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
+	public static final java.lang.String ALIGNED           = "Currently aligned";
+	private java.lang.String state = ALIGN_ON_BUMP;
 
 	// Subscribers
 	//
@@ -179,7 +177,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// Abstracts away sending the state message
 	//
-	private void changeState(RobotState newState){
+	private void changeState(java.lang.String newState){
 		state = newState;
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = newState;
