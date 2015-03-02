@@ -60,6 +60,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.printf("Front Sonar Range: %.3f\n",message.range);
+					changeState("OKAY");
 					//handleSonar(message);
 				}
 			});
