@@ -28,7 +28,7 @@ public class VisualServo implements NodeMain, Runnable {
 	private BlobTracking blobTrack = null;
 
 
-	private VisionGUI gui;
+        //private VisionGUI gui;
 	private ArrayBlockingQueue<byte[]> visionImage = new ArrayBlockingQueue<byte[]>(
 			1);
 
@@ -44,7 +44,7 @@ public class VisualServo implements NodeMain, Runnable {
 
 		setInitialParams();
 
-		gui = new VisionGUI();
+		//gui = new VisionGUI();
 	}
 
 	protected void setInitialParams() {
@@ -78,7 +78,7 @@ public class VisualServo implements NodeMain, Runnable {
 			blobTrack.apply(src, dest);
 
 			// update newly formed vision message
-			gui.setVisionImage(dest.toArray(), width, height);
+			//gui.setVisionImage(dest.toArray(), width, height);
 
 			// Begin Student Code
 
@@ -98,7 +98,7 @@ public class VisualServo implements NodeMain, Runnable {
 	@Override
 	public void onStart(Node node) {
 	    blobTrack = new BlobTracking(width, height, node);
-	    gui.onStart(node);
+	    //gui.onStart(node);
 
 		// Begin Student Code
 
@@ -142,9 +142,9 @@ public class VisualServo implements NodeMain, Runnable {
 					org.ros.message.rss_msgs.OdometryMsg message) {
 				if (firstUpdate) {
 					firstUpdate = false;
-					gui.resetWorldToView(message.x, message.y);
+					//gui.resetWorldToView(message.x, message.y);
 				}
-				gui.setRobotPose(message.x, message.y, message.theta);
+				//gui.setRobotPose(message.x, message.y, message.theta);
 			}
 		});
 		Thread runningStuff = new Thread(this);

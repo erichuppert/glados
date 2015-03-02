@@ -133,6 +133,7 @@ public class BlobTracking {
 	//		int pixelThreshold = 900; 
 	double saturationThreshold = 0.5;
 	double brightnessThreshold = 0.15;
+	System.out.printf("HELLO\n");
 	//saturateBallPixels(src, dest, saturationThreshold, brightnessThreshold);
 	blobPresent(src, dest, saturationThreshold, brightnessThreshold, 50);
 	// End Student Code
@@ -247,14 +248,14 @@ public class BlobTracking {
 
 	    double m = 202.602532;
 	    double b = -0.202548;
-	    double d = Math.sqrt(m*1.0/area + b);
+	    double d = Math.sqrt(Math.max(0.0,m*1.0/area + b));
 	    System.out.printf("Distance: %.2f\n", d);
 	    double desired_distance = 0.5;
-	    double speed_gain = -1.0;
+	    double speed_gain = -3.0;
 	    tv = (desired_distance-d)*speed_gain;
 
 	    int desired_angle = width/2;
-	    double angle_gain = 0.001;
+	    double angle_gain = 0.003;
 	    rv = (desired_angle-centroid[0])*angle_gain;
 	}
 
