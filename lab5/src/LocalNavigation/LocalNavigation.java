@@ -160,7 +160,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 
 	public GraphName getDefaultNodeName() {
-		return new GraphName("rss/localnavigation");
+		return new GraphName("/rss/localnavigation");
 	}
 
 	// Abstracts away sending the state message
