@@ -62,6 +62,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		// Sonar GUI - it allows us to control the robot, and see sonar output
 		//
 		if (RUN_SONAR_GUI) {
+			gui = new SonarGUI();
 			gui.onStart(node);
 		}
 
