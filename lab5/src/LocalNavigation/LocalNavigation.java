@@ -19,6 +19,8 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.namespace.GraphName;
 
+public class RobotState extends java.lang.String {}
+
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
 
@@ -30,11 +32,11 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// State machine states, and state variable
 	//
-	public static final String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
-	public static final String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
-	public static final String ALIGNING          = "Currently aligining the robot";
-	public static final String ALIGNED           = "Currently aligned";
-	private String state = ALIGN_ON_BUMP;
+	public static final RobotState STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
+	public static final RobotState ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
+	public static final RobotState ALIGNING          = "Currently aligining the robot";
+	public static final RobotState ALIGNED           = "Currently aligned";
+	private RobotState state = ALIGN_ON_BUMP;
 
 	// Subscribers
 	//
@@ -79,7 +81,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarBackSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
 				@Override
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
-					System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFron, message.range);
+					System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					//handleSonar(message);
 				}
 			});
@@ -177,7 +179,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// Abstracts away sending the state message
 	//
-	private void changeState(String newState){
+	private void changeState(RobotState newState){
 		state = newState;
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = newState;
