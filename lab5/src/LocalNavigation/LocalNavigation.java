@@ -16,7 +16,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
-import org.ros.namespace.GraphName
+import org.ros.namespace.GraphName;
 
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
