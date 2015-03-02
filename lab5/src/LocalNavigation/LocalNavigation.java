@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.awt.Color;//for color from SonarGUI
 
 import org.ros.message.MessageListener;
+import org.ros.message.rss_msgs.*;
+import org.ros.message.std_msgs.*;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
@@ -33,7 +35,9 @@ public class LocalNavigation implements NodeMain,Runnable{
 	public Subscriber<org.ros.message.rss_msgs.OdometryMsg> odoSub;
 	public Publisher<org.ros.message.rss_msgs.MotionMsg> motorPub;
 	public Publisher<org.ros.message.rss_msgs.GUIPointMsg> pointPub;
-	Publisher<org.ros.message.std_msgs.String> statePub;
+	public Publisher<org.ros.message.std_msgs.String> statePub;
+	public Publisher<org.ros.message.std_msgs.GUILineMsg> linePub;
+	public Publisher<org.ros.message.std_msgs.GUISMsg> segmentPub;
 	
 	// below are dummy values that will need to be tuned based on experimentation
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
@@ -91,22 +95,22 @@ public class LocalNavigation implements NodeMain,Runnable{
 		
 		// initialize the ROS publication to graph points
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
-		pointPlot = new GUIPointMsg();
-		pointPlotColor = new ColorMsg();
+//		pointPlot = new GUIPointMsg();
+//		pointPlotColor = new ColorMsg();
 
 		// initialize the ROS publication to graph lines
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
-		linePlot = new GUILineMsg();
-		linePlotColor = new ColorMsg();
+//		linePlot = new GUILineMsg();
+//		linePlotColor = new ColorMsg();
 
 		// initialize the ROS publication to graph line segments
 		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
-		segmentPlot = new GUISegmentMsg();
-		segmentPlotColor = new ColorMsg();
+//		segmentPlot = new GUISegmentMsg();
+//		segmentPlotColor = new ColorMsg();
 
 		// initialize the ROS publication to rss/state
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
-		org.ros.message.std_msgs.String stateMsg = new org.ros.message.std_msgs.String();
+//		org.ros.message.std_msgs.String stateMsg = new org.ros.message.std_msgs.String();
 		
 
 		Thread runningStuff = new Thread(this);
