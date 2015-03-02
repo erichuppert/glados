@@ -63,25 +63,25 @@ public class LocalNavigation implements NodeMain,Runnable{
 					//handleSonar(message);
 				}
 			});
-		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
-		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
-				@Override
-				public void onNewMessage(SonarMsg message) {
-					System.out.printf("Back Sonar Range: %.3f\n",message.range);
-					//handleSonar(message);
-				}
-			});
+		// sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
+		// sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
+		// 		@Override
+		// 		public void onNewMessage(SonarMsg message) {
+		// 			System.out.printf("Back Sonar Range: %.3f\n",message.range);
+		// 			//handleSonar(message);
+		// 		}
+		// 	});
 
-		// initialize the ROS subscription to rss/BumpSensors
-		//
-		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
-		bumpSub.addMessageListener(new MessageListener<BumpMsg>() {
-				@Override
-				public void onNewMessage(BumpMsg message) {
-					System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
-					//handleBump(message);
-				}
-			});
+		// // initialize the ROS subscription to rss/BumpSensors
+		// //
+		// bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
+		// bumpSub.addMessageListener(new MessageListener<BumpMsg>() {
+		// 		@Override
+		// 		public void onNewMessage(BumpMsg message) {
+		// 			System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
+		// 			//handleBump(message);
+		// 		}
+		// 	});
 		// initialize the ROS subscription to rss/odometry
 		// Don't need it right now
 		//
