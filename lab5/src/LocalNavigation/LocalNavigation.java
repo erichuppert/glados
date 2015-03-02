@@ -32,7 +32,8 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// Subscribers
 	//
-	public Subscriber<org.ros.message.rss_msgs.SonarMsg> sonarFrontSub, sonarBackSub; // Sonars
+	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
+	public Subscriber<SonarMsg> sonarBackSub;
 	public Subscriber<BumpMsg> bumpSub; // Bump sensors
 	//public Subscriber<OdometryMsg> odoSub; // Odometry, don't care for now
 
@@ -56,18 +57,17 @@ public class LocalNavigation implements NodeMain,Runnable{
 		// initialize the ROS subscriptions to rss/Sonars
 		//
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
-		sonarFrontSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					System.out.printf("Front Sonar Range: %.3f\n",message.range);
-					changeState("OKAY");
 					//handleSonar(message);
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
-		sonarBackSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					System.out.printf("Back Sonar Range: %.3f\n",message.range);
 					//handleSonar(message);
 				}
