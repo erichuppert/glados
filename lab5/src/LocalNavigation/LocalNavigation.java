@@ -251,8 +251,7 @@ public class LocalNavigation implements NodeMain,Runnable{
 		}
 		motorPub.publish(motorControlMsg);
 	}
-	
-	
+
 	public void onStart(Node node) {
 
 		logNode = node;
@@ -262,29 +261,17 @@ public class LocalNavigation implements NodeMain,Runnable{
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-<<<<<<< HEAD
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.println(message);
 					handleSonar(message);
-=======
-				public void onNewMessage(SonarMsg message) {
-					//System.out.printf("isFront: %b\tRange: %.3f\n",message.isFront,message.range);
-					//handleSonar(message);
->>>>>>> origin/LocalNavigation
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-<<<<<<< HEAD
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
-					System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
-					handleSonar(message);
-=======
-				public void onNewMessage(SonarMsg message) {
-					//System.out.printf("isFront: %b\Range: %.3f\n",message.isFront,message.range);
+					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					//handleSonar(message);
->>>>>>> origin/LocalNavigation
 				}
 			});
 
@@ -298,21 +285,10 @@ public class LocalNavigation implements NodeMain,Runnable{
 					//handleBump(message);
 				}
 			});
-<<<<<<< HEAD
-		//initialize the ROS subscription to rss/odometry
+
+		// Initialize the ROS subscription to rss/odometry
 		// Don't need it right now
 		//
-		 odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
-		 odoSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.OdometryMsg>() {
-			@Override
-			public void onNewMessage(org.ros.message.rss_msgs.OdometryMsg message) {
-				System.out.println(message);
-				handleOdometry(message);
-		 		}
-		 	});
-=======
-		// initialize the ROS subscription to rss/odometry
-
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
 		odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
 				@Override
@@ -321,13 +297,12 @@ public class LocalNavigation implements NodeMain,Runnable{
 					//handleOdometry(message);
 				}
 			});
->>>>>>> origin/LocalNavigation
 
-		// initialize the ROS publication to command/Motors
+		// Initialize the ROS publication to command/Motors
 		//
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 
-		// initialize the ROS publication to graph points
+		// Initialize the ROS publication to graph points
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
 		initialize the ROS publication to graph lines
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
@@ -348,9 +323,6 @@ public class LocalNavigation implements NodeMain,Runnable{
 		}
 	}
 
-<<<<<<< HEAD
-	
-=======
 	/**
 	 * Processes and prescribes response to a message from the bump sensor
 	 * @param message an OdometryMsg containing details about a bump sensor event
@@ -403,7 +375,6 @@ public class LocalNavigation implements NodeMain,Runnable{
 		setMotorVelocities(tv,rv);
 	}
 
->>>>>>> origin/LocalNavigation
 	public void onShutdownComplete(Node node) {
 	}
 
