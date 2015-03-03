@@ -19,24 +19,16 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.namespace.GraphName;
 
-public class RobotState extends java.lang.String {}
-
 public class LocalNavigation implements NodeMain,Runnable{
 	private Node logNode;
 
-	// Sonar GUI
-	// Allows us to control the robot, and see the sonars
-	//
-	private static final boolean RUN_SONAR_GUI = true;
-	public SonarGUI gui;
-
 	// State machine states, and state variable
 	//
-	public static final RobotState STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
-	public static final RobotState ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
-	public static final RobotState ALIGNING          = "Currently aligining the robot";
-	public static final RobotState ALIGNED           = "Currently aligned";
-	private RobotState state = ALIGN_ON_BUMP;
+	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
+	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
+	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
+	public static final java.lang.String ALIGNED           = "Currently aligned";
+	private java.lang.String state = ALIGN_ON_BUMP;
 
 	protected boolean firstUpdate = true;
 
@@ -80,13 +72,14 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 	// Subscribers
 	//
-	public Subscriber<org.ros.message.rss_msgs.SonarMsg> sonarFrontSub, sonarBackSub; // Sonars
-	public Subscriber<org.ros.message.rss_msgs.BumpMsg> bumpSub; // Bump sensors
-	//public Subscriber<org.ros.message.rss_msgs.OdometryMsg> odoSub; // Odometry, don't care for now
+	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
+	public Subscriber<SonarMsg> sonarBackSub;
+	public Subscriber<BumpMsg> bumpSub; // Bump sensors
+	public Subscriber<OdometryMsg> odoSub; // Odometry
 
 	// Message Publishers
 	//
-	public Publisher<org.ros.message.rss_msgs.MotionMsg> motorPub; // motors for velocity
+	public Publisher<MotionMsg> motorPub; // motors for velocity
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
 	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Don't care for now
 	private GUILineMsg linePlot;
@@ -264,41 +257,48 @@ public class LocalNavigation implements NodeMain,Runnable{
 
 		logNode = node;
 
-		// Sonar GUI - it allows us to control the robot, and see sonar output
-		//
-		if (RUN_SONAR_GUI) {
-			gui.onStart(node);
-		}
-
 		// initialize the ROS subscriptions to rss/Sonars
 		//
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
-		sonarFrontSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
+<<<<<<< HEAD
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.println(message);
 					handleSonar(message);
+=======
+				public void onNewMessage(SonarMsg message) {
+					//System.out.printf("isFront: %b\tRange: %.3f\n",message.isFront,message.range);
+					//handleSonar(message);
+>>>>>>> origin/LocalNavigation
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
-		sonarBackSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.SonarMsg>() {
+		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
+<<<<<<< HEAD
 				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
 					System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					handleSonar(message);
+=======
+				public void onNewMessage(SonarMsg message) {
+					//System.out.printf("isFront: %b\Range: %.3f\n",message.isFront,message.range);
+					//handleSonar(message);
+>>>>>>> origin/LocalNavigation
 				}
 			});
 
 		// initialize the ROS subscription to rss/BumpSensors
 		//
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
-		bumpSub.addMessageListener(new MessageListener<org.ros.message.rss_msgs.BumpMsg>() {
+		bumpSub.addMessageListener(new MessageListener<BumpMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.BumpMsg message) {
-					System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
+				public void onNewMessage(BumpMsg message) {
+					//System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
 					//handleBump(message);
 				}
 			});
+<<<<<<< HEAD
 		//initialize the ROS subscription to rss/odometry
 		// Don't need it right now
 		//
@@ -310,6 +310,18 @@ public class LocalNavigation implements NodeMain,Runnable{
 				handleOdometry(message);
 		 		}
 		 	});
+=======
+		// initialize the ROS subscription to rss/odometry
+
+		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");
+		odoSub.addMessageListener(new MessageListener<OdometryMsg>() {
+				@Override
+				public void onNewMessage(OdometryMsg message) {
+					//System.out.printf("X: %.2f\tY: %.2f\ttheta: %.2f\n",message.x,message.y,message.theta);
+					//handleOdometry(message);
+				}
+			});
+>>>>>>> origin/LocalNavigation
 
 		// initialize the ROS publication to command/Motors
 		//
@@ -336,18 +348,73 @@ public class LocalNavigation implements NodeMain,Runnable{
 		}
 	}
 
+<<<<<<< HEAD
 	
+=======
+	/**
+	 * Processes and prescribes response to a message from the bump sensor
+	 * @param message an OdometryMsg containing details about a bump sensor event
+	 */
+	public void handleBump(BumpMsg message) {
+		// Translational, and rotational velocities
+		//
+		double tv = 0;
+		double rv = 0;
+
+		if (state == STOP_ON_BUMP) {
+			// If we see a bump, then stop, otherwise we are controlled externally
+			//
+			if (message.right || message.left) {
+				tv = rv = 0;
+			} else {
+				return;
+			}
+		} else if (state == ALIGN_ON_BUMP) {
+			// Start aligning if a bump is pressed, otherwise we are controlled externally
+			//
+			if (message.right || message.left) {
+				changeState(ALIGNING);
+			}
+			else {
+				return;
+			}
+		}
+		else if (state == ALIGNING) {
+			if (message.right && message.left) {
+				// if both sensors are depressed, then we are aligned
+				//
+				changeState(ALIGNED);
+				tv = rv = 0;
+			} else if (message.right || message.left) {
+				// If one bumper is depressed, then we need to rotate so that they are both depressed
+				// based on which bumper is hit, we need to choose the rotation direction
+				// We also have a small forward velocity to make sure the bumper that was depressed does not get undepressed
+				//
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+				int rotationalFactor = (message.left ? 1 : -1);
+				rv = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
+			} else {
+				// If neither is depressed, we move slowly forward.
+				//
+				rv = 0;
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			}
+		}
+		setMotorVelocities(tv,rv);
+	}
+
+>>>>>>> origin/LocalNavigation
 	public void onShutdownComplete(Node node) {
 	}
 
 
 	public GraphName getDefaultNodeName() {
-		return new GraphName("rss/localnavigation");
+		return new GraphName("/rss/localnavigation");
 	}
 
 	// Abstracts away sending the state message
 	//
-	private void changeState(RobotState newState){
+	private void changeState(java.lang.String newState){
 		state = newState;
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = newState;
