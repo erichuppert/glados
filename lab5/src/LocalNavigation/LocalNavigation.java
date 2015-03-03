@@ -166,7 +166,6 @@ public class LocalNavigation implements NodeMain,Runnable{
 				//
 				rv = 0;
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-				motorControlMsg.translationalVelocity = ALIGNMENT_TRANSLATIONAL_SPEED;
 			}
 		}
 		setMotorVelocities(tv,rv);
