@@ -1,6 +1,6 @@
 /**
  * 
- * @author nforrest
+ * 
  *
  * Matrix operations handy for robots
  *
