@@ -46,23 +46,19 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private double y;
 	private double theta;
 
-	//private Mat wallStartRobotToWorld;
-	//private Mat wallEndRobotToWorld;
-
-
-	// transforms between odometry and world frames
+	// Transforms between odometry and world frames
 	private Mat odoToWorld; // initialize in handleOdometry
 	private Mat worldToOdo; // initialize in handleOdometry
 
-	// transforms between robot and world frames
+	// Transforms between robot and world frames
 	private Mat robotToWorld; // continuously update in handleOdometry
 
-	// transforms between sonar and robot frames
-	private static final Mat sonarToRobotRot = Mat rotation(Math.PI / 2);
-	private static final Mat sonarFrontToRobot = Mat mul(Mat translation(-0.64, 0.19), sonarToRobotRot);
-	private static final Mat sonarBackToRobot  = Mat mul(Mat translation(-0.3350, 0.2150), sonarToRobotRot);
+	// Transforms between sonar and robot frames
+	private static final Mat sonarToRobotRot = Mat.rotation(Math.PI / 2);
+	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.64, 0.19), sonarToRobotRot);
+	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
 
-	// transforms between aligned and world frames
+	// Transforms between aligned and world frames
 	private Mat alignedToWorld; // update when entering the ALIGNED state
 	private Mat worldToAligned; // update when entering the ALIGNED state
 
@@ -79,18 +75,18 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	public Publisher<MotionMsg> motorPub; // motors for velocity
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
-	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Don't care for now
+	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Publishes the Line to the GUI
 	private GUILineMsg linePlot;
 	private GUILineMsg linePlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Don't care for now
+	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
 	private GUISegmentMsg segmentPlot;
 	private ColorMsg segmentPlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub; // Don't care for now
+	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub; // Publishes points to the GUI
 	private GUIPointMsg pointPlot;
 	private ColorMsg pointPlotColor;
 
 	public boolean obstacleDetected = false;
-	public double threshold = Double.MAX_VALUE;//TODO value to be added after testing
+	public double threshold = Double.MAX_VALUE; //TODO value to be added after testing
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
@@ -118,7 +114,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(rss_msgs.SonarMsg message) {
 					System.out.println(message);
 					handleSonar(message);
 				}
@@ -126,7 +122,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(org.ros.message.rss_msgs.SonarMsg message) {
+				public void onNewMessage(rss_msgs.SonarMsg message) {
 					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					//handleSonar(message);
 				}
@@ -161,10 +157,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 		// Initialize the ROS publication to graph points
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
-		initialize the ROS publication to graph lines
-			linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
-		initialize the ROS publication to graph line segments
-			segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
+		// Initialize the ROS publication to graph lines
+		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
+		// Initialize the ROS publication to graph line segments
+		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
 		// initialize the ROS publication to rss/state
 		//
@@ -185,7 +181,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	 *all tranforms are done using matrix operations (functions from the Mat Class)
 	 */
 
-	public void handleOdometry(org.ros.message.rss_msgs.OdometryMsg message) {
+	public void handleOdometry(rss_msgs.OdometryMsg message) {
 		if ( firstUpdate ) {
 			odoToWorld = Mat.mul(Mat.rotation(-message.theta), Mat.translation(-message.x, -message.y));
 			worldToOdo = Mat.inverse(odoToWorld);
@@ -264,7 +260,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		setMotorVelocities(tv,rv);
 	}
 
-	public void handleSonar(org.ros.message.rss_msgs.SonarMsg message) {
+	public void handleSonar(rss_msgs.SonarMsg message) {
 		String sensor = new String();
 
 		Mat sonarToRobot;
@@ -345,7 +341,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	private void changeState(java.lang.String newState){
 		state = newState;
-		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
+		std_msgs.String msg = new std_msgs.String();
 		msg.data = newState;
 		if(statePub != null) {
 			statePub.publish(msg);
