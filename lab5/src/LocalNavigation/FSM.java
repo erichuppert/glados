@@ -216,7 +216,7 @@ public class FSM {
 		// based on our original pose at the wall, we rotate until we get pi/2 away from that directional pose
 		if (!rotatedEnough()) {
 			tv = 0;
-			rv = ALIGNMENT_ROTATIONAL_SPEED;
+			rv = -ALIGNMENT_ROTATIONAL_SPEED;
 		} else {
 			tv = rv = 0;
 			changeState(ALIGNED_AND_ROTATED);
