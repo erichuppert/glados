@@ -6,22 +6,34 @@ import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
 
 public class FSM {
-	// Frequency that step should be called
+    // Frequency that step should be called
 	//
 	public static final double FREQ = 20;
 
 	// Possible States
 	//
-	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
-	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
-	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
-	public static final java.lang.String ALIGNED           = "Currently aligned";
-	public static final java.lang.String RETREATING        = "Moving backwards from obstacle after alignment";
-	public static final java.lang.String ROTATING          = "Rotating so that sonars face the obstacle";
-	
+
+	public static final int STOP_ON_BUMP      = 0;
+	public static final int ALIGN_ON_BUMP     = 1;
+	public static final int ALIGNING          = 2;
+	public static final int ALIGNED           = 3;
+	public static final int RETREATING        = 4;
+	public static final int ROTATING          = 5;
+
+	// State descriptions
+	//
+	private static final java.lang.String[] stateDescriptions = new java.lang.String[] {
+		"Initial state: stops when it feels a bump",
+		"Initial state: aligns when it feels a bump",
+		"Currently aligining the robot",
+		"Currently aligned",
+		"Moving backwards from obstacle after alignment",
+		"Rotating so that sonars face the obstacle"
+	};
+
 	// State variable
 	//
-	private java.lang.String state;
+	private int state;
 
 	// Inputs
 	//
@@ -36,7 +48,7 @@ public class FSM {
 
 	// Set the Initial State
 	//
-	public FSM(Node node, java.lang.String initialState) {
+	public FSM(Node node, int initialState) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		changeState(initialState);
@@ -92,7 +104,7 @@ public class FSM {
 			rotating();
 			break;
 		default:
-			throw new Exception("INVALID STATE");
+			// INVALID STATE, do nothing
 		}
 
 		if (setVelocities) {
@@ -127,22 +139,21 @@ public class FSM {
 	// Otherwise, look for wall by moving forward.
 	//
 	private void aligning() {
-		int bumperStatus = bumperStatus();
 		setVelocities = true;
 
-		if(bumpers[LEFT] && bumpers[RIGHT]) {
+		if(bumpers[g.LEFT] && bumpers[g.RIGHT]) {
 			// Both bumpers pressed
 			//
 			changeState(ALIGNED);
 			tv = rv = 0;
-		} else if (bumpers[LEFT] || bumpers[RIGHT]) {
+		} else if (bumpers[g.LEFT] || bumpers[g.RIGHT]) {
 			// Either bumper pressed
 			// Rotate to align.
 			// Slight forward speed to avoid oscillations
 			// Happened due to depressed bumper becoming undepressed in pure rotation
 			//
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
-			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[LEFT]?1.0:-1.0);
+			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
 			// Neither is depressed, just move slowly forward.
 			//
@@ -185,10 +196,10 @@ public class FSM {
 	
 	// Changes state variable, and publishes it.
 	//
-	private void changeState(java.lang.String newState){
+	private void changeState(int newState){
 		state = newState;
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
-		msg.data = newState;
+		msg.data = stateDescriptions[newState];
 		if(statePub != null) {
 			statePub.publish(msg);
 		}

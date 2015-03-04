@@ -28,9 +28,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 	// Global status
 	//
-	double[] sonars  = new double[]         {0,0}; // {front,back}
-	double[] pose    = new double[]       {0,0,0}; // {x,y,theta}
-	double[] bumpers = new double[] {false,false}; // {left,right}
+	double[]  sonars  = new double[]          {0,0}; // {front,back}
+	double[]  pose    = new double[]        {0,0,0}; // {x,y,theta}
+	boolean[] bumpers = new boolean[] {false,false}; // {left,right}
 
 	public void onStart(Node node) {
 		// Initialize helpers
@@ -121,9 +121,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// For thread safe copying
 		//
 		boolean _shutdown;
-		double _sonars;
-		double _pose;
-		double _bumpers;
+		double[] _sonars = new double[2];
+		double[] _pose = new double[3];
+		boolean[] _bumpers = new boolean[2];
 
 		do {
 			initial_time = System.currentTimeMillis();
@@ -137,9 +137,14 @@ public class LocalNavigation implements NodeMain,Runnable {
 				System.arraycopy(bumpers, 0, _bumpers, 0, bumpers.length);
 			}
 			fsm.step(_sonars, _pose, _bumpers);
+
 			duration = System.currentTimeMillis()-initial_time;
 			sleep_time = ((long) (1000.0/FSM.FREQ)) - duration;
-			Thread.sleep(sleep_time);
+			try {
+				Thread.sleep(sleep_time);
+			} catch (InterruptedException e) {
+				_shutdown = true;
+			}
 		} while (_shutdown);
 	}
 }
