@@ -270,6 +270,7 @@ public class FSM {
 	// when we are moving forward and scanning the wall after finding its end previously
 	//
 	private void tracking_wall() {
+		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
