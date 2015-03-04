@@ -19,7 +19,7 @@ public class SonarPoints {
 
 	// Obstacle tracking must be explicit
 	//
-	private boolean tracking = false;
+	private boolean tracking = true;
 
 	/* Transformation Matrices: used to find the point the sonar is seeing.
 	 *
@@ -147,8 +147,8 @@ public class SonarPoints {
 			}
 			mostRecent = pose.clone();
 
-			lineFilter.addPoint(pose[g.X], pose[g.Y]);
-			lineFilter.publishLine();
+			// lineFilter.addPoint(pose[g.X], pose[g.Y]);
+			// lineFilter.publishLine();
 		}
 
 		int pointShape = front?0:1;
