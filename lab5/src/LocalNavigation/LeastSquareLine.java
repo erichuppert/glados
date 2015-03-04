@@ -70,13 +70,32 @@ public class LeastSquareLine {
 		return nPoints;
 	}
 
-	public double getDistance(double x, double y) throws Exception {
+	public double getDistance(double x, double y) {
 		double[] line = getLine();
 		if (line.length > 0) {
 			return Math.abs(line[0] * x + line[1] * y + line[2]);
 		} else {
-			throw new Exception("Bad line in getDistance\n");
+			// BAD, SHOULD NOT HAPPEN, but don't want to put exception handlers everywhere
+			// Freaking java
+			//
+			return 0;
 		}
+	}
+
+	/**
+	 * Gets the point in the line nearest to pose
+	 * @param pose: pose array of the point we're interested in.
+	 */
+	public double[] getNearestPoint(double[] pose) {
+		if(line.length < 0) {
+			// BAD, SHOULD NOT HAPPEN, see above
+			//
+			return pose;
+		}
+		double a = line[0];
+		double b = line[1];
+		double d = getDistance(pose[g.X],pose[g.Y]);
+		return new double[]{pose[g.X]+d*a,pose[g.Y]+d*b};
 	}
 
 	public void publishLine() {
