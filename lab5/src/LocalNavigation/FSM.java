@@ -67,7 +67,7 @@ public class FSM {
 	private Publisher<org.ros.message.std_msgs.String> statePub; // state
 	private Publisher<MotionMsg> motorPub; // motor commands
 	private Publisher<OdometryMsg> odoPub; // Odometry readjustments
-	
+
 	private static boolean logErrors = true;
 	private BufferedWriter errorOutput;
 
@@ -318,7 +318,7 @@ public class FSM {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
-			double desired = 0.3;
+			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
@@ -338,6 +338,10 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
+		setVelocities = true;
+		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+		rv = tv/OBSTACLE_RETREAT_DISTANCE;
+		changeState(ALIGN_ON_BUMP);
 	}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
