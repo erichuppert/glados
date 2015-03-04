@@ -49,13 +49,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.64, 0.19), sonarToRobotRot);
 	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
 
-<<<<<<< HEAD
-	// Transforms between aligned and world frames
-	private Mat alignedToWorld; // update when entering the ALIGNED state
-	private Mat worldToAligned; // update when entering the ALIGNED state
-
-=======
->>>>>>> 133d75ff626e1d18834db43c01b719a573a95755
 	// Subscribers
 	//
 	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
@@ -76,13 +69,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 	public double threshold = Double.MAX_VALUE;
 
 	private LeastSquareLine lsqWorld;
-<<<<<<< HEAD
-	private LeastSquareLine lsqOdo;
-	
+
 	// define colors for GUI
+	//
 	private static int RED=1, BLUE=2, GREEN=3;
-=======
->>>>>>> 133d75ff626e1d18834db43c01b719a573a95755
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
