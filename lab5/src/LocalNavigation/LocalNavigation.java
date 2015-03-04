@@ -77,7 +77,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
 	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Publishes the Line to the GUI
 	private GUILineMsg linePlot;
-	private GUILineMsg linePlotColor;
+	private ColorMsg linePlotColor;
 	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
 	private GUISegmentMsg segmentPlot;
 	private ColorMsg segmentPlotColor;
