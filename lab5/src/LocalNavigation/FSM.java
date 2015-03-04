@@ -108,11 +108,11 @@ public class FSM {
 		switch(state) {
 		case START_STATE:
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(3000);
 			} catch(Exception e) {
 				return;
 			}
-			System.out.printf("START_STATE\n");
+			System.out.printf("Resetting\n");
 			changeState(initialState);
 			resetRobot();
 		case STOP_ON_BUMP:
@@ -155,6 +155,13 @@ public class FSM {
 		if (setVelocities) {
 			setMotorVelocities(tv,rv);
 		}
+	}
+
+	public void shutdown() {
+		// Reset everything so the robot doesn't go haywire
+		//
+		System.out.printf("Shutting down\n");
+		resetRobot();
 	}
 
 	// Below are values that have been tuned based on experimentation
