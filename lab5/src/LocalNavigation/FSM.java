@@ -73,6 +73,7 @@ public class FSM {
 	 * @param _bumpers: most recent bumper statuses
 	 */
 	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) {
+		System.out.printf("Current state is %d", state);
 		// Make inputs available to all methods
 		//
 		sonars = _sonars;
