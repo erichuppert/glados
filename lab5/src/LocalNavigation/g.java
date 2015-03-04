@@ -12,5 +12,5 @@ public class g {
 	public static final int Y = 1;
 	public static final int THETA = 2;
 	public static final int LEFT = 0;
-	public static final int RIGHT = 0;
+	public static final int RIGHT = 1;
 }
