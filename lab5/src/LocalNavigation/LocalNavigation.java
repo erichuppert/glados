@@ -138,7 +138,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			}
 			fsm.step(_sonars, _pose, _bumpers);
 			duration = System.currentTimeMillis()-initial_time;
-			sleep_time = ((long) (1000.0/FSM.FREQ)) - duration
+			sleep_time = ((long) (1000.0/FSM.FREQ)) - duration;
 			Thread.sleep(sleep_time);
 		} while (_shutdown);
 	}

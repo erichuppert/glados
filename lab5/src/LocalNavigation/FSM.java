@@ -95,9 +95,9 @@ public class FSM {
 
 	// Binary manipulations to make bumper testing simpler
 	//
-	private static final int bLEFT = 0b10;
-	private static final int bRIGHT = 0b01;
-	private static final int bNONE = 0b00;
+	private static final int bLEFT = (int)0b10;
+	private static final int bRIGHT = (int)0b01;
+	private static final int bNONE = (int)0b00;
 	private static int bumperStatus() {
 		return (bumpers[g.LEFT]?bLEFT:bNONE) | (bumpers[g.RIGHT]?bRIGHT:bNONE);
 	}
