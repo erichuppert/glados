@@ -282,7 +282,7 @@ public class FSM {
 		//
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double distance = obstacleInRange(sonars[g.RIGHT])?sonars[g.RIGHT]:sonars[g.LEFT];
+			double distance = SonarPoints.obstacleInRange(sonars[g.RIGHT])?sonars[g.RIGHT]:sonars[g.LEFT];
 			if (previous_distance == -1) {
 				previous_distance = distance;
 			}
