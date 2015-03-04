@@ -49,7 +49,7 @@ public class SonarPoints {
 	//
 	private static final double threshold_high = 0.6;
 	private static final double threshold_low = 0.1;
-	private static boolean obstacleInRange(double range) { // Utility method
+	private boolean obstacleInRange(double range) { // Utility method
 		return tracking && range <= threshold_high && range >= threshold_low;
 	}
 
@@ -140,9 +140,9 @@ public class SonarPoints {
 		//
 		if (obstacleInRange(range)) {
 			if (first == null) {
-				first = new Point(pose[g.X],pose[g.Y]);
+				first = new utils.Point(pose[g.X],pose[g.Y]);
 			}
-			mostRecent = new Point(pose[g.X],pose[g.Y]);
+			mostRecent = new utils.Point(pose[g.X],pose[g.Y]);
 
 			lineFilter.addPoint(pose[g.X], pose[g.Y]);
 			lineFilter.publishLine();
