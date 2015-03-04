@@ -66,7 +66,7 @@ public class SonarPoints {
 	 * Updates the robot pose matrix
 	 * @param pose: the current pose array
 	 */
-	public updateRobotPose(double[] pose) {
+	public void updateRobotPose(double[] pose) {
 		robotToWorld = Mat.mul(Mat.translation(pose[g.X], pose[g.Y]), Mat.rotation(pose[g.THETA]));
 	}
 
