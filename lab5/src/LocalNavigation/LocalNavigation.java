@@ -264,7 +264,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	}
 
 	public void handleSonar(SonarMsg message) {
-		java.lang.String sensor = new String();
+		java.lang.String sensor = new java.lang.String();
 
 		Mat sonarToRobot;
 
@@ -345,7 +345,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	private void changeState(java.lang.String newState){
 		state = newState;
-		std_msgs.String msg = new std_msgs.String();
+		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = newState;
 		if(statePub != null) {
 			statePub.publish(msg);
