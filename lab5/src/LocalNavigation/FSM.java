@@ -74,7 +74,7 @@ public class FSM {
 	 */
 	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) {
 		System.out.printf("Current state is %d\n", state);
-		System.out.printf("Bumpers: %b %b\n\n", _bumpers[g.LEFT], _bumpers[g.RIGHT]);
+		System.out.printf("Bumpers: %b %b\n\n", _bumpers[0], _bumpers[1]);
 		
 		// Make inputs available to all methods
 		//
