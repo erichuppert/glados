@@ -121,9 +121,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// For thread safe copying
 		//
 		boolean _shutdown;
-		double _sonars;
-		double _pose;
-		double _bumpers;
+		double[] _sonars = new double[2];
+		double[] _pose = new double[3];
+		boolean[] _bumpers = new boolean[2];
 
 		do {
 			initial_time = System.currentTimeMillis();

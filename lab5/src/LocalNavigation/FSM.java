@@ -19,7 +19,7 @@ public class FSM {
 
 	// State descriptions
 	//
-	private static final java.lang.String[] stateDescriptions = new String[] {
+	private static final java.lang.String[] stateDescriptions = new java.lang.String[] {
 		"Initial state: stops when it feels a bump",
 		"Initial state: aligns when it feels a bump",
 		"Currently aligining the robot",
