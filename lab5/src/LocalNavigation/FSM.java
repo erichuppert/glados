@@ -24,6 +24,7 @@ public class FSM {
 	public static final int FINDING_WALL        = 8;
 	public static final int TRACKING_WALL       = 9;
 	public static final int WALL_ENDED          = 10;
+	public static final int START_STATE         = 11;
 
 	// State descriptions
 	//
@@ -43,7 +44,8 @@ public class FSM {
 
 	// State variable
 	//
-	private int state;
+	private int state = START_STATE;
+	private int initialState;
 
 	// Inputs
 	//
@@ -63,17 +65,11 @@ public class FSM {
 
 	// Set the Initial State
 	//
-	public FSM(Node node, int initialState, SonarPoints _sp) {
+	public FSM(Node node, int _initialState, SonarPoints _sp) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
-
-		// Delay to publish?
-		try {
-			Thread.sleep(10000);
-		} catch(Exception e) {}
-		changeState(initialState);
-		resetRobot();
+		initialState = _initialState;
 		sp = _sp;
 	}
 
@@ -108,6 +104,9 @@ public class FSM {
 		// Execute the method for the current state
 		//
 		switch(state) {
+		case START_STATE:
+			changeState(initialState);
+			resetRobot();
 		case STOP_ON_BUMP:
 			stop_on_bump();
 			break;
