@@ -39,16 +39,15 @@ public class LocalNavigation implements NodeMain,Runnable {
 	 * Aligned frame: Relative to the robot when it most recently entered the ALIGNED state.
 	 */
 
+	// Transforms between robot and world frames
+	//
+	private Mat robotToWorld;
+
 	// Transforms between sonar and robot frames
+	//
 	private static final Mat sonarToRobotRot = Mat.rotation(Math.PI / 2);
 	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.64, 0.19), sonarToRobotRot);
 	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
-
-	// Transforms between aligned and world frames
-	private Mat alignedToWorld; // update when entering the ALIGNED state
-	private Mat worldToAligned; // update when entering the ALIGNED state
-
-	private boolean publishTheLine = true;
 
 	// Subscribers
 	//
@@ -61,15 +60,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	public Publisher<MotionMsg> motorPub; // motors for velocity
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
-	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Publishes the Line to the GUI
-	private GUILineMsg linePlot;
-	private ColorMsg linePlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
-	private GUISegmentMsg segmentPlot;
-	private ColorMsg segmentPlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub; // Publishes points to the GUI
-	private GUIPointMsg pointPlot;
-	private ColorMsg pointPlotColor;
+	public Publisher<GUILineMsg> linePub; // Publishes the Line to the GUI
+	//public Publisher<GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
+	public Publisher<GUIPointMsg> pointPub; // Publishes points to the GUI
 
 	//TODO value to be added after testing
 	//
@@ -142,8 +135,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
 		// Initialize the ROS publication to graph lines
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
-		// Initialize the ROS publication to graph line segments
-		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
+		// // Initialize the ROS publication to graph line segments
+		// segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
 		// initialize the ROS publication to rss/state
 		//
@@ -227,6 +220,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 		ColorMsg pointPlotColor;
 		GUIPointMsg pointPlot;
+		GUILineMsg linePlot;
+		ColorMsg linePlotColor;
 
 		if (message.isFront) {
 			sonarToRobot = sonarFrontToRobot;
@@ -259,9 +254,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			linePlotColor.g = 150;
 			linePlotColor.b = 0;
 			linePlot.color = linePlotColor;
-			if (publishTheLine) {
-				linePub.publish(linePlot);
-			}
+			linePub.publish(linePlot);
 		}
 
 		pointPlot.color = pointPlotColor;
