@@ -229,8 +229,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 		Color pointColor = message.range < threshold ? Color.RED : Color.BLUE; 
 
 		if (message.range < threshold) {
-			lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
-			lsqWorld.publishLine();
+			//lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
+			//lsqWorld.publishLine();
 		}
 		int pointShape = message.isFront ? 0 : 1;
 		publishPoint((float) echoWorldL[0], (float) echoWorldL[1], pointColor, pointShape);
