@@ -87,6 +87,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 	public boolean obstacleDetected = false;
 	public double threshold = Double.MAX_VALUE; //TODO value to be added after testing
+	
+	private LeastSquareLine lsqWorld;
+	private LeastSquareLine lsqOdo;
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
@@ -261,7 +264,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	}
 
 	public void handleSonar(SonarMsg message) {
-		String sensor = new String();
+		java.lang.String sensor = new String();
 
 		Mat sonarToRobot;
 
@@ -276,8 +279,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		}
 
 		if (!firstUpdate) {
+			// get the range encoded as a pose vector
 			Mat echoSonar = Mat.encodePose(message.range, 0, 0);
-
+			// get the sonar position with respect to the world frame
 			Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
 			Mat echoOdo = Mat.mul(worldToOdo, echoWorld);
 
