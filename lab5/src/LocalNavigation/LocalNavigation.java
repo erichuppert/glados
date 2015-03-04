@@ -61,7 +61,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(BumpMsg m) {
 					synchronized(this) {
-						System.out.printf("Info from message: %b %b\n", m.left, m.right );
 						bumpers[g.LEFT] = m.left;
 						bumpers[g.RIGHT] = m.right;
 					}
