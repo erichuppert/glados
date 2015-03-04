@@ -62,8 +62,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private Mat alignedToWorld; // update when entering the ALIGNED state
 	private Mat worldToAligned; // update when entering the ALIGNED state
 
-	private boolean publishTheLine = true;
-
 	// Subscribers
 	//
 	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
@@ -90,6 +88,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 	
 	private LeastSquareLine lsqWorld;
 	private LeastSquareLine lsqOdo;
+	
+	// define colors for GUI
+	private static int RED=1, BLUE=2, GREEN=3;
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
@@ -263,11 +264,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		if (message.isFront) {
 			sensor = "Front";
 			sonarToRobot = sonarFrontToRobot;
-			pointPlot.shape = 0;
 		} else {
 			sensor = "Back";
 			sonarToRobot = sonarBackToRobot;
-			pointPlot.shape = 1;
 		}
 
 		if (!firstUpdate) {
@@ -279,42 +278,19 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 			double[] echoWorldL = Mat.decodePose(echoWorld);
 			double[] echoOdoL = Mat.decodePose(echoOdo);
-
+			
+			Color pointColor; // based on whether the point is within the threshold, we will choose the color of the point on the GUI
 			if (message.range < threshold) {
             	obstacleDetected = true;
-
-            	pointPlotColor.r = 255;
-				pointPlotColor.g = 0;
-				pointPlotColor.b = 0;
-
+            	pointColor = Color.RED;
 				lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
-				lsqOdo.addPoint(echoOdoL[0], echoOdoL[1]);
-				double[] line = lsqOdo.getLine();
-				if (line.length > 0) {
-					linePlot.lineA = line[0];
-					linePlot.lineB = line[1];
-					linePlot.lineC = line[2];
-					linePlotColor.r = 0;
-					linePlotColor.g = 150;
-					linePlotColor.b = 0;
-					linePlot.color = linePlotColor;
-					if (publishTheLine) {
-						linePub.publish(linePlot);
-					}
-				}
+				lsqWorld.publishLine();
         	} else {
             	obstacleDetected = false;
-
-            	pointPlotColor.r = 0;
-				pointPlotColor.g = 0;
-				pointPlotColor.b = 255;
-
+            	pointColor = Color.GREEN;
         	}
-        	pointPlot.color = pointPlotColor;
-			pointPlot.x = echoOdoL[0];
-			pointPlot.y = echoOdoL[1];
-			pointPub.publish(pointPlot);
-
+			int pointShape = message.isFront ? 0 : 1;
+			publishPoint((float) echoOdoL[0], (float) echoOdoL[1], pointColor, pointShape); // 
 			//logNode.getLog().info("SONAR: Sensor: " + sensor + " Range: " + message.range);
 		}
 	}
@@ -348,6 +324,24 @@ public class LocalNavigation implements NodeMain,Runnable {
 			motorPub.publish(msg);
 		}
 	}
+	
+	private ColorMsg getColorMessage(Color color) {
+		ColorMsg message = new ColorMsg();
+		message.r = color.getRed();
+		message.b = color.getBlue();
+		message.g = color.getGreen();
+		return message;
+	}
+	
+	private void publishPoint(float x, float y, Color color, int shape) {
+		GUIPointMsg pointPlot = new GUIPointMsg();
+		pointPlot.shape = shape;
+    	pointPlot.color = getColorMessage(color);
+		pointPlot.x = echoOdoL[0];
+		pointPlot.y = echoOdoL[1];
+		pointPub.publish(pointPlot);
+	}
+	
 
 	public void run() {}
 }

@@ -5,7 +5,12 @@
 package LocalNavigation;
 
 
+
 import java.lang.Exception;
+
+import org.ros.message.rss_msgs.*;
+import org.ros.message.std_msgs.*;
+import org.ros.message.lab5_msgs.*;
 
 public class LeastSquareLine {
 	private double sumX;
@@ -17,8 +22,10 @@ public class LeastSquareLine {
 	private long nPoints;
 	private boolean lineDirty;
 	private double[] line; // {a, b, c}
+	private Publisher<org.ros.message.lab5_msgs.GUILineMsg> publisher;
 
-	public LeastSquareLine() {
+	public LeastSquareLine(Publisher<org.ros.message.lab5_msgs.GUILineMsg> _publisher) {
+		publisher = _publisher;
 		reset();
 	}
 
@@ -71,6 +78,22 @@ public class LeastSquareLine {
 			return Math.abs(line[0] * x + line[1] * y + line[2]);
 		} else {
 			throw new Exception("Bad line in getDistance\n");
+		}
+	}
+	
+	public void publishLine() {
+		GUILineMsg linePlot = new GUILineMsg();
+		ColorMsg linePlotColor new ColorMsg();
+		double[] line = getLine();
+		if (line.length > 0) {
+			linePlot.lineA = line[0];
+			linePlot.lineB = line[1];
+			linePlot.lineC = line[2];
+			linePlotColor.r = 0;
+			linePlotColor.g = 150;
+			linePlotColor.b = 0;
+			linePlot.color = linePlotColor;
+			publisher.publish(linePlot);
 		}
 	}
 }
