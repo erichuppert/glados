@@ -233,7 +233,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 			if (message.right && message.left) {
 				// if both sensors are depressed, then we are aligned
 				//
-				System.out.printf("I ALIGNED\n");
 				changeState(ALIGNED);
 				tv = rv = 0;
 			} else if (message.right || message.left) {
@@ -241,14 +240,12 @@ public class LocalNavigation implements NodeMain,Runnable {
 				// based on which bumper is hit, we need to choose the rotation direction
 				// We also have a small forward velocity to make sure the bumper that was depressed does not get undepressed
 				//
-				System.out.printf("BUMP IS DEPRESSED\n");
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.5;
 				int rotationalFactor = (message.left ? 1 : -1);
 				rv = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
 			} else {
 				// If neither is depressed, we move slowly forward.
 				//
-				System.out.printf("I CAN GO FORWARD YAY!!!!!!\n");
 				rv = 0;
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			}
