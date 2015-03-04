@@ -11,6 +11,7 @@ import java.lang.Exception;
 import org.ros.message.rss_msgs.*;
 import org.ros.message.std_msgs.*;
 import org.ros.message.lab5_msgs.*;
+import org.ros.node.topic.Publisher;
 
 public class LeastSquareLine {
 	private double sumX;
@@ -22,9 +23,9 @@ public class LeastSquareLine {
 	private long nPoints;
 	private boolean lineDirty;
 	private double[] line; // {a, b, c}
-	private Publisher<org.ros.message.lab5_msgs.GUILineMsg> publisher;
+	private Publisher<GUILineMsg> publisher;
 
-	public LeastSquareLine(Publisher<org.ros.message.lab5_msgs.GUILineMsg> _publisher) {
+	public LeastSquareLine(Publisher<GUILineMsg> _publisher) {
 		publisher = _publisher;
 		reset();
 	}

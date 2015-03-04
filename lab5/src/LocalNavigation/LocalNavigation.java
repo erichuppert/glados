@@ -80,7 +80,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
 
 	public LocalNavigation() {
-		lsqWorld = new LeastSquareLine();
 	}
 
 	public void onStart(Node node) {
@@ -134,6 +133,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
 		// Initialize the ROS publication to graph lines
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
+		lsqWorld = new LeastSquareLine(linePub);
 		// // Initialize the ROS publication to graph line segments
 		// segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
