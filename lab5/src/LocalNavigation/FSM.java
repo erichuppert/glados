@@ -107,6 +107,11 @@ public class FSM {
 		//
 		switch(state) {
 		case START_STATE:
+			try {
+				Thread.sleep(5000);
+			} catch(Exception e) {
+				return;
+			}
 			System.out.printf("START_STATE\n");
 			changeState(initialState);
 			resetRobot();
