@@ -62,7 +62,7 @@ public class FSM {
 	 * @param _pose:    most recent odometry pose
 	 * @param _bumpers: most recent bumper statuses
 	 */
-	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) {
+	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) throws Exception {
 		// Make inputs available to all methods
 		//
 		sonars = _sonars;
