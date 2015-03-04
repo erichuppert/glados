@@ -176,7 +176,7 @@ public class FSM {
 
 	// rotate so that we align sensors with object
 	public void rotating() {
-		if (!rotatedEnough) {
+		if (!rotatedEnough()) {
 			tv = 0;
 			rv = ALIGNMENT_ROTATIONAL_SPEED;
 		} else {
