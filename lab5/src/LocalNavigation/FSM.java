@@ -280,11 +280,12 @@ public class FSM {
 		//
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 2.5;
-			double Ka = 2;
+			double Kd = 0.625;
+			double Ka = 0.5;
 			double desired = 0.4;
 			double theta_i = Kd*(desired-sp.getDistanceError());
-			rv = -Ka*(theta_i - sp.getAngleError());
+			rv = Ka*(theta_i - sp.getAngleError());
+			System.out.printf("Angle: %.2f\n",sp.getAngleError());
 		} else {
 			tv = rv = 0;
 			sp.stopTracking();
