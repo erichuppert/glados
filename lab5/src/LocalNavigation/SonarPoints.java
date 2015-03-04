@@ -47,8 +47,10 @@ public class SonarPoints {
 	// Threshold for finding obstacles.
 	// Values decided on based on parameters of the problem.
 	//
-	private static final double threshold_high = 0.4;
+	private static final double threshold_high = 0.5;
 	private static final double threshold_low = 0.1;
+	private static final double threshold_highest = 1.8;
+
 	public static boolean obstacleInRange(double range) { // Utility method
 		return range <= threshold_high && range >= threshold_low;
 	}
@@ -116,8 +118,9 @@ public class SonarPoints {
 	 */
 	public synchronized void newPoint(boolean front, double range) {
 		// Can only add a point if we have a verified pose.
+		// And if it's a valid range.
 		//
-		if (robot == null) {
+		if (robot == null || range > threshold_highest || range < threshold_low) {
 			return;
 		}
 
