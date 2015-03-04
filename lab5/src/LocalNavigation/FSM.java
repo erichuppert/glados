@@ -50,6 +50,10 @@ public class FSM {
 	private double[] pose;
 	private boolean[] bumpers;
 
+	// SonarPoints to control the linear filter/segments
+	//
+	SonarPoints sp;
+
 	// ROS publishers
 	//
 	private Publisher<org.ros.message.std_msgs.String> statePub; // state
@@ -57,10 +61,11 @@ public class FSM {
 
 	// Set the Initial State
 	//
-	public FSM(Node node, int initialState) {
+	public FSM(Node node, int initialState, SonarPoints _sp) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		changeState(initialState);
+		sp = _sp;
 	}
 
 	// Translational/Rotational velocities
@@ -81,7 +86,6 @@ public class FSM {
 	 * @param _bumpers: most recent bumper statuses
 	 */
 	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) {
-		
 		// Make inputs available to all methods
 		//
 		sonars = _sonars;
@@ -186,7 +190,7 @@ public class FSM {
 			rv = 0;
 		}
 	}
-	
+
 	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.4;
 
 	// If we're aligned, we move away from the obstacle
@@ -262,6 +266,7 @@ public class FSM {
 		} else {
 			// once in view, start tracking the wall
 			tv = rv = 0;
+			sp.startTracking();
 			changeState(TRACKING_WALL);
 		}
 	}
@@ -283,9 +288,8 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		
 	}
-	
+
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
 	//
 	private boolean haveObstacle() {
