@@ -147,8 +147,8 @@ public class SonarPoints {
 			}
 			mostRecent = pose.clone();
 
-			// lineFilter.addPoint(pose[g.X], pose[g.Y]);
-			// lineFilter.publishLine();
+			lineFilter.addPoint(pose[g.X], pose[g.Y]);
+			lineFilter.publishLine();
 		}
 
 		int pointShape = front?0:1;
