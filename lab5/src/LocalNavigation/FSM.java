@@ -288,6 +288,8 @@ public class FSM {
 				previous_distance = distance;
 			}
 			rv = Kp*(0.27-distance) + Kd*(distance-previous_distance);
+			System.out.printf("Distance: %.2f\tPrevious: %.2f\tRV: %.2f\n", distance,previous_distance,rv);
+			rv = -rv;
 			previous_distance = distance;
 		} else {
 			tv = rv = 0;
