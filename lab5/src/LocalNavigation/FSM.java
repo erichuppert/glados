@@ -13,12 +13,13 @@ public class FSM {
 	// Possible States
 	//
 
-	public static final int STOP_ON_BUMP      = 0;
-	public static final int ALIGN_ON_BUMP     = 1;
-	public static final int ALIGNING          = 2;
-	public static final int ALIGNED           = 3;
-	public static final int RETREATING        = 4;
-	public static final int ROTATING          = 5;
+	public static final int STOP_ON_BUMP        = 0;
+	public static final int ALIGN_ON_BUMP       = 1;
+	public static final int ALIGNING            = 2;
+	public static final int ALIGNED             = 3;
+	public static final int RETREATING          = 4;
+	public static final int ROTATING            = 5;
+	public static final int ALIGNED_AND_ROTATED = 6;
 
 	// State descriptions
 	//
@@ -188,6 +189,7 @@ public class FSM {
 
 	// rotate so that we align sensors with object
 	public void rotating() {
+		setVelocities = true;
 		if (!rotatedEnough()) {
 			tv = 0;
 			rv = ALIGNMENT_ROTATIONAL_SPEED;
