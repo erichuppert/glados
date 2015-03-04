@@ -114,7 +114,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					System.out.println(message);
 					handleSonar(message);
 				}
@@ -122,7 +122,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
 		sonarBackSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
-				public void onNewMessage(rss_msgs.SonarMsg message) {
+				public void onNewMessage(SonarMsg message) {
 					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
 					//handleSonar(message);
 				}
@@ -181,7 +181,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	 *all tranforms are done using matrix operations (functions from the Mat Class)
 	 */
 
-	public void handleOdometry(rss_msgs.OdometryMsg message) {
+	public void handleOdometry(OdometryMsg message) {
 		if ( firstUpdate ) {
 			odoToWorld = Mat.mul(Mat.rotation(-message.theta), Mat.translation(-message.x, -message.y));
 			worldToOdo = Mat.inverse(odoToWorld);
@@ -260,7 +260,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		setMotorVelocities(tv,rv);
 	}
 
-	public void handleSonar(rss_msgs.SonarMsg message) {
+	public void handleSonar(SonarMsg message) {
 		String sensor = new String();
 
 		Mat sonarToRobot;
