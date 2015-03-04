@@ -75,10 +75,7 @@ public class LeastSquareLine {
 		if (line.length > 0) {
 			return Math.abs(line[0] * x + line[1] * y + line[2]);
 		} else {
-			// BAD, SHOULD NOT HAPPEN, but don't want to put exception handlers everywhere
-			// Freaking java
-			//
-			return 0;
+			throw new RuntimeException();
 		}
 	}
 
@@ -89,9 +86,7 @@ public class LeastSquareLine {
 	public double[] getNearestPoint(double[] pose) {
 		getLine();
 		if(line.length == 0) {
-			// BAD, SHOULD NOT HAPPEN, see above
-			//
-			return pose;
+			throw new RuntimeException();
 		}
 		double a = line[0];
 		double b = line[1];
@@ -118,9 +113,7 @@ public class LeastSquareLine {
 
 	public double getAngleToLine(double angle) {
 		if(line.length == 0) {
-			// BAD, SHOULD NOT HAPPEN, see above
-			//
-			return 0;
+			throw new RuntimeException();
 		}
 		double a = line[0];
 		double b = line[1];
