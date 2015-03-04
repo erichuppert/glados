@@ -288,7 +288,7 @@ public class FSM {
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
 	//
 	private boolean haveObstacle() {
-		return SonarPoints.obstacleInRange(sonars[g.BACK]) || SonarPoints.obstacleInRange(sonars[g.BACK]);
+		return SonarPoints.obstacleInRange(sonars[g.BACK]) || SonarPoints.obstacleInRange(sonars[g.FRONT]);
 	}
 	
 	
