@@ -19,7 +19,7 @@ public class SonarPoints {
 
 	// Obstacle tracking must be explicit
 	//
-	private boolean tracking = true;
+	private boolean tracking = false;
 
 	/* Transformation Matrices: used to find the point the sonar is seeing.
 	 *
