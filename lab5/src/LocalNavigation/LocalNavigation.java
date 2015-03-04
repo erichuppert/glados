@@ -299,12 +299,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 						linePub.publish(linePlot);
 					}
 				}
-
-				if (message.isFront){
-                	frontSonarDist = message.range;
-            	} else {
-                	backSonarDist = message.range;
-            	}
         	} else {
             	obstacleDetected = false;
 
