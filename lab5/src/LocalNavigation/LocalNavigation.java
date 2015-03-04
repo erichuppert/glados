@@ -145,6 +145,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 			} catch (InterruptedException e) {
 				_shutdown = true;
 			}
-		} while (_shutdown);
+		} while (!_shutdown);
 	}
 }
