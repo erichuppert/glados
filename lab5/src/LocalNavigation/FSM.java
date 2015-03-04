@@ -271,35 +271,27 @@ public class FSM {
 			changeState(TRACKING_WALL);
 		}
 	}
-	
+
 	// when we are moving forward and scanning the wall after finding its end previously
 	//
-	private double previous_distance = -1;
 	private void tracking_wall() {
 		setVelocities = true;
-		double Kp = 0.3;
-		double Kd = -28;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double distance = SonarPoints.obstacleInRange(sonars[g.RIGHT])?sonars[g.RIGHT]:sonars[g.LEFT];
-			if (previous_distance == -1) {
-				previous_distance = distance;
-			}
-			rv = Kp*(0.4-distance) + Kd*(distance-previous_distance);
-			System.out.printf("Distance: %.2f\tPrevious: %.2f\tRV: %.2f\n", distance,previous_distance,rv);
-			rv = -rv;
-			if (distance != previous_distance) {
-				previous_distance = distance;
-			}
+			double Kd = 2.5;
+			double Ka = 2;
+			double desired = 0.4;
+			double theta_i = Kd*(desired-sp.getDistanceError());
+			rv = -Ka*(theta_i - sp.getAngleError());
 		} else {
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
 		}
 	}
-	
+
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {

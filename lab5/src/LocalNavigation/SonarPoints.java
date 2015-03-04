@@ -30,6 +30,7 @@ public class SonarPoints {
 	 */
 	// Robot's pose
 	//
+	private double[] robotPose;
 	private Mat robot;
 
 	// Transforms between sonar and robot frames
@@ -81,6 +82,7 @@ public class SonarPoints {
 	 * @param pose: the current pose array
 	 */
 	public synchronized void updateRobotPose(double[] pose) {
+		robotPose = pose.clone();
 		robot = Mat.mul(Mat.translation(pose[g.X], pose[g.Y]), Mat.rotation(pose[g.THETA]));
 	}
 
@@ -202,5 +204,21 @@ public class SonarPoints {
 		}
 
 		tracking = false;
+	}
+
+	public synchronized double getDistanceError() {
+		if(robotPose == null) {
+			return 0;
+		} else {
+			return lineFilter.getDistance(robotPose[g.X], robotPose[g.Y]);
+		}
+	}
+
+	public synchronized double getAngleError() {
+		if(robotPose == null) {
+			return 0;
+		} else {
+			return lineFilter.getAngleToLine(robotPose[g.THETA]);
+		}
 	}
 }

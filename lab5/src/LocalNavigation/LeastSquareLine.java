@@ -87,7 +87,7 @@ public class LeastSquareLine {
 	 * @param pose: pose array of the point we're interested in.
 	 */
 	public double[] getNearestPoint(double[] pose) {
-		if(line.length < 0) {
+		if(line.length == 0) {
 			// BAD, SHOULD NOT HAPPEN, see above
 			//
 			return pose;
@@ -113,5 +113,18 @@ public class LeastSquareLine {
 			linePlot.color = linePlotColor;
 			publisher.publish(linePlot);
 		}
+	}
+
+	public double getAngleToLine(double angle) {
+		if(line.length == 0) {
+			// BAD, SHOULD NOT HAPPEN, see above
+			//
+			return 0;
+		}
+		double a = line[0];
+		double b = line[1];
+		double lineAngle = Math.atan2(a,-b);
+		double diff = Math.atan2(Math.sin(angle-lineAngle),Math.cos(angle-lineAngle)); // lazy conversion to [-pi, pi]
+		return diff;
 	}
 }
