@@ -346,7 +346,7 @@ public class FSM {
 	}
 
 	private void setRobotPose(double x, double y, double theta) {
-		OdometryMsg msg = new OdometryMsg;
+		OdometryMsg msg = new OdometryMsg();
 		msg.x = x;
 		msg.y = y;
 		msg.theta = theta;
