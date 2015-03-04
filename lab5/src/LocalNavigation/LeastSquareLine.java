@@ -94,8 +94,9 @@ public class LeastSquareLine {
 		}
 		double a = line[0];
 		double b = line[1];
-		double d = getDistance(pose[g.X],pose[g.Y]);
-		return new double[]{pose[g.X]+d*a,pose[g.Y]+d*b};
+		double c = line[2];
+		double d = a*pose[g.X]+b*pose[g.Y]+c;
+		return new double[]{pose[g.X]-d*a,pose[g.Y]-d*b};
 	}
 
 	public void publishLine() {
