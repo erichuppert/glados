@@ -223,7 +223,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// get the range encoded as a pose vector
 		Mat echoSonar = Mat.encodePose(message.range, 0, 0);
 		// get the sonar position with respect to the world frame
-		Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
+		Mat echoWorld = Mat.mul(sonarToRobot, echoSonar);
 
 		double[] echoWorldL = Mat.decodePose(echoWorld);
 		Color pointColor = message.range < threshold ? Color.RED : Color.BLUE; 
