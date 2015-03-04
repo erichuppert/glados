@@ -1,10 +1,7 @@
-
-/* least square estimator for line from appendix
-*/
+// least square estimator for line from appendix
+//
 
 package LocalNavigation;
-
-
 
 import java.lang.Exception;
 
@@ -81,7 +78,7 @@ public class LeastSquareLine {
 			throw new Exception("Bad line in getDistance\n");
 		}
 	}
-	
+
 	public void publishLine() {
 		GUILineMsg linePlot = new GUILineMsg();
 		ColorMsg linePlotColor = new ColorMsg();

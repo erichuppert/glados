@@ -1,15 +1,26 @@
 package LocalNavigation;
 
+import java.util.Random;
 import java.awt.Color;
 
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 import org.ros.message.lab5_msgs.GUIPointMsg;
 import org.ros.message.lab5_msgs.GUILineMsg;
-// TODO: import org.ros.message.lab5_msgs.GUIPointMsg;
+import org.ros.message.lab5_msgs.GUISegmentMsg;
 import org.ros.message.lab5_msgs.ColorMsg;
 
 public class SonarPoints {
+	// Segment building helpers
+	//
+	private utils.Point first;
+	private utils.Point mostRecent;
+	private Random rand = new Random();
+
+	// Obstacle tracking must be explicit
+	//
+	private boolean tracking = false;
+
 	/* Transformation Matrices: used to find the point the sonar is seeing.
 	 *
 	 * Frames of reference:
@@ -31,7 +42,7 @@ public class SonarPoints {
 	//
 	private Publisher<GUIPointMsg> pointPub; // point
 	private Publisher<GUILineMsg> linePub; // line
-	// TODO: public Publisher<GUISegmentMsg> segmentPub; // segment
+	private Publisher<GUISegmentMsg> segmentPub; // segment
 
 	// Threshold for finding obstacles.
 	// Values decided on based on parameters of the problem.
@@ -39,7 +50,7 @@ public class SonarPoints {
 	private static final double threshold_high = 0.6;
 	private static final double threshold_low = 0.1;
 	private static boolean obstacleInRange(double range) { // Utility method
-		return range <= threshold_high && range >= threshold_low;
+		return tracking && range <= threshold_high && range >= threshold_low;
 	}
 
 	// Linear Filter.
@@ -52,7 +63,7 @@ public class SonarPoints {
 		//
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg"); // points
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg"); // line
-		// TODO: segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
+		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
 		// Initialize the linear filter.
 		// It takes the line publisher so it can publish the line
@@ -64,7 +75,7 @@ public class SonarPoints {
 	 * Updates the robot pose matrix
 	 * @param pose: the current pose array
 	 */
-	public void updateRobotPose(double[] pose) {
+	public synchronized void updateRobotPose(double[] pose) {
 		robot = Mat.mul(Mat.translation(pose[g.X], pose[g.Y]), Mat.rotation(pose[g.THETA]));
 	}
 
@@ -100,7 +111,7 @@ public class SonarPoints {
 	 * @param front: is this the front sonar?
 	 * @param range: distance returned by the sonar
 	 */
-	public void newPoint(boolean front, double range) {
+	public synchronized void newPoint(boolean front, double range) {
 		// Can only add a point if we have a verified pose.
 		//
 		if (robot == null) {
@@ -128,11 +139,57 @@ public class SonarPoints {
 		// If we are seeing an obstacle, add it to the line points.
 		//
 		if (obstacleInRange(range)) {
-			//lineFilter.addPoint(pose[g.X], pose[g.Y]);
-			//lineFilter.publishLine();
+			if (first == null) {
+				first = new Point(pose[g.X],pose[g.Y]);
+			}
+			mostRecent = new Point(pose[g.X],pose[g.Y]);
+
+			lineFilter.addPoint(pose[g.X], pose[g.Y]);
+			lineFilter.publishLine();
 		}
 
 		int pointShape = front?0:1;
 		publishPoint(pose, pointColor, pointShape);
+	}
+
+	// Need it to generate new colors for the line segments
+	// From: http://stackoverflow.com/questions/4246351/creating-random-colour-in-java
+	// Darker color so that it's more visible in the GUI
+	//
+	private Color randomColor() {
+		float r = rand.nextFloat();
+		float g = rand.nextFloat();
+		float b = rand.nextFloat();
+		Color rndC = new Color(r,g,b);
+		return rndC.darker();
+	}
+
+	/**
+	 * Starts tracking a new line
+	 * Resets the line, and the segment
+	 */
+	public synchronized void startTracking() {
+		tracking = true;
+		first = null;
+		lineFilter.reset();
+		mostRecent = null;
+	}
+
+	/**
+	 * Builds the segment, and publishes it with a random color
+	 * Finishes tracking an obstacle
+	 */
+	public synchronized void stopTracking() {
+		GUISegmentMsg msg = new GUISegmentMsg();
+		/**
+		 * TODO: Builds the segment
+		 * Find the closest point in the line to the first point, and mark it as start
+		 * Find the closest point in the line to the most recent point, and mark it as end
+		 * Add a random color
+		 * Publish it.
+		 */
+		msg.color = getColorMessage(randomColor());
+		segmentPub.publish(msg);
+		tracking = false;
 	}
 }
