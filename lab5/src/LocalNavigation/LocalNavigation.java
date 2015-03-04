@@ -146,5 +146,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 				_shutdown = true;
 			}
 		} while (!_shutdown);
+		fsm.shutdown();
 	}
 }
