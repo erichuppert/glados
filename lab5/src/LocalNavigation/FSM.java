@@ -69,10 +69,6 @@ public class FSM {
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 
-		// Delay to publish?
-		try {
-			Thread.sleep(1000);
-		} catch(Exception e) {}
 		changeState(initialState);
 		resetRobot();
 		sp = _sp;
