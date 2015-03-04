@@ -213,10 +213,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 	public void handleSonar(SonarMsg message) {
 		Mat sonarToRobot;
 
-		ColorMsg pointPlotColor;
-		GUIPointMsg pointPlot;
-		GUILineMsg linePlot;
-		ColorMsg linePlotColor;
+		GUIPointMsg pointPlot = new GUIPointMsg();
+		ColorMsg pointPlotColor = new ColorMsg();
+		GUILineMsg linePlot = new GUILineMsg();
+		ColorMsg linePlotColor = new ColorMsg();
 
 		if (message.isFront) {
 			sonarToRobot = sonarFrontToRobot;
