@@ -135,9 +135,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				_shutdown = shutdown;
 				_sonars = sonars.clone();
 				_pose = pose.clone();
-				System.out.printf("Before setting _bumpers %b %b", bumpers[0], bumpers[1]);
 				_bumpers = bumpers.clone();
-				System.out.printf("After setting _bumpers %b %b", _bumpers[0], _bumpers[1]);
 			}
 			fsm.step(_sonars, _pose, _bumpers);
 
