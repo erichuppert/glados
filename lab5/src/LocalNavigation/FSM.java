@@ -288,6 +288,7 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
+		sp.stopTracking();
 	}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
