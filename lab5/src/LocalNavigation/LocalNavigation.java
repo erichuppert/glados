@@ -28,7 +28,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
 	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
 	public static final java.lang.String ALIGNED           = "Currently aligned";
-	private java.lang.String state = ALIGN_ON_BUMP;
+	private java.lang.String state = "";
 
 	protected boolean firstUpdate = true;
 
@@ -101,6 +101,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 		lsqWorld = new LeastSquareLine();
 		lsqOdo = new LeastSquareLine();
+
 	}
 
 	public void onStart(Node node) {
@@ -113,8 +114,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarFrontSub.addMessageListener(new MessageListener<SonarMsg>() {
 				@Override
 				public void onNewMessage(SonarMsg message) {
-					System.out.println(message);
-					handleSonar(message);
+					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
+					//handleSonar(message);
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
@@ -126,6 +127,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				}
 			});
 
+		changeState(ALIGN_ON_BUMP);
 		// initialize the ROS subscription to rss/BumpSensors
 		//
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
@@ -133,7 +135,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(BumpMsg message) {
 					//System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
-					//handleBump(message);
+					handleBump(message);
 				}
 			});
 
@@ -227,8 +229,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			else {
 				return;
 			}
-		}
-		else if (state == ALIGNING) {
+		} else if (state == ALIGNING) {
 			if (message.right && message.left) {
 				// if both sensors are depressed, then we are aligned
 				//
@@ -248,6 +249,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 				rv = 0;
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			}
+		} else if (state == ALIGNED) {
+			tv = rv = 0;
 		}
 		setMotorVelocities(tv,rv);
 	}
