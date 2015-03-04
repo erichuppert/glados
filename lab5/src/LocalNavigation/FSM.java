@@ -80,8 +80,12 @@ public class FSM {
 		initialState = _initialState;
 		sp = _sp;
 		if (logErrors) {
-			File logFile = new File("./error-log.txt");
-			errorOutput =  new BufferedWriter(new FileWriter(logFile));			
+			try {
+				File logFile = new File("./error-log.txt");
+				errorOutput =  new BufferedWriter(new FileWriter(logFile));							
+			} catch (Exception e) {
+				System.err.println(e);
+			}
 		}
 	}
 
@@ -401,10 +405,15 @@ public class FSM {
 	 */
 	private void logError(double translationError, double angleError) {
 		if (logErrors) {
-			errorOutput.append(
-					Long.toString(System.currentTimeMillis()) + " " +
-					Double.toString(translationError) + " " +
-					Double.toString(angleError));
+			try {
+				errorOutput.append(
+						Long.toString(System.currentTimeMillis()) + " " +
+								Double.toString(translationError) + " " +
+								Double.toString(angleError));
+				
+			} catch (Exception e){
+				System.err.println(e);
+			}
 		}
 	}
 }
