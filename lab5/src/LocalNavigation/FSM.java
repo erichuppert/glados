@@ -287,10 +287,12 @@ public class FSM {
 			if (previous_distance == -1) {
 				previous_distance = distance;
 			}
-			rv = Kp*(0.27-distance) + Kd*(distance-previous_distance);
+			rv = Kp*(0.4-distance) + Kd*(distance-previous_distance);
 			System.out.printf("Distance: %.2f\tPrevious: %.2f\tRV: %.2f\n", distance,previous_distance,rv);
 			rv = -rv;
-			previous_distance = distance;
+			if (distance != previous_distance) {
+				previous_distance = distance;
+			}
 		} else {
 			tv = rv = 0;
 			sp.stopTracking();
