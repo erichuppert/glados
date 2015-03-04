@@ -13,8 +13,8 @@ import org.ros.message.lab5_msgs.ColorMsg;
 public class SonarPoints {
 	// Segment building helpers
 	//
-	private utils.Point first;
-	private utils.Point mostRecent;
+	private double[] first;
+	private double[] mostRecent;
 	private Random rand = new Random();
 
 	// Obstacle tracking must be explicit
@@ -140,9 +140,9 @@ public class SonarPoints {
 		//
 		if (obstacleInRange(range)) {
 			if (first == null) {
-				first = new utils.Point(pose[g.X],pose[g.Y]);
+				first = pose.clone();
 			}
-			mostRecent = new utils.Point(pose[g.X],pose[g.Y]);
+			mostRecent = pose.clone();
 
 			lineFilter.addPoint(pose[g.X], pose[g.Y]);
 			lineFilter.publishLine();
@@ -181,15 +181,20 @@ public class SonarPoints {
 	 */
 	public synchronized void stopTracking() {
 		GUISegmentMsg msg = new GUISegmentMsg();
-		/**
-		 * TODO: Builds the segment
-		 * Find the closest point in the line to the first point, and mark it as start
-		 * Find the closest point in the line to the most recent point, and mark it as end
-		 * Add a random color
-		 * Publish it.
-		 */
-		msg.color = getColorMessage(randomColor());
-		segmentPub.publish(msg);
+
+		// If we built any sort of segment, then we publish it
+		//
+		if (first != null) {
+			double[] start = lineFilter.getNearestPoint(first);
+			double[] end = lineFilter.getNearestPoint(mostRecent);
+			msg.startX = start[g.X];
+			msg.startY = start[g.Y];
+			msg.endX = end[g.X];
+			msg.endY = end[g.Y];
+			msg.color = getColorMessage(randomColor());
+			segmentPub.publish(msg);
+		}
+
 		tracking = false;
 	}
 }
