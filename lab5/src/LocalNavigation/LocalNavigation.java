@@ -242,7 +242,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				// We also have a small forward velocity to make sure the bumper that was depressed does not get undepressed
 				//
 				System.out.printf("BUMP IS DEPRESSED\n");
-				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.5;
 				int rotationalFactor = (message.left ? 1 : -1);
 				rv = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
 			} else {
