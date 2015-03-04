@@ -276,13 +276,13 @@ public class FSM {
 	private double previous_distance = -1;
 	private void tracking_wall() {
 		setVelocities = true;
-		Kp = 0.3;
-		Kd = -28;
+		double Kp = 0.3;
+		double Kd = -28;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			distance = obstacleInRange(sonars[g.RIGHT])?sonars[g.RIGHT]:sonars[g.LEFT];
+			double distance = obstacleInRange(sonars[g.RIGHT])?sonars[g.RIGHT]:sonars[g.LEFT];
 			if (previous_distance == -1) {
 				previous_distance = distance;
 			}
