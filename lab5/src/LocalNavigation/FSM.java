@@ -62,7 +62,7 @@ public class FSM {
 	 * @param _pose:    most recent odometry pose
 	 * @param _bumpers: most recent bumper statuses
 	 */
-	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) throws Exception {
+	public void step(double[] _sonars, double[] _pose, boolean[] _bumpers) {
 		// Make inputs available to all methods
 		//
 		sonars = _sonars;
@@ -89,7 +89,7 @@ public class FSM {
 			aligned();
 			break;
 		default:
-			throw new Exception("INVALID STATE");
+			// INVALID STATE, do nothing
 		}
 
 		if (setVelocities) {
