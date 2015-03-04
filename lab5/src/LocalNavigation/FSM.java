@@ -12,10 +12,10 @@ public class FSM {
 
 	// Possible States
 	//
-	public static final int STOP_ON_BUMP      = 0
-	public static final int ALIGN_ON_BUMP     = 1
-	public static final int ALIGNING          = 2
-	public static final int ALIGNED           = 3
+	public static final int STOP_ON_BUMP      = 0;
+	public static final int ALIGN_ON_BUMP     = 1;
+	public static final int ALIGNING          = 2;
+	public static final int ALIGNED           = 3;
 
 	// State descriptions
 	//
