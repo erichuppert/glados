@@ -308,6 +308,7 @@ public class FSM {
 			try {
 				double theta_i = Kd*(desired-sp.getDistanceError());
 				rv = Ka*(theta_i - sp.getAngleError());
+				System.out.printf("Angle error: %.2f\tDesired: %.2f\tRV: %.2f\n", sp.getAngleError(), theta_i, rv);
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
