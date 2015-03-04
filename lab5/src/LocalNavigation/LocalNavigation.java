@@ -64,9 +64,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//public Publisher<GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
 	public Publisher<GUIPointMsg> pointPub; // Publishes points to the GUI
 
-	//TODO value to be added after testing
+	// Value decided on based on parameters of the problem.
 	//
-	public double threshold = Double.MAX_VALUE;
+	public double threshold_high = 0.6;
+	public double threshold_low = 0.1;
 
 	private LeastSquareLine lsqWorld;
 
@@ -74,7 +75,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	private static int RED=1, BLUE=2, GREEN=3;
 
-	// below are dummy values that will need to be tuned based on experimentation
+	// below are values that have been tuned based on experimentation
 	//
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.1;
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
@@ -152,7 +153,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		}
 	}
 
-	/*handle odometry
+	/* handle odometry
 	 * all position co-ordinates are stored as a matrix of 3*1 [x,y,theta]
 	 * all tranforms are done using matrix operations (functions from the Mat Class)
 	 */
@@ -214,6 +215,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 		setMotorVelocities(tv,rv);
 	}
 
+	private boolean obstacleInRange(SonarMsg message) {
+		return message.range <= threshold_high && message.range >= threshold_low;
+	}
+
 	public void handleSonar(SonarMsg message) {
 		if (robotToWorld == null) {
 			return;
@@ -226,9 +231,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
 
 		double[] echoWorldL = Mat.decodePose(echoWorld);
-		Color pointColor = message.range < threshold ? Color.RED : Color.BLUE; 
+		Color pointColor = obstacleInRange(message) ? Color.RED : Color.BLUE;
 
-		if (message.range < threshold) {
+		if (obstacleInRange(message)) {
 			//lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
 			//lsqWorld.publishLine();
 		}
