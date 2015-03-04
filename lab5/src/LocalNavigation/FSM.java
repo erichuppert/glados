@@ -137,7 +137,7 @@ public class FSM {
 			wall_ended();
 			break;
 		default:
-			// INVALID STATE, do nothing
+			throw new RuntimeException();
 		}
 
 		if (setVelocities) {
