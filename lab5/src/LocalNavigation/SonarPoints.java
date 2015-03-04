@@ -49,8 +49,11 @@ public class SonarPoints {
 	//
 	private static final double threshold_high = 0.6;
 	private static final double threshold_low = 0.1;
-	private boolean obstacleInRange(double range) { // Utility method
-		return tracking && range <= threshold_high && range >= threshold_low;
+	public static boolean obstacleInRange(double range) { // Utility method
+		return range <= threshold_high && range >= threshold_low;
+	}
+	private boolean trackingObstacle(double range) { // Uses tracking variable
+		return tracking && obstacleInRange(range)
 	}
 
 	// Linear Filter.
@@ -134,11 +137,11 @@ public class SonarPoints {
 
 		// Color of the point depends on whether it belongs to an obstacle or not.
 		//
-		Color pointColor = obstacleInRange(range) ? Color.RED : Color.BLUE;
+		Color pointColor = trackingObstacle(range) ? Color.RED : Color.BLUE;
 
 		// If we are seeing an obstacle, add it to the line points.
 		//
-		if (obstacleInRange(range)) {
+		if (trackingObstacle(range)) {
 			if (first == null) {
 				first = pose.clone();
 			}
