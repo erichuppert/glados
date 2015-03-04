@@ -1,5 +1,9 @@
 package LocalNavigation;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 import org.ros.message.std_msgs.String;
@@ -64,6 +68,9 @@ public class FSM {
 	private Publisher<org.ros.message.std_msgs.String> statePub; // state
 	private Publisher<MotionMsg> motorPub; // motor commands
 	private Publisher<OdometryMsg> odoPub; // Odometry readjustments
+	
+	private static boolean logErrors = true;
+	private BufferedWriter errorOutput;
 
 	// Set the Initial State
 	//
@@ -73,6 +80,10 @@ public class FSM {
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		initialState = _initialState;
 		sp = _sp;
+		if (logErrors) {
+			File logFile = new File("./error-log.txt");
+			errorOutput =  new BufferedWriter(new FileWriter(logFile));			
+		}
 	}
 
 	// Translational/Rotational velocities
@@ -306,9 +317,11 @@ public class FSM {
 			double Ka = 0.1;
 			double desired = 0.3;
 			try {
-				double theta_i = Kd*(desired-sp.getDistanceError());
-				rv = -Ka*(theta_i - sp.getAngleError());
-				System.out.printf("Angle error: %.2f\tDesired: %.2f\tRV: %.2f\n", sp.getAngleError(), theta_i, rv);
+				double distanceError = sp.getDistanceError();
+				double angleError = sp.getAngleError();
+				double theta_i = Kd*(desired-distanceError);
+				rv = -Ka*(theta_i - angleError);
+				logError(distanceError, angleError);
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
@@ -380,5 +393,19 @@ public class FSM {
 	private void resetRobot() {
 		setMotorVelocities(0,0);
 		setRobotPose(0,0,0);
+	}
+	
+	/**
+	 * Takes the error terms and adds them to the file. 
+	 * @param translationError amount of translational error
+	 * @param angleError amount of angleError
+	 */
+	private void logError(double translationError, double angleError) {
+		if (logErrors) {
+			errorOutput.append(
+					Long.toString(System.currentTimeMillis()) + " " +
+					Double.toString(translationError) + " " +
+					Double.toString(angleError));
+		}
 	}
 }
