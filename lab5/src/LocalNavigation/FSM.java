@@ -39,7 +39,8 @@ public class FSM {
 		"Backing up to find the end of the obstacle",
 		"Finding the obstacle while moving forward",
 		"Tracking the wall with sonars",
-		"Found the end of the wall"
+		"Found the end of the wall",
+		"Initialization State"
 	};
 
 	// State variable
@@ -105,6 +106,7 @@ public class FSM {
 		//
 		switch(state) {
 		case START_STATE:
+			System.out.printf("START_STATE\n");
 			changeState(initialState);
 			resetRobot();
 		case STOP_ON_BUMP:
