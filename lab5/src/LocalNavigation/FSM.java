@@ -32,7 +32,12 @@ public class FSM {
 		"Currently aligining the robot",
 		"Currently aligned",
 		"Moving backwards from obstacle after alignment",
-		"Rotating so that sonars face the obstacle"
+		"Rotating so that sonars face the obstacle",
+		"Sonars facing obstacle",
+		"Backing up to find the end of the obstacle",
+		"Finding the obstacle while moving forward",
+		"Tracking the wall with sonars",
+		"Found the end of the wall"
 	};
 
 	// State variable
