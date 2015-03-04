@@ -79,7 +79,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 					}
 					sp.updateRobotPose(_pose);
 				}
-			}
+			};
 
 		// Add message listeners to subscribers
 		//
