@@ -69,7 +69,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 	public double threshold = Double.MAX_VALUE;
 
 	private LeastSquareLine lsqWorld;
-	private LeastSquareLine lsqOdo;
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
@@ -77,11 +76,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
 
 	public LocalNavigation() {
-		//setInitialParams();
-
 		lsqWorld = new LeastSquareLine();
-		lsqOdo = new LeastSquareLine();
-
 	}
 
 	public void onStart(Node node) {
@@ -235,26 +230,26 @@ public class LocalNavigation implements NodeMain,Runnable {
 		Mat echoSonar = Mat.encodePose(message.range, 0, 0);
 		// get the sonar position with respect to the world frame
 		Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
-		Mat echoOdo = Mat.mul(worldToOdo, echoWorld);
 
 		double[] echoWorldL = Mat.decodePose(echoWorld);
-		double[] echoOdoL = Mat.decodePose(echoOdo);
 
 		pointPlotColor.g = 0;
 		pointPlotColor.r = (message.range < threshold) ? 255:0;
 		pointPlotColor.b = (message.range < threshold) ? 0:255;
 
-		lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
-		double[] line = lsqWorld.getLine();
-		if (line.length > 0) {
-			linePlot.lineA = line[0];
-			linePlot.lineB = line[1];
-			linePlot.lineC = line[2];
-			linePlotColor.r = 0;
-			linePlotColor.g = 150;
-			linePlotColor.b = 0;
-			linePlot.color = linePlotColor;
-			linePub.publish(linePlot);
+		if (message.range < threshold) {
+			lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
+			double[] line = lsqWorld.getLine();
+			if (line.length > 0) {
+				linePlot.lineA = line[0];
+				linePlot.lineB = line[1];
+				linePlot.lineC = line[2];
+				linePlotColor.r = 0;
+				linePlotColor.g = 150;
+				linePlotColor.b = 0;
+				linePlot.color = linePlotColor;
+				linePub.publish(linePlot);
+			}
 		}
 
 		pointPlot.color = pointPlotColor;
