@@ -302,8 +302,8 @@ public class FSM {
 		//
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 0.625;
-			double Ka = 0.5;
+			double Kd = 0.125;
+			double Ka = 0.1;
 			double desired = 0.3;
 			try {
 				double theta_i = Kd*(desired-sp.getDistanceError());
