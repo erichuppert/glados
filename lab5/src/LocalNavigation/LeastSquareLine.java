@@ -83,7 +83,7 @@ public class LeastSquareLine {
 	
 	public void publishLine() {
 		GUILineMsg linePlot = new GUILineMsg();
-		ColorMsg linePlotColor new ColorMsg();
+		ColorMsg linePlotColor = new ColorMsg();
 		double[] line = getLine();
 		if (line.length > 0) {
 			linePlot.lineA = line[0];
