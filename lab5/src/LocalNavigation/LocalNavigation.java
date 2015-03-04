@@ -46,7 +46,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	// Transforms between sonar and robot frames
 	//
 	private static final Mat sonarToRobotRot = Mat.rotation(Math.PI / 2);
-	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.64, 0.19), sonarToRobotRot);
+	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.064, 0.19), sonarToRobotRot);
 	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
 
 	// Subscribers
@@ -223,7 +223,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// get the range encoded as a pose vector
 		Mat echoSonar = Mat.encodePose(message.range, 0, 0);
 		// get the sonar position with respect to the world frame
-		Mat echoWorld = Mat.mul(sonarToRobot, echoSonar);
+		Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
 
 		double[] echoWorldL = Mat.decodePose(echoWorld);
 		Color pointColor = message.range < threshold ? Color.RED : Color.BLUE; 
@@ -265,7 +265,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			motorPub.publish(msg);
 		}
 	}
-	
+
 	public static ColorMsg getColorMessage(Color color) {
 		ColorMsg message = new ColorMsg();
 		message.r = color.getRed();
@@ -273,7 +273,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		message.g = color.getGreen();
 		return message;
 	}
-	
+
 	private void publishPoint(float x, float y, Color color, int shape) {
 		GUIPointMsg pointPlot = new GUIPointMsg();
 		pointPlot.shape = shape;
@@ -282,7 +282,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 		pointPlot.y = y;
 		pointPub.publish(pointPlot);
 	}
-	
 
 	public void run() {}
 }
