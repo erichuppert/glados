@@ -12,13 +12,25 @@ public class FSM {
 
 	// Possible States
 	//
-	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
-	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
-	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
-	public static final java.lang.String ALIGNED           = "Currently aligned";
-	public static final java.lang.String RETREATING        = "Moving backwards from obstacle after alignment";
-	public static final java.lang.String ROTATING          = "Rotating so that sonars face the obstacle";
-	
+	public static final int STOP_ON_BUMP        = 0;
+	public static final int ALIGN_ON_BUMP       = 1;
+	public static final int ALIGNING            = 2;
+	public static final int ALIGNED             = 3;
+	public static final int RETREATING          = 4;
+	public static final int ROTATING            = 5;
+	public static final int ALIGNED_AND_ROTATED = 6;
+
+	// State descriptions
+	//
+	private static final java.lang.String[] stateDescriptions = new java.lang.String[] {
+		"Initial state: stops when it feels a bump",
+		"Initial state: aligns when it feels a bump",
+		"Currently aligining the robot",
+		"Currently aligned",
+		"Moving backwards from obstacle after alignment",
+		"Rotating so that sonars face the obstacle"
+	};
+
 	// State variable
 	//
 	private int state;
@@ -176,6 +188,7 @@ public class FSM {
 
 	// rotate so that we align sensors with object
 	public void rotating() {
+		setVelocities = true;
 		if (!rotatedEnough()) {
 			tv = 0;
 			rv = ALIGNMENT_ROTATIONAL_SPEED;
