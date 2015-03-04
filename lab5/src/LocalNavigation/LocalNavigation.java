@@ -118,7 +118,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(OdometryMsg message) {
 					//System.out.printf("X: %.2f\tY: %.2f\ttheta: %.2f\n",message.x,message.y,message.theta);
-					//handleOdometry(message);
+					handleOdometry(message);
 				}
 			});
 
@@ -211,6 +211,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 	}
 
 	public void handleSonar(SonarMsg message) {
+		if (robotToWorld == null) {
+			return;
+		}
 		Mat sonarToRobot;
 
 		GUIPointMsg pointPlot = new GUIPointMsg();
