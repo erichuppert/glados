@@ -117,8 +117,16 @@ public class LeastSquareLine {
 		}
 		double a = line[0];
 		double b = line[1];
-		double lineAngle = Math.atan2(a,-b);
-		double diff = Math.atan2(Math.sin(angle-lineAngle),Math.cos(angle-lineAngle)); // lazy conversion to [-pi, pi]
+		double x = Math.cos(angle);
+		double y = Math.sin(angle);
+		double dot = (x*(-b) + y*a); // Vector parallel to the line
+		if (dot < 0) {
+			a = -a;
+			b = -b;
+			dot = (x*(-b) + y*a);
+		}
+		double sign = (x*a+y*b)>=0?1:-1;
+		double diff = Math.acos(dot)*sign;
 		return diff;
 	}
 }
