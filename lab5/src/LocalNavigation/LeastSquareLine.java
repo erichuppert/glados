@@ -87,6 +87,7 @@ public class LeastSquareLine {
 	 * @param pose: pose array of the point we're interested in.
 	 */
 	public double[] getNearestPoint(double[] pose) {
+		getLine();
 		if(line.length == 0) {
 			// BAD, SHOULD NOT HAPPEN, see above
 			//
