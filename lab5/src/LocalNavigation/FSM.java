@@ -176,6 +176,18 @@ public class FSM {
 
 	// rotate so that we align sensors with object
 	public void rotating() {
+		if (!rotatedEnough) {
+			tv = 0;
+			rv = ALIGNMENT_ROTATIONAL_SPEED;
+		} else {
+			tv = rv = 0;
+		}
+	}
+	
+	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
+	//
+	public boolean rotatedEnough() {
+		return Math.abs(pose[g.THETA] - alignedPose[g.THETA]) > Math.PI/2;
 	}
 
 	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
