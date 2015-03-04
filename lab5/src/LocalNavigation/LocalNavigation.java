@@ -142,7 +142,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			sleep_time = ((long) (1000.0/FSM.FREQ)) - duration;
 			try {
 				Thread.sleep(sleep_time);
-			} catch (InterruptedException) {
+			} catch (InterruptedException e) {
 				_shutdown = true;
 			}
 		} while (_shutdown);
