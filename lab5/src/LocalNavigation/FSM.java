@@ -6,7 +6,7 @@ import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
 
 public class FSM {
-	// Frequency that step should be called
+    // Frequency that step should be called
 	//
 	public static final double FREQ = 20;
 
