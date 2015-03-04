@@ -53,7 +53,7 @@ public class SonarPoints {
 		return range <= threshold_high && range >= threshold_low;
 	}
 	private boolean trackingObstacle(double range) { // Uses tracking variable
-		return tracking && obstacleInRange(range)
+		return tracking && obstacleInRange(range);
 	}
 
 	// Linear Filter.
