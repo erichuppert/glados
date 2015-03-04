@@ -4,6 +4,7 @@ import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
+import org.ros.message.rss_msgs.OdometryMsg;
 
 public class FSM {
     // Frequency that step should be called
@@ -59,13 +60,16 @@ public class FSM {
 	//
 	private Publisher<org.ros.message.std_msgs.String> statePub; // state
 	private Publisher<MotionMsg> motorPub; // motor commands
+	private Publisher<OdometryMsg> odoPub; // Odometry readjustments
 
 	// Set the Initial State
 	//
 	public FSM(Node node, int initialState, SonarPoints _sp) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
+		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		changeState(initialState);
+		resetRobot();
 		sp = _sp;
 	}
 
@@ -231,13 +235,13 @@ public class FSM {
 			changeState(ALIGNED_AND_ROTATED);
 		}
 	}
-	
+
 	// what to do once we have our sensors facing the obstacle ready to scan
 	//
 	private void aligned_and_rotated() {
 		changeState(BACKING_UP);
 	}
-	
+
 	// when we are backing up and scanning the obstacle, trying to find its end
 	//
 	private void backing_up() {
@@ -253,7 +257,7 @@ public class FSM {
 			changeState(FINDING_WALL);
 		}
 	}
-	
+
 	// once we have moved so that both sensors are behind the obstacle, we move forward
 	//
 	private void finding_wall() {
@@ -303,8 +307,7 @@ public class FSM {
 	private boolean haveObstacle() {
 		return SonarPoints.obstacleInRange(sonars[g.BACK]) || SonarPoints.obstacleInRange(sonars[g.FRONT]);
 	}
-	
-	
+
 	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough() {
@@ -340,5 +343,20 @@ public class FSM {
 		if(motorPub != null) {
 			motorPub.publish(msg);
 		}
+	}
+
+	private void setRobotPose(double x, double y, double theta) {
+		OdometryMsg msg = new OdometryMsg;
+		msg.x = x;
+		msg.y = y;
+		msg.theta = theta;
+		if (odoPub != null) {
+			odoPub.publish(msg);
+		}
+	}
+
+	private void resetRobot() {
+		setMotorVelocities(0,0);
+		setRobotPose(0,0,0);
 	}
 }
