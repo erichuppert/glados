@@ -20,8 +20,6 @@ import org.ros.node.topic.Subscriber;
 import org.ros.namespace.GraphName;
 
 public class LocalNavigation implements NodeMain,Runnable {
-	private Node logNode;
-
 	// State machine states, and state variable
 	//
 	public static final java.lang.String STOP_ON_BUMP      = "Initial state: stops when it feels a bump";
@@ -41,27 +39,23 @@ public class LocalNavigation implements NodeMain,Runnable {
 	 * Aligned frame: Relative to the robot when it most recently entered the ALIGNED state.
 	 */
 
-	// x, y, and theta record the robot's current position in the world frame
-	private double x;
-	private double y;
-	private double theta;
-
-	// Transforms between odometry and world frames
-	private Mat odoToWorld; // initialize in handleOdometry
-	private Mat worldToOdo; // initialize in handleOdometry
-
 	// Transforms between robot and world frames
-	private Mat robotToWorld; // continuously update in handleOdometry
+	//
+	private Mat robotToWorld;
 
 	// Transforms between sonar and robot frames
+	//
 	private static final Mat sonarToRobotRot = Mat.rotation(Math.PI / 2);
 	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.64, 0.19), sonarToRobotRot);
 	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
 
+<<<<<<< HEAD
 	// Transforms between aligned and world frames
 	private Mat alignedToWorld; // update when entering the ALIGNED state
 	private Mat worldToAligned; // update when entering the ALIGNED state
 
+=======
+>>>>>>> 133d75ff626e1d18834db43c01b719a573a95755
 	// Subscribers
 	//
 	public Subscriber<SonarMsg> sonarFrontSub; // Sonars
@@ -73,24 +67,22 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	public Publisher<MotionMsg> motorPub; // motors for velocity
 	public Publisher<org.ros.message.std_msgs.String> statePub; // Publish state value
-	public Publisher<org.ros.message.lab5_msgs.GUILineMsg> linePub; // Publishes the Line to the GUI
-	private GUILineMsg linePlot;
-	private ColorMsg linePlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
-	private GUISegmentMsg segmentPlot;
-	private ColorMsg segmentPlotColor;
-	public Publisher<org.ros.message.lab5_msgs.GUIPointMsg> pointPub; // Publishes points to the GUI
-	private GUIPointMsg pointPlot;
-	private ColorMsg pointPlotColor;
+	public Publisher<GUILineMsg> linePub; // Publishes the Line to the GUI
+	//public Publisher<GUISegmentMsg> segmentPub; // Published Segment to the GUI; Not sure what it does
+	public Publisher<GUIPointMsg> pointPub; // Publishes points to the GUI
 
-	public boolean obstacleDetected = false;
-	public double threshold = Double.MAX_VALUE; //TODO value to be added after testing
-	
+	//TODO value to be added after testing
+	//
+	public double threshold = Double.MAX_VALUE;
+
 	private LeastSquareLine lsqWorld;
+<<<<<<< HEAD
 	private LeastSquareLine lsqOdo;
 	
 	// define colors for GUI
 	private static int RED=1, BLUE=2, GREEN=3;
+=======
+>>>>>>> 133d75ff626e1d18834db43c01b719a573a95755
 
 	// below are dummy values that will need to be tuned based on experimentation
 	//
@@ -98,17 +90,10 @@ public class LocalNavigation implements NodeMain,Runnable {
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
 
 	public LocalNavigation() {
-		//setInitialParams();
-
 		lsqWorld = new LeastSquareLine();
-		lsqOdo = new LeastSquareLine();
-
 	}
 
 	public void onStart(Node node) {
-
-		logNode = node;
-
 		// initialize the ROS subscriptions to rss/Sonars
 		//
 		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg");
@@ -116,7 +101,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(SonarMsg message) {
 					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
-					//handleSonar(message);
+					handleSonar(message);
 				}
 			});
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");
@@ -124,7 +109,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(SonarMsg message) {
 					//System.out.printf("Is Front?: %b\tRange: %.3f\n",message.isFront, message.range);
-					//handleSonar(message);
+					handleSonar(message);
 				}
 			});
 
@@ -135,7 +120,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(BumpMsg message) {
 					//System.out.printf("Left: %b\tRight: %b\n", message.left, message.right);
-					handleBump(message);
+					//handleBump(message);
 				}
 			});
 
@@ -159,8 +144,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 		pointPub = node.newPublisher("/gui/Point","lab5_msgs/GUIPointMsg");
 		// Initialize the ROS publication to graph lines
 		linePub = node.newPublisher("/gui/Line","lab5_msgs/GUILineMsg");
-		// Initialize the ROS publication to graph line segments
-		segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
+		// // Initialize the ROS publication to graph line segments
+		// segmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
 
 		// initialize the ROS publication to rss/state
 		//
@@ -179,28 +164,11 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 	/*handle odometry
 	 * all position co-ordinates are stored as a matrix of 3*1 [x,y,theta]
-	 *all tranforms are done using matrix operations (functions from the Mat Class)
+	 * all tranforms are done using matrix operations (functions from the Mat Class)
 	 */
 
 	public void handleOdometry(OdometryMsg message) {
-		if ( firstUpdate ) {
-			odoToWorld = Mat.mul(Mat.rotation(-message.theta), Mat.translation(-message.x, -message.y));
-			worldToOdo = Mat.inverse(odoToWorld);
-
-			firstUpdate = false;
-		}
-
-		double[] robotPose = Mat.decodePose(Mat.mul(odoToWorld, Mat.encodePose(message.x, message.y, message.theta)));
-
-		x     = robotPose[0];
-		y     = robotPose[1];
-		theta = robotPose[2];
-
-		robotToWorld = Mat.mul(Mat.translation(x, y), Mat.rotation(theta));
-
-		//logNode.getLog().info("Odometry raw: " + message.x + " " + message.y + " " + message.theta +
-		//                    "\nOdemetry processed: " +         x + " " +         y + " " +         theta);
-		//motorUpdate();
+		robotToWorld = Mat.mul(Mat.translation(message.x, message.y), Mat.rotation(message.theta));
 	}
 
 	/**
@@ -257,42 +225,22 @@ public class LocalNavigation implements NodeMain,Runnable {
 	}
 
 	public void handleSonar(SonarMsg message) {
-		java.lang.String sensor = new java.lang.String();
+		Mat sonarToRobot = message.isFront ? sonarFrontToRobot : sonarBackToRobot;
 
-		Mat sonarToRobot;
+		// get the range encoded as a pose vector
+		Mat echoSonar = Mat.encodePose(message.range, 0, 0);
+		// get the sonar position with respect to the world frame
+		Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
 
-		if (message.isFront) {
-			sensor = "Front";
-			sonarToRobot = sonarFrontToRobot;
-		} else {
-			sensor = "Back";
-			sonarToRobot = sonarBackToRobot;
+		double[] echoWorldL = Mat.decodePose(echoWorld);
+		Color pointColor = message.range < threshold ? Color.RED : Color.BLUE; 
+
+		if (message.range < threshold) {
+			lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
+			lsqWorld.publishLine();
 		}
-
-		if (!firstUpdate) {
-			// get the range encoded as a pose vector
-			Mat echoSonar = Mat.encodePose(message.range, 0, 0);
-			// get the sonar position with respect to the world frame
-			Mat echoWorld = Mat.mul(robotToWorld, sonarToRobot, echoSonar);
-			Mat echoOdo = Mat.mul(worldToOdo, echoWorld);
-
-			double[] echoWorldL = Mat.decodePose(echoWorld);
-			double[] echoOdoL = Mat.decodePose(echoOdo);
-			
-			Color pointColor; // based on whether the point is within the threshold, we will choose the color of the point on the GUI
-			if (message.range < threshold) {
-            	obstacleDetected = true;
-            	pointColor = Color.RED;
-				lsqWorld.addPoint(echoWorldL[0], echoWorldL[1]);
-				lsqWorld.publishLine();
-        	} else {
-            	obstacleDetected = false;
-            	pointColor = Color.GREEN;
-        	}
-			int pointShape = message.isFront ? 0 : 1;
-			publishPoint((float) echoOdoL[0], (float) echoOdoL[1], pointColor, pointShape); // 
-			//logNode.getLog().info("SONAR: Sensor: " + sensor + " Range: " + message.range);
-		}
+		int pointShape = message.isFront ? 0 : 1;
+		publishPoint((float) echoWorldL[0], (float) echoWorldL[1], pointColor, pointShape);
 	}
 
 	public void onShutdownComplete(Node node) {
@@ -325,7 +273,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		}
 	}
 	
-	private ColorMsg getColorMessage(Color color) {
+	public static ColorMsg getColorMessage(Color color) {
 		ColorMsg message = new ColorMsg();
 		message.r = color.getRed();
 		message.b = color.getBlue();
@@ -337,8 +285,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 		GUIPointMsg pointPlot = new GUIPointMsg();
 		pointPlot.shape = shape;
     	pointPlot.color = getColorMessage(color);
-		pointPlot.x = echoOdoL[0];
-		pointPlot.y = echoOdoL[1];
+		pointPlot.x = x;
+		pointPlot.y = y;
 		pointPub.publish(pointPlot);
 	}
 	
