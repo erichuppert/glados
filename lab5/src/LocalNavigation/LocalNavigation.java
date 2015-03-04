@@ -345,8 +345,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 	//
 	private void setMotorVelocities(double tv, double rv) {
 		MotionMsg msg = new MotionMsg();
-		msg.translationalVelocity = rv;
-		msg.rotationalVelocity = tv;
+		msg.translationalVelocity = tv;
+		msg.rotationalVelocity = rv;
 		if(motorPub != null) {
 			motorPub.publish(msg);
 		}
