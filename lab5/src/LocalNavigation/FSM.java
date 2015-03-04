@@ -303,7 +303,7 @@ public class FSM {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.625;
 			double Ka = 0.5;
-			double desired = 0.4;
+			double desired = 0.3;
 			try {
 				double theta_i = Kd*(desired-sp.getDistanceError());
 				rv = Ka*(theta_i - sp.getAngleError());
