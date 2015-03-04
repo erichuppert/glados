@@ -16,7 +16,9 @@ public class FSM {
 	public static final java.lang.String ALIGN_ON_BUMP     = "Initial state: aligns when it feels a bump";
 	public static final java.lang.String ALIGNING          = "Currently aligining the robot";
 	public static final java.lang.String ALIGNED           = "Currently aligned";
-
+	public static final java.lang.String RETREATING        = "Moving backwards from obstacle after alignment";
+	public static final java.lang.String ROTATING          = "Rotating so that sonars face the obstacle";
+	
 	// State variable
 	//
 	private java.lang.String state;
@@ -46,6 +48,10 @@ public class FSM {
 	//
 	private boolean setVelocities;
 	private double tv,rv;
+	
+	// keep track of the location that robot was in when aligned with wall so that we can retreat the right distance
+	//
+	private double[] alignedPose;
 
 	/**
 	 * Take a step in the state machine
@@ -78,6 +84,12 @@ public class FSM {
 			break;
 		case ALIGNED:
 			aligned();
+			break;
+		case RETREATING:
+			retreating();
+			break;
+		case ROTATING:
+			rotating();
 			break;
 		default:
 			throw new Exception("INVALID STATE");
@@ -139,10 +151,38 @@ public class FSM {
 		}
 	}
 
-	// If we're aligned, we do nothing
+	// If we're aligned, we move away from the obstacle 
 	//
-	private void aligned() {}
-
+	private void aligned() {
+		alignedPose = pose.clone();
+		setMotorVelocities(-ALIGNMENT_TRANSLATIONAL_SPEED, 0);
+		changeState(RETREATING);
+	}
+	
+	// Move back from the obstacle after we are aligned
+	//
+	private void retreating() {
+		if (!retreatedEnough()) {
+			setMotorVelocities(-ALIGNMENT_TRANSLATIONAL_SPEED, 0);
+		} else {
+			setMotorVelocities(0, 0);
+			changeState(ROTATING);
+		}
+	}
+	
+	// rotate so that we align sensors with object
+	public void rotating() {
+		
+	}
+	
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
+	
+	// tell if, based on our current pose, if we have retreated from the wall enough
+	private boolean retreatedEnough() {
+		double distanceSinceAligned = Math.sqrt(Math.pow(pose[g.X]-alignedPose[g.X],2) + Math.pow(pose[g.Y] - alignedPose[g.Y],2));
+		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE;
+	}
+	
 	// Changes state variable, and publishes it.
 	//
 	private void changeState(java.lang.String newState){
@@ -153,6 +193,7 @@ public class FSM {
 			statePub.publish(msg);
 		}
 	}
+	
 
 	// Useful for abstracting setting the motor velocities
 	//
