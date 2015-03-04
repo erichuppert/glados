@@ -20,6 +20,10 @@ public class FSM {
 	public static final int RETREATING          = 4;
 	public static final int ROTATING            = 5;
 	public static final int ALIGNED_AND_ROTATED = 6;
+	public static final int BACKING_UP          = 7;
+	public static final int FINDING_WALL        = 8;
+	public static final int TRACKING_WALL       = 9;
+	public static final int WALL_ENDED          = 10;
 
 	// State descriptions
 	//
@@ -104,6 +108,21 @@ public class FSM {
 			break;
 		case ROTATING:
 			rotating();
+			break;
+		case ALIGNED_AND_ROTATED:
+			aligned_and_rotated();
+			break;
+		case BACKING_UP:
+			backing_up();
+			break;
+		case FINDING_WALL:
+			finding_wall();
+			break;
+		case TRACKING_WALL:
+			tracking_wall();
+			break;
+		case WALL_ENDED:
+			wall_ended();
 			break;
 		default:
 			// INVALID STATE, do nothing
@@ -191,15 +210,83 @@ public class FSM {
 	}
 
 	// rotate so that we align sensors with object
-	public void rotating() {
+	//
+	private void rotating() {
 		setVelocities = true;
+		// based on our original pose at the wall, we rotate until we get pi/2 away from that directional pose
 		if (!rotatedEnough()) {
 			tv = 0;
 			rv = ALIGNMENT_ROTATIONAL_SPEED;
 		} else {
 			tv = rv = 0;
+			changeState(ALIGNED_AND_ROTATED);
 		}
 	}
+	
+	// what to do once we have our sensors facing the obstacle ready to scan
+	//
+	private void aligned_and_rotated() {
+		changeState(BACKING_UP);
+	}
+	
+	// when we are backing up and scanning the obstacle, trying to find its end
+	//
+	private void backing_up() {
+		setVelocities = true;
+		// as long is the wall is still in view, we back up so that we can find the end of it
+		//
+		if (haveObstacle()) {
+			tv = -ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = 0;
+		} else {
+			// once both sensors dont see the wall, we start finding the wall
+			tv = rv = 0;
+			changeState(FINDING_WALL);
+		}
+	}
+	
+	// once we have moved so that both sensors are behind the obstacle, we move forward
+	//
+	private void finding_wall() {
+		setVelocities = true;
+		// in this state, we will have backed up and moved behind the wall
+		// we need to move forward to bring the wall back into view
+		//
+		if (!haveObstacle()) {
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = 0;
+		} else {
+			// once in view, start tracking the wall
+			tv = rv = 0;
+			changeState(TRACKING_WALL);
+		}
+	}
+	
+	// when we are moving forward and scanning the wall after finding its end previously
+	//
+	private void tracking_wall() {
+		// when we have an obstacle in sonar view, continue moving forward and tracking it
+		if (haveObstacle()) {
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = 0;
+		} else {
+			tv = rv = 0;
+			changeState(WALL_ENDED);
+		}
+	}
+	
+	// after we have cleared the wall in front (and know the location of the wall)
+	//
+	private void wall_ended() {
+		
+	}
+	
+	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
+	//
+	private boolean haveObstacle() {
+		return true;
+	}
+	
 	
 	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
 	//
