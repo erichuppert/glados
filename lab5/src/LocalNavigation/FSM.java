@@ -165,6 +165,8 @@ public class FSM {
 			rv = 0;
 		}
 	}
+	
+	private static final float POST_RETREAT_ROTATION_SPEED = 0.4;
 
 	// If we're aligned, we move away from the obstacle
 	//
@@ -172,7 +174,7 @@ public class FSM {
 		setVelocities = true;
 
 		alignedPose = pose.clone();
-		tv = -ALIGNMENT_TRANSLATIONAL_SPEED;
+		tv = POST_RETREAT_ROTATION_SPEED;
 		rv = 0;
 		changeState(RETREATING);
 	}
