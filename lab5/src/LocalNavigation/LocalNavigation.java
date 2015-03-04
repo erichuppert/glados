@@ -101,11 +101,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 		lsqWorld = new LeastSquareLine();
 		lsqOdo = new LeastSquareLine();
-
-		if (RUN_SONAR_GUI) {
-			gui = new SonarGUI();
-			gui.resetWorldToView(0,0,0);
-		}
 	}
 
 	public void onStart(Node node) {
@@ -189,9 +184,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 			odoToWorld = Mat.mul(Mat.rotation(-message.theta), Mat.translation(-message.x, -message.y));
 			worldToOdo = Mat.inverse(odoToWorld);
 
-			if (RUN_SONAR_GUI) {
-				gui.resetWorldToView(0, 0);
-			}
 			firstUpdate = false;
 		}
 
@@ -203,9 +195,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 
 		robotToWorld = Mat.mul(Mat.translation(x, y), Mat.rotation(theta));
 
-		if (RUN_SONAR_GUI) {
-			gui.setRobotPose(x, y, theta);
-		}
 		//logNode.getLog().info("Odometry raw: " + message.x + " " + message.y + " " + message.theta +
 		//                    "\nOdemetry processed: " +         x + " " +         y + " " +         theta);
 		//motorUpdate();
