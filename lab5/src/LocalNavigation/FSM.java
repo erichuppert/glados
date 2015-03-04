@@ -231,7 +231,7 @@ public class FSM {
 	// what to do once we have our sensors facing the obstacle ready to scan
 	//
 	private void aligned_and_rotated() {
-//		changeState(BACKING_UP);
+		changeState(BACKING_UP);
 	}
 	
 	// when we are backing up and scanning the obstacle, trying to find its end
