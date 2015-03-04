@@ -70,12 +70,12 @@ public class LocalNavigation implements NodeMain,Runnable {
 		MessageListener<OdometryMsg> odoListener = new MessageListener<OdometryMsg>() {
 				@Override
 				public void onNewMessage(OdometryMsg m) {
-					double[] _pose = new double[3];
+					double[] _pose;
 					synchronized(this) {
 						pose[g.X] = m.x;
 						pose[g.Y] = m.y;
 						pose[g.THETA] = m.theta;
-						System.arraycopy(pose,0,_pose,0,pose.length);
+						_pose = pose.clone();
 					}
 					sp.updateRobotPose(_pose);
 				}
@@ -121,9 +121,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// For thread safe copying
 		//
 		boolean _shutdown;
-		double[] _sonars = new double[2];
-		double[] _pose = new double[3];
-		boolean[] _bumpers = new boolean[2];
+		double[] _sonars;
+		double[] _pose;
+		boolean[] _bumpers;
 
 		do {
 			initial_time = System.currentTimeMillis();
@@ -132,9 +132,9 @@ public class LocalNavigation implements NodeMain,Runnable {
 			//
 			synchronized(this) {
 				_shutdown = shutdown;
-				System.arraycopy(sonars,  0, _sonars,  0, sonars.length );
-				System.arraycopy(pose,    0, _pose,    0, pose.length   );
-				System.arraycopy(bumpers, 0, _bumpers, 0, bumpers.length);
+				_sonars = sonars.clone();
+				_pose = pose.clone();
+				_bumpers = bumpers.clone();
 			}
 			fsm.step(_sonars, _pose, _bumpers);
 
