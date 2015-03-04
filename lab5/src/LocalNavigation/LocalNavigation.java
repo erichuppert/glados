@@ -127,7 +127,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 				}
 			});
 
-		changeState(ALIGN_ON_BUMP);
 		// initialize the ROS subscription to rss/BumpSensors
 		//
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");
@@ -165,6 +164,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// initialize the ROS publication to rss/state
 		//
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
+		changeState(ALIGN_ON_BUMP);
 
 		Thread runningStuff = new Thread(this);
 		runningStuff.start();
@@ -233,6 +233,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 			if (message.right && message.left) {
 				// if both sensors are depressed, then we are aligned
 				//
+				System.out.printf("I ALIGNED\n");
 				changeState(ALIGNED);
 				tv = rv = 0;
 			} else if (message.right || message.left) {
@@ -240,12 +241,14 @@ public class LocalNavigation implements NodeMain,Runnable {
 				// based on which bumper is hit, we need to choose the rotation direction
 				// We also have a small forward velocity to make sure the bumper that was depressed does not get undepressed
 				//
+				System.out.printf("BUMP IS DEPRESSED\n");
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 				int rotationalFactor = (message.left ? 1 : -1);
 				rv = rotationalFactor * ALIGNMENT_ROTATIONAL_SPEED;
 			} else {
 				// If neither is depressed, we move slowly forward.
 				//
+				System.out.printf("I CAN GO FORWARD YAY!!!!!!\n");
 				rv = 0;
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			}
