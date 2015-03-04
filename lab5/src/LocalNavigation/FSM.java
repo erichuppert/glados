@@ -307,7 +307,7 @@ public class FSM {
 			double desired = 0.4;
 			try {
 				double theta_i = Kd*(desired-sp.getDistanceError());
-				rv = -Ka*(theta_i - sp.getAngleError());
+				rv = Ka*(theta_i - sp.getAngleError());
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
