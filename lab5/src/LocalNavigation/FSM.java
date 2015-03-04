@@ -180,8 +180,8 @@ public class FSM {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.2;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
+	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.5;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.2;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
@@ -340,7 +340,7 @@ public class FSM {
 	private void wall_ended() {
 		setVelocities = true;
 		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-		rv = tv/OBSTACLE_RETREAT_DISTANCE;
+		rv = -ALIGNMENT_ROTATIONAL_SPEED;
 		changeState(ALIGN_ON_BUMP);
 	}
 
