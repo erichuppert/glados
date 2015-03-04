@@ -93,15 +93,6 @@ public class FSM {
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.2;
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
 
-	// Binary manipulations to make bumper testing simpler
-	//
-	private static final int bLEFT = (int)0b10;
-	private static final int bRIGHT = (int)0b01;
-	private static final int bNONE = (int)0b00;
-	private static int bumperStatus() {
-		return (bumpers[g.LEFT]?bLEFT:bNONE) | (bumpers[g.RIGHT]?bRIGHT:bNONE);
-	}
-
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
 	private void stop_on_bump() {
@@ -127,15 +118,12 @@ public class FSM {
 		int bumperStatus = bumperStatus();
 		setVelocities = true;
 
-		switch(bumperStatus) {
-		case bRIGHT|bLEFT:
+		if(bumpers[LEFT] && bumpers[RIGHT]) {
 			// Both bumpers pressed
 			//
 			changeState(ALIGNED);
 			tv = rv = 0;
-			break;
-		case bLEFT:
-		case bRIGHT:
+		} else if (bumpers[LEFT] || bumpers[RIGHT]) {
 			// Either bumper pressed
 			// Rotate to align.
 			// Slight forward speed to avoid oscillations
@@ -143,7 +131,7 @@ public class FSM {
 			//
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
 			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[LEFT]?1.0:-1.0);
-		case bNONE:
+		} else {
 			// Neither is depressed, just move slowly forward.
 			//
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
