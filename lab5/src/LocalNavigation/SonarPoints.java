@@ -17,8 +17,6 @@ public class SonarPoints {
 	 * Robot frame: Relative to the robot right now, x front, y left, theta up
 	 * Sonar frame: Relative to the sonar, x points along the sonar axis, y left, theta up
 	 */
-	//
-
 	// Robot's pose
 	//
 	private Mat robot;
@@ -67,7 +65,7 @@ public class SonarPoints {
 	 * @param pose: the current pose array
 	 */
 	public void updateRobotPose(double[] pose) {
-		robotToWorld = Mat.mul(Mat.translation(pose[g.X], pose[g.Y]), Mat.rotation(pose[g.THETA]));
+		robot = Mat.mul(Mat.translation(pose[g.X], pose[g.Y]), Mat.rotation(pose[g.THETA]));
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class SonarPoints {
 		msg.r = color.getRed();
 		msg.b = color.getBlue();
 		msg.g = color.getGreen();
-		return message;
+		return msg;
 	}
 
 	/**
@@ -105,7 +103,7 @@ public class SonarPoints {
 	public void newPoint(boolean front, double range) {
 		// Can only add a point if we have a verified pose.
 		//
-		if (robotToWorld == null) {
+		if (robot == null) {
 			return;
 		}
 
@@ -116,20 +114,20 @@ public class SonarPoints {
 		// Get the position of the point relative to the sonar
 		// and use it to get the point in the real world
 		//
-		Mat sonarTranslation = Mat.encodePose(message.range, 0, 0);
-		Mat poseMat = Mat.mul(robotToWorld, sonarToRobot, sonarTranslation);
+		Mat sonarTranslation = Mat.encodePose(range, 0, 0);
+		Mat poseMat = Mat.mul(robot, sonarToRobot, sonarTranslation);
 
 		// Put it in a pose array
 		//
-		double[] pose = Mat.decodePose(pointMat);
+		double[] pose = Mat.decodePose(poseMat);
 
 		// Color of the point depends on whether it belongs to an obstacle or not.
 		//
-		Color pointColor = obstacleInRange(message) ? Color.RED : Color.BLUE;
+		Color pointColor = obstacleInRange(range) ? Color.RED : Color.BLUE;
 
 		// If we are seeing an obstacle, add it to the line points.
 		//
-		if (obstacleInRange(msg)) {
+		if (obstacleInRange(range)) {
 			//lineFilter.addPoint(pose[g.X], pose[g.Y]);
 			//lineFilter.publishLine();
 		}
