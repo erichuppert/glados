@@ -44,11 +44,6 @@ public class LocalNavigation implements NodeMain,Runnable {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");   // back sonar
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");         // bump sensors
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
-		
-		// initialize the ROS publication to graph line segments
-		segmentPlosegmentPub = node.newPublisher("/gui/Segment","lab5_msgs/GUISegmentMsg");
-		t = new GUISegmentMsg();
-		segmentPlotColor = new ColorMsg();
 
 		// Describe message listeners
 		//
