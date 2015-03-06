@@ -45,7 +45,7 @@ public class FSM {
 		"Finding the obstacle while moving forward",
 		"Tracking the wall with sonars",
 		"Found the end of the wall",
-		"Initialization State"
+		"Initialization State",
 		"Found the final state, finished."
 	};
 
