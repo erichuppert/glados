@@ -30,6 +30,7 @@ public class FSM {
 	public static final int TRACKING_WALL       = 9;
 	public static final int WALL_ENDED          = 10;
 	public static final int START_STATE         = 11;
+	public static final int DONE                = 12;
 
 	// State descriptions
 	//
@@ -46,6 +47,7 @@ public class FSM {
 		"Tracking the wall with sonars",
 		"Found the end of the wall",
 		"Initialization State"
+		"Found the final state, finished."
 	};
 
 	// State variable
@@ -83,7 +85,7 @@ public class FSM {
 		if (logErrors) {
 			try {
 				File logFile = new File("./error-log.txt");
-				errorOutput =  new BufferedWriter(new FileWriter(logFile));							
+				errorOutput =  new BufferedWriter(new FileWriter(logFile));
 			} catch (Exception e) {
 				System.err.println(e);
 			}
@@ -340,12 +342,21 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double radius = 0.5;
+		double radius = 0.5*OBSTACLE_RETREAT_DISTANCE + 0.1/OBSTACLE_RETREAT_DISTANCE;
 		setVelocities = true;
-		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-		rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius * 1./5.;
-		changeState(ALIGN_ON_BUMP);
+		if (sp.obstacleDone()) {
+			tv=rv=0;
+			changeState(DONE);
+		} else {
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius * 1./5.;
+			changeState(ALIGN_ON_BUMP);
+		}
 	}
+
+	// Goes into this state when we have found a model of the obstacle
+	//
+	private void done() {}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
 	//
@@ -404,9 +415,9 @@ public class FSM {
 		setMotorVelocities(0,0);
 		setRobotPose(0,0,0);
 	}
-	
+
 	/**
-	 * Takes the error terms and adds them to the file. 
+	 * Takes the error terms and adds them to the file.
 	 * @param translationError amount of translational error
 	 * @param angleError amount of angleError
 	 */
@@ -417,7 +428,6 @@ public class FSM {
 						Long.toString(System.currentTimeMillis()) + " " +
 								Double.toString(translationError) + " " +
 								Double.toString(angleError));
-				
 			} catch (Exception e){
 				System.err.println(e);
 			}
