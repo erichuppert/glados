@@ -61,7 +61,7 @@ public class FSM {
 	private double[] pose;
 	private boolean[] bumpers;
 	
-	private IntBuffer wallTrackingBuffer;
+//	private IntBuffer wallTrackingBuffer;
 
 	// SonarPoints to control the linear filter/segments
 	//
@@ -84,7 +84,7 @@ public class FSM {
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		initialState = _initialState;
 		sp = _sp;
-		wallTrackingBuffer = IntBuffer.allocate(5);
+//		wallTrackingBuffer = IntBuffer.allocate(5);
 		if (logErrors) {
 			try {
 				File logFile = new File("./error-log.txt");
@@ -186,7 +186,7 @@ public class FSM {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.25;
+	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.05;
 	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
@@ -224,7 +224,7 @@ public class FSM {
 			// Slight forward speed to avoid oscillations
 			// Happened due to depressed bumper becoming undepressed in pure rotation
 			//
-			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.5;
 			double robot_radius = .215;
 			rv = ALIGNMENT_ROTATIONAL_SPEED*0.5 * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
@@ -235,7 +235,7 @@ public class FSM {
 		}
 	}
 
-	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.5;
+	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.2;
 
 	// If we're aligned, we move away from the obstacle
 	//
@@ -322,13 +322,13 @@ public class FSM {
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		
-		wallTrackingBuffer.put(haveObstacle() ? 1 : 0);
-		
-		int bufferCount = 0;
-		for (int i = 0; i< wallTrackingBuffer.capacity(); i++) {
-			bufferCount += wallTrackingBuffer.get(i);
-		}
-		boolean startFindWall = bufferCount < 3;
+//		wallTrackingBuffer.put(haveObstacle() ? 1 : 0);
+//		
+//		int bufferCount = 0;
+//		for (int i = 0; i< wallTrackingBuffer.capacity(); i++) {
+//			bufferCount += wallTrackingBuffer.get(i);
+//		}
+//		boolean startFindWall = bufferCount < 3;
 //		if (startFindWall) {
 		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
@@ -362,7 +362,7 @@ public class FSM {
 			changeState(DONE);
 		} else {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius * 1./5.;
+			rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius;
 			changeState(ALIGN_ON_BUMP);
 		}
 	}
@@ -407,7 +407,7 @@ public class FSM {
 	//
 	private void setMotorVelocities(double tv, double rv) {
 		MotionMsg msg = new MotionMsg();
-		msg.translationalVelocity = tv;
+		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
 		if(motorPub != null) {
 			motorPub.publish(msg);
