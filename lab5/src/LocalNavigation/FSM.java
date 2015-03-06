@@ -337,6 +337,7 @@ public class FSM {
 			sp.stopTracking();
 			changeState(WALL_ENDED);
 		}
+		System.out.Printf("HERE!!!! TV: %.2f\tRV: %.2f\n", tv, rv);
 	}
 
 	// after we have cleared the wall in front (and know the location of the wall)
