@@ -181,7 +181,7 @@ public class FSM {
 	// Below are values that have been tuned based on experimentation
 	//
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.25;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.15;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
@@ -356,7 +356,7 @@ public class FSM {
 		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > Math.PI/2;
 	}
 
-	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.3;
 
 	// Tell if, based on our current pose, if we have retreated from the wall enough
 	//
