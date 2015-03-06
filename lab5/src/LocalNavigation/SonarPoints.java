@@ -204,19 +204,19 @@ public class SonarPoints {
 			msg.endY = end[g.Y];
 			msg.color = getColorMessage(randomColor());
 			segmentPub.publish(msg);
+
+			// Add to the max angle
+			//
+			double [] segVector = new double[] {end[g.X]-start[g.X],end[g.Y]-start[g.Y]};
+			double length = Math.pow(segVector[g.X]*segVector[g.X] + segVector[g.Y]*segVector[g.Y],0.5);
+			segVector[g.X] /= length;
+			segVector[g.Y] /= length;
+			double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
+			outerAngle += Math.acos(dot);
+			previousVector = segVector.clone();
 		}
 
 		tracking = false;
-
-		// Add to the max angle
-		//
-		double [] segVector = new double[] {end[g.X]-start[g.X],end[g.Y]-start[g.Y]};
-		double length = Math.pow(segVector[g.X]*segVector[g.X] + segVector[g.Y]*segVector[g.Y],0.5);
-		segVector[g.X] /= length;
-		segVector[g.Y] /= length;
-		double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
-		outerAngle += Math.acos(dot);
-		previousVector = segVector.clone();
 	}
 
 	public synchronized double getDistanceError() {
