@@ -426,7 +426,7 @@ public class FSM {
 			try {
 				errorOutput.append(
 						Long.toString(System.currentTimeMillis()) + " " +
-								Double.toString(translationError) + " " +
+								Double.toString(OBSTACLE_RETREAT_DISTANCE-translationError) + " " +
 								Double.toString(angleError) + "\n");
 			} catch (Exception e){
 				System.err.println(e);
