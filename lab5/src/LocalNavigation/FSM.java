@@ -353,7 +353,7 @@ public class FSM {
 	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough() {
-		return ((pose[g.THETA] - alignedPose[g.THETA] + 2*Math.PI) % Math.PI*2) > Math.PI/2; // Hacky-ish
+		return Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]));
 	}
 
 	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
