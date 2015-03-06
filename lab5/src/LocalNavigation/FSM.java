@@ -339,7 +339,7 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double radius = 0.5
+		double radius = 0.5;
 		setVelocities = true;
 		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 		rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius * 1./5.;
