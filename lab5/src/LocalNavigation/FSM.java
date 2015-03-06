@@ -354,7 +354,7 @@ public class FSM {
 	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough() {
-		return Math.abs(pose[g.THETA] - alignedPose[g.THETA]) > Math.PI/2;
+		return ((Math.abs(pose[g.THETA] - alignedPose[g.THETA] + 2*Math.PI) % Math.PI*2) > Math.PI/2; // Hacky-ish
 	}
 
 	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
