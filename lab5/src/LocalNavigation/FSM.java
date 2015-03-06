@@ -341,7 +341,7 @@ public class FSM {
 	private void wall_ended() {
 		setVelocities = true;
 		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-		rv = 0.07;
+		rv = 0.06;
 		changeState(ALIGN_ON_BUMP);
 	}
 
