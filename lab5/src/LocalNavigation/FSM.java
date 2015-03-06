@@ -338,7 +338,6 @@ public class FSM {
 			sp.stopTracking();
 			changeState(WALL_ENDED);
 		}
-		//System.out.printf("HERE!!!! TV: %.2f\tRV: %.2f\n", tv, rv);
 	}
 
 	// after we have cleared the wall in front (and know the location of the wall)
@@ -396,6 +395,12 @@ public class FSM {
 	//
 	private void setMotorVelocities(double tv, double rv) {
 		MotionMsg msg = new MotionMsg();
+		// Motor commands do not handle NaN well. We should never get these.
+		//
+		if (tv == Double.NaN || rv == Double.NaN) {
+			throw new RuntimeException("NaN command sent!");
+		}
+
 		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
 		if(motorPub != null) {
