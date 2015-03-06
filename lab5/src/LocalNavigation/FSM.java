@@ -342,7 +342,7 @@ public class FSM {
 	private void wall_ended() {
 		setVelocities = true;
 		tv = counter<200?0:0;//ALIGNMENT_TRANSLATIONAL_SPEED:0;
-		rv = Math.PI/20;
+		rv = counter<200?Math.PI/20:0;
 		++counter;
 		//changeState(ALIGN_ON_BUMP);
 	}
