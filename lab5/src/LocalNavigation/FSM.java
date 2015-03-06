@@ -290,7 +290,7 @@ public class FSM {
 		} else {
 			// once both sensors dont see the wall, we start finding the wall
 			tv = rv = 0;
-			changeState(FINDING_WALL);
+//			changeState(FINDING_WALL);
 		}
 	}
 
@@ -427,7 +427,7 @@ public class FSM {
 				errorOutput.append(
 						Long.toString(System.currentTimeMillis()) + " " +
 								Double.toString(translationError) + " " +
-								Double.toString(angleError));
+								Double.toString(angleError) + "\n");
 			} catch (Exception e){
 				System.err.println(e);
 			}
