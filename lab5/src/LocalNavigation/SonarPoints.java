@@ -211,8 +211,10 @@ public class SonarPoints {
 			double length = Math.pow(segVector[g.X]*segVector[g.X] + segVector[g.Y]*segVector[g.Y],0.5);
 			segVector[g.X] /= length;
 			segVector[g.Y] /= length;
-			double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
-			outerAngle += Math.acos(dot);
+			if (previousVector != null) {
+				double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
+				outerAngle += Math.acos(dot);
+			}
 			previousVector = segVector.clone();
 		}
 
