@@ -346,7 +346,7 @@ public class FSM {
 				rv = 0;
 			}
 		} else {
-			wallTrackingBuffer.clear();
+//			wallTrackingBuffer.clear();
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
