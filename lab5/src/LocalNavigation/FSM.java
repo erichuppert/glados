@@ -62,7 +62,7 @@ public class FSM {
 	private double[] pose;
 	private boolean[] bumpers;
 	
-	private IntBuffer findWallObstacleBuffer;
+	private IntBuffer wallTrackingBuffer;
 
 	// SonarPoints to control the linear filter/segments
 	//
@@ -85,7 +85,7 @@ public class FSM {
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		initialState = _initialState;
 		sp = _sp;
-		findWallObstacleBuffer = IntBuffer.allocate(5);
+		wallTrackingBuffer = IntBuffer.allocate(5);
 		if (logErrors) {
 			try {
 				File logFile = new File("./error-log.txt");
@@ -323,14 +323,15 @@ public class FSM {
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		
-		findWallObstacleBuffer.put(haveObstacle() ? 1 : 0);
+		wallTrackingBuffer.put(haveObstacle() ? 1 : 0);
 		
 		int bufferCount = 0;
-		for (int i = 0; i< findWallObstacleBuffer.capacity(); i++) {
-			bufferCount += findWallObstacleBuffer.get(i);
+		for (int i = 0; i< wallTrackingBuffer.capacity(); i++) {
+			bufferCount += wallTrackingBuffer.get(i);
 		}
-		boolean startFindWall = bufferCount > 3;
-		if (startFindWall) {
+		boolean startFindWall = bufferCount < 3;
+//		if (startFindWall) {
+		if (haveObstacle())
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
@@ -345,7 +346,7 @@ public class FSM {
 				rv = 0;
 			}
 		} else {
-			findWallObstacleBuffer.clear();
+			wallTrackingBuffer.clear();
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
