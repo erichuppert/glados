@@ -182,7 +182,7 @@ public class FSM {
 	// Below are values that have been tuned based on experimentation
 	//
 	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.25;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.15;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
@@ -220,7 +220,8 @@ public class FSM {
 			// Happened due to depressed bumper becoming undepressed in pure rotation
 			//
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
-			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[g.LEFT]?1.0:-1.0);
+			double robot_radius = .215;
+			rv = ALIGNMENT_TRANSLATIONAL_SPEED*0.02/robot_radius * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
 			// Neither is depressed, just move slowly forward.
 			//
