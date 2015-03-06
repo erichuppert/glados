@@ -236,7 +236,7 @@ public class FSM {
 		}
 	}
 
-	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.1;
+	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.2;
 
 	// If we're aligned, we move away from the obstacle
 	//
