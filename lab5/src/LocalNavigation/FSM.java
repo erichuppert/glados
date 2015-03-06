@@ -289,7 +289,7 @@ public class FSM {
 		} else {
 			// once both sensors dont see the wall, we start finding the wall
 			tv = rv = 0;
-//			changeState(FINDING_WALL);
+			changeState(FINDING_WALL);
 		}
 	}
 
