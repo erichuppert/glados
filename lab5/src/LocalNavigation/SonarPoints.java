@@ -16,6 +16,9 @@ public class SonarPoints {
 	private double[] first;
 	private double[] mostRecent;
 	private Random rand = new Random();
+	private double[] previousVector;
+	private double outerAngle = 0;
+	private double angleThreshold = 0.01;
 
 	// Obstacle tracking must be explicit
 	//
@@ -204,6 +207,16 @@ public class SonarPoints {
 		}
 
 		tracking = false;
+
+		// Add to the max angle
+		//
+		double [] segVector = new double[] {end[g.X]-start[g.X],end[g.Y]-start[g.Y]};
+		double length = Math.pow(segVector[g.X]*segVector[g.X] + segVector[g.Y]*segVector[g.Y],0.5);
+		segVector[g.X] /= length;
+		segVector[g.Y] /= length;
+		double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
+		outerAngle += Math.acos(dot);
+		previousVector = segVector.clone();
 	}
 
 	public synchronized double getDistanceError() {
@@ -220,5 +233,9 @@ public class SonarPoints {
 		} else {
 			return lineFilter.getAngleToLine(robotPose[g.THETA]);
 		}
+	}
+
+	public synchronized boolean obstacleDone() {
+		return Math.abs(outerAngle - 2*Math.PI) <= angleThreshold;
 	}
 }
