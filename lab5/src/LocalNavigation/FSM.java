@@ -330,7 +330,7 @@ public class FSM {
 		}
 		boolean startFindWall = bufferCount < 3;
 //		if (startFindWall) {
-		if (haveObstacle())
+		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
