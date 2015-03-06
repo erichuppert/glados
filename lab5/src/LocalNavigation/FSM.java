@@ -3,6 +3,7 @@ package LocalNavigation;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.IntBuffer;
 
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
@@ -60,6 +61,8 @@ public class FSM {
 	private double[] sonars;
 	private double[] pose;
 	private boolean[] bumpers;
+	
+	private IntBuffer findWallObstacleBuffer;
 
 	// SonarPoints to control the linear filter/segments
 	//
@@ -82,6 +85,7 @@ public class FSM {
 		odoPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		initialState = _initialState;
 		sp = _sp;
+		findWallObstacleBuffer = IntBuffer.allocate(5);
 		if (logErrors) {
 			try {
 				File logFile = new File("./error-log.txt");
@@ -318,7 +322,15 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
-		if (haveObstacle()) {
+		
+		findWallObstacleBuffer.put(haveObstacle() ? 1 : 0);
+		
+		int bufferCount = 0;
+		for (int i = 0; i< findWallObstacleBuffer.capacity(); i++) {
+			bufferCount += findWallObstacleBuffer.get(i);
+		}
+		boolean startFindWall = bufferCount > 3;
+		if (startFindWall) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
@@ -333,6 +345,7 @@ public class FSM {
 				rv = 0;
 			}
 		} else {
+			findWallObstacleBuffer.clear();
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
