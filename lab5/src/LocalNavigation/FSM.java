@@ -220,7 +220,7 @@ public class FSM {
 			//
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
 			double robot_radius = .215;
-			rv = 2*robot_radius/ALIGNMENT_TRANSLATIONAL_SPEED*0.02 * (bumpers[g.LEFT]?1.0:-1.0);
+			rv = (ALIGNMENT_TRANSLATIONAL_SPEED*0.02)/(2*robot_radius) * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
 			// Neither is depressed, just move slowly forward.
 			//
