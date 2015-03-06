@@ -341,7 +341,7 @@ public class FSM {
 		setVelocities = true;
 		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 		rv = ALIGNMENT_TRANSLATIONAL_SPEED/OBSTACLE_RETREAT_DISTANCE * 1./5.;
-		//changeState(ALIGN_ON_BUMP);
+		changeState(ALIGN_ON_BUMP);
 	}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
