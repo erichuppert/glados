@@ -302,7 +302,7 @@ public class FSM {
 		// in this state, we will have backed up and moved behind the wall
 		// we need to move forward to bring the wall back into view
 		//
-		if (!haveObstacle()) {
+		if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			rv = 0;
 		} else {
@@ -320,14 +320,14 @@ public class FSM {
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		if (haveObstacle()) {
-			System.out.printf("Here!!\n");
+			System.out.printf("   ");
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
 			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
-				double angleError = sp.getAngleError();
+				double angleError = sp.getAngleError();				
 				double theta_i = Kd*(desired-distanceError);
 				rv = -Ka*(theta_i - angleError);
 				logError(distanceError, angleError);
@@ -344,7 +344,7 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double d = OBSTACLE_RETREAT_DISTANCE + 0.2;
+		double d = OBSTACLE_RETREAT_DISTANCE;
 		double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);
 		setVelocities = true;
 		if (sp.obstacleDone()) {
@@ -365,6 +365,12 @@ public class FSM {
 	//
 	private boolean haveObstacle() {
 		return SonarPoints.obstacleInRange(sonars[g.BACK]) || SonarPoints.obstacleInRange(sonars[g.FRONT]);
+	}
+	
+	// determines if BOTH sensors are encountering an obstacle based on sonar threshold
+	//
+	private boolean bothHaveObstacle() {
+		return SonarPoints.obstacleInRange(sonars[g.BACK]) && SonarPoints.obstacleInRange(sonars[g.FRONT]);
 	}
 
 	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
