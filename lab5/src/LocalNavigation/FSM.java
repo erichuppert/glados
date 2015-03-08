@@ -183,8 +183,8 @@ public class FSM {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.03;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
+	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.01;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
