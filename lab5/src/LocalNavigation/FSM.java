@@ -102,6 +102,7 @@ public class FSM {
 	// keep track of the location that robot was in when aligned with wall so that we can retreat the right distance
 	//
 	private double[] alignedPose;
+	private double[] wallEndPose;
 
 	/**
 	 * Take a step in the state machine
@@ -337,6 +338,7 @@ public class FSM {
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
+			wallEndPose = pose.clone();
 		}
 	}
 
@@ -350,10 +352,19 @@ public class FSM {
 			tv=rv=0;
 			changeState(DONE);
 		} else {
-			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius;
-			changeState(ALIGN_ON_BUMP);
+			if (rotatedAfterWallEnd()) {
+				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+				rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius;
+				changeState(ALIGN_ON_BUMP);				
+			} else {
+				tv = 0;
+				rv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			}
 		}
+	}
+	
+	private boolean rotatedAfterWallEnd() {
+		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-wallEndPose[g.THETA]), Math.cos(pose[g.THETA]-wallEndPose[g.THETA]))) >= Math.PI/4;
 	}
 
 	// Goes into this state when we have found a model of the obstacle
