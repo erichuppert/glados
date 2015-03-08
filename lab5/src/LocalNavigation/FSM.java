@@ -395,7 +395,7 @@ public class FSM {
 	//
 	private boolean retreatedEnough() {
 		double distanceSinceAligned = Math.sqrt(Math.pow(pose[g.X]-alignedPose[g.X],2) + Math.pow(pose[g.Y] - alignedPose[g.Y],2));
-		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE;
+		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE - 0.05;
 	}
 
 	// Changes state variable, and publishes it.
