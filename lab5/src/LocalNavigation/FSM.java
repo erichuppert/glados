@@ -325,7 +325,7 @@ public class FSM {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
-			double desired = OBSTACLE_RETREAT_DISTANCE;
+			double desired = OBSTACLE_RETREAT_DISTANCE + 0.2;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();				
