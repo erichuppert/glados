@@ -346,8 +346,7 @@ public class FSM {
 	//
 	private void wall_ended() {
 		double d = OBSTACLE_RETREAT_DISTANCE;
-		//double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);  
-		//@Rodrigo: What is this? Where do the numbers come from? -jaguark
+		double radius = (140477.0+73000.0*d+500000.0*d*d)/(73000.0+1000000.0*d);  
 		setVelocities = true;
 		if (sp.obstacleDone()) {
 			tv=rv=0;
