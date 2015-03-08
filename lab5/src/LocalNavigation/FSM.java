@@ -345,7 +345,7 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double d = OBSTACLE_RETREAT_DISTANCE + 0.1;
+		double d = OBSTACLE_RETREAT_DISTANCE + 0.4;
 		double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);
 		setVelocities = true;
 		if (sp.obstacleDone()) {
@@ -395,7 +395,7 @@ public class FSM {
 	//
 	private boolean retreatedEnough() {
 		double distanceSinceAligned = Math.sqrt(Math.pow(pose[g.X]-alignedPose[g.X],2) + Math.pow(pose[g.Y] - alignedPose[g.Y],2));
-		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE - 0.05;
+		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE - 0.1;
 	}
 
 	// Changes state variable, and publishes it.
