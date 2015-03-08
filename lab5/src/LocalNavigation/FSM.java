@@ -354,7 +354,7 @@ public class FSM {
 		} else {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
-
+			changeState(ALIGN_ON_BUMP);
 		}
 	}
 
