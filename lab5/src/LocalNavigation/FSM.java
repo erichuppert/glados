@@ -345,7 +345,7 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double d = OBSTACLE_RETREAT_DISTANCE;
+		double d = OBSTACLE_RETREAT_DISTANCE + 0.1;
 		double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);
 		setVelocities = true;
 		if (sp.obstacleDone()) {
