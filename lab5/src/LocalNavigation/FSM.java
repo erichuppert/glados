@@ -353,6 +353,10 @@ public class FSM {
 			tv=rv=0;
 			changeState(DONE);
 		} else {
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
+			
+			/*
 			if (rotatedAfterWallEnd()) {
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 				rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
@@ -361,6 +365,7 @@ public class FSM {
 				tv = 0;
 				rv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			}
+			*/
 		}
 	}
 	
