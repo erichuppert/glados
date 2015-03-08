@@ -346,8 +346,9 @@ public class FSM {
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
-		double d = OBSTACLE_RETREAT_DISTANCE + 2.4;
-		double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);
+		double d = OBSTACLE_RETREAT_DISTANCE;
+		//double radius = (140477.0+73000.0*d+50000.0*d*d)/(73000.0+1000000.0*d);  
+		//@Rodrigo: What is this? Where do the numbers come from? -jaguark
 		setVelocities = true;
 		if (sp.obstacleDone()) {
 			tv=rv=0;
@@ -355,7 +356,7 @@ public class FSM {
 		} else {
 			if (rotatedAfterWallEnd()) {
 				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-				rv = ALIGNMENT_TRANSLATIONAL_SPEED/radius;
+				rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
 				changeState(ALIGN_ON_BUMP);				
 			} else {
 				tv = 0;
