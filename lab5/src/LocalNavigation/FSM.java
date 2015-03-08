@@ -301,7 +301,7 @@ public class FSM {
 		// in this state, we will have backed up and moved behind the wall
 		// we need to move forward to bring the wall back into view
 		//
-		if (bothHaveObstacle()) {
+		if (!bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			rv = 0;
 		} else {
