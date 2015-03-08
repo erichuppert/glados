@@ -318,8 +318,8 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
+		System.out.printf("HERE!!!!!");
 		if (haveObstacle()) {
-			System.out.printf("HERE!!!!!");
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
