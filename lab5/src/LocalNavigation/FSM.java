@@ -354,22 +354,8 @@ public class FSM {
 		} else {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
-			
-			/*
-			if (rotatedAfterWallEnd()) {
-				tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-				rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
-				changeState(ALIGN_ON_BUMP);				
-			} else {
-				tv = 0;
-				rv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			}
-			*/
+
 		}
-	}
-	
-	private boolean rotatedAfterWallEnd() {
-		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-wallEndPose[g.THETA]), Math.cos(pose[g.THETA]-wallEndPose[g.THETA]))) >= Math.PI/4;
 	}
 
 	// Goes into this state when we have found a model of the obstacle
