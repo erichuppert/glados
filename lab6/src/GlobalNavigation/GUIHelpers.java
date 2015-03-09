@@ -1,7 +1,6 @@
 package GlobalNavigation;
 import java.awt.Color;
-
-import LocalNavigation.ColorMsg;
+import org.ros.message.lab5_msgs.*;
 
 public class GUIHelpers {
 	
