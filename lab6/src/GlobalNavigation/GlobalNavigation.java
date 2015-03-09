@@ -40,11 +40,11 @@ public class GlobalNavigation implements NodeMain{
     }
     
 	public void onStart(Node node){
-		guiRectPub = new Publisher<org.ros.message.lab6_msgs.GUIRectMsg>();
-		guiPolyPub = new Publisher<org.ros.message.lab6_msgs.GUIPolyMsg>();
-		guiErasePub = new Publisher<org.ros.message.lab5_msgs.GUIEraseMsg>();
-		guiSegPub =  new Publisher<org.ros.message.lab5_msgs.GUISegmentMsg>();
-		guiPointPub = new Publisher<org.ros.message.lab5_msgs.GUIPointMsg>();
+		guiRectPub = node.newPublisher("/gui/Rect");
+		guiPolyPub = node.newPublisher("/gui/Poly");
+		guiErasePub = node.newPublisher("/gui/Erase");
+		guiSegPub =  node.newPublisher("/gui/Segment");
+		guiPointPub = node.newPublisher("/gui/Point");
 		
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
