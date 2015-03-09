@@ -40,11 +40,11 @@ public class GlobalNavigation implements NodeMain{
     }
     
 	public void onStart(Node node){
-		guiRectPub = node.newPublisher("/gui/Rect");
-		guiPolyPub = node.newPublisher("/gui/Poly");
-		guiErasePub = node.newPublisher("/gui/Erase");
-		guiSegPub =  node.newPublisher("/gui/Segment");
-		guiPointPub = node.newPublisher("/gui/Point");
+		guiRectPub = node.newPublisher("/gui/Rect", "lab6_msgs/GUIRectMsg");
+		guiPolyPub = node.newPublisher("/gui/Poly", "lab5_msgs/GUIPolyMsg");
+		guiErasePub = node.newPublisher("/gui/Erase", "lab5_msgs/GUIEraseMsg");
+		guiSegPub =  node.newPublisher("/gui/Segment", "lab5_msgs/GUISegmentMsg");
+		guiPointPub = node.newPublisher("/gui/Point", "lab5_msgs/GUIPointMsg");
 		
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
