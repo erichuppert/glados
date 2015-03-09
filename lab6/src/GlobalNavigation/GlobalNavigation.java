@@ -10,7 +10,6 @@ import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
-
 import java.io.*;
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -62,7 +61,7 @@ public class GlobalNavigation implements NodeMain{
 		return new GraphName("/rss/GlobalNavigation");
 	}
 	
-	public void handle() {
+	public void handle(BumpMsg arg0) {
 		
 	}
 
