@@ -130,10 +130,10 @@ public class GlobalNavigation implements NodeMain{
 			int32 filled
 		 */
 		GUIRectMsg guiRectMsg = new GUIRectMsg();
-		guiRectMsg.x = rectangle.x;
-		guiRectMsg.y = rectangle.y;
-		guiRectMsg.height = rectangle.height;
-		guiRectMsg.width = rectangle.width;
+		guiRectMsg.x = (float) rectangle.x;
+		guiRectMsg.y = (float) rectangle.y;
+		guiRectMsg.height = (float) rectangle.height;
+		guiRectMsg.width = (float) rectangle.width;
 		guiRectMsg.filled = 0; // we don't want our whole map filled in
 		guiRectMsg.color = GUIHelpers.colorMessage(color);
 		guiRectPub.publish(guiRectMsg);
@@ -164,8 +164,8 @@ public class GlobalNavigation implements NodeMain{
 		float[] xPoints = new float[numObstacleVertices];
 		float[] yPoints = new float[numObstacleVertices];
 		for (int i=0; i< numObstacleVertices; i++) {
-			xPoints[i] = obstacleVertices[i].getX();
-			yPoints[i] = obstacleVertices[i].getY();
+			xPoints[i] = (float) obstacleVertices[i].getX();
+			yPoints[i] = (float) obstacleVertices[i].getY();
 		}
 		guiPolyPub.publish(polyMsg);
 	}
