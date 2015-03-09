@@ -31,6 +31,7 @@ public class FSM {
 	public static final int WALL_ENDED          = 10;
 	public static final int START_STATE         = 11;
 	public static final int DONE                = 12;
+	public static final int FORWARD             = 13;
 
 	// State descriptions
 	//
@@ -47,7 +48,8 @@ public class FSM {
 		"Tracking the wall with sonars",
 		"Found the end of the wall",
 		"Initialization State",
-		"Found the final state, finished."
+		"Found the final state, finished.",
+		"Moving Forward"
 	};
 
 	// State variable
@@ -60,7 +62,7 @@ public class FSM {
 	private double[] sonars;
 	private double[] pose;
 	private boolean[] bumpers;
-	
+
 
 	// SonarPoints to control the linear filter/segments
 	//
@@ -167,6 +169,11 @@ public class FSM {
 		case WALL_ENDED:
 			wall_ended();
 			break;
+		case DONE:
+			done();
+			break;
+		case FORWARD:
+			forward();
 		default:
 			throw new RuntimeException();
 		}
@@ -367,6 +374,14 @@ public class FSM {
 	// Goes into this state when we have found a model of the obstacle
 	//
 	private void done() {}
+
+	// Moves forward: for testing motor asymmetry
+	//
+	private void forward() {
+		setVelocities = true;
+		tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+		rv = 0;
+	}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
 	//
