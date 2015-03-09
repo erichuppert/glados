@@ -41,7 +41,11 @@ public class GlobalNavigation implements NodeMain{
 	public void onStart(Node node){
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("˜/mapFileName"));
-		polygonMap = new PolygonMap(new File(mapFileName));
+		try {
+			polygonMap = new PolygonMap(new File(mapFileName));			
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
     }
     
 	public void onShutdown(Node node){
@@ -63,6 +67,10 @@ public class GlobalNavigation implements NodeMain{
 	}
 	
 	public void handle(BumpMsg arg0) {
+		
+	}
+	
+	public void handle(OdometryMsg arg0) {
 		
 	}
 
