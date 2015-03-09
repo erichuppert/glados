@@ -53,7 +53,11 @@ public class GlobalNavigation implements NodeMain{
 			Runnable myRunnable = new Runnable(){
 
 			     public void run(){
-			    	 Thread.sleep(4000);
+			    	 try {
+			    		 Thread.sleep(4000);			    		 
+			    	 } catch (Exception e) {
+			    		 throw new RuntimeException();
+			    	 }
 			        System.out.println("Runnable running");
 			        displayMap();
 			     }
