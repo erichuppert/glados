@@ -33,12 +33,19 @@ public class GlobalNavigation implements NodeMain{
     private ParameterTree paramTree;
     
     private boolean shutdown;
+    
 
     public GlobalNavigation(){
     	
     }
     
 	public void onStart(Node node){
+		guiRectPub = new Publisher<org.ros.message.lab6_msgs.GUIRectMsg>();
+		guiPolyPub = new Publisher<org.ros.message.lab6_msgs.GUIPolyMsg>();
+		guiErasePub = new Publisher<org.ros.message.lab5_msgs.GUIEraseMsg>();
+		guiSegPub =  new Publisher<org.ros.message.lab5_msgs.GUISegmentMsg>();
+		guiPointPub = new Publisher<org.ros.message.lab5_msgs.GUIPointMsg>();
+		
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
