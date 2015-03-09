@@ -30,6 +30,7 @@ public class FSM {
 	public static final int TRACKING_WALL       = 9;
 	public static final int WALL_ENDED          = 10;
 	public static final int START_STATE         = 11;
+	public static final int DONE                = 12;
 
 	// State descriptions
 	//
@@ -45,7 +46,8 @@ public class FSM {
 		"Finding the obstacle while moving forward",
 		"Tracking the wall with sonars",
 		"Found the end of the wall",
-		"Initialization State"
+		"Initialization State",
+		"Found the final state, finished."
 	};
 
 	// State variable
@@ -58,6 +60,7 @@ public class FSM {
 	private double[] sonars;
 	private double[] pose;
 	private boolean[] bumpers;
+	
 
 	// SonarPoints to control the linear filter/segments
 	//
@@ -68,7 +71,7 @@ public class FSM {
 	private Publisher<org.ros.message.std_msgs.String> statePub; // state
 	private Publisher<MotionMsg> motorPub; // motor commands
 	private Publisher<OdometryMsg> odoPub; // Odometry readjustments
-	
+
 	private static boolean logErrors = true;
 	private BufferedWriter errorOutput;
 
@@ -83,7 +86,7 @@ public class FSM {
 		if (logErrors) {
 			try {
 				File logFile = new File("./error-log.txt");
-				errorOutput =  new BufferedWriter(new FileWriter(logFile));							
+				errorOutput =  new BufferedWriter(new FileWriter(logFile));
 			} catch (Exception e) {
 				System.err.println(e);
 			}
@@ -100,6 +103,7 @@ public class FSM {
 	// keep track of the location that robot was in when aligned with wall so that we can retreat the right distance
 	//
 	private double[] alignedPose;
+	private double[] wallEndPose;
 
 	/**
 	 * Take a step in the state machine
@@ -181,8 +185,8 @@ public class FSM {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.2;
-	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.05;
+	private static float ALIGNMENT_TRANSLATIONAL_SPEED = (float) 0.05;
+	private static float ALIGNMENT_ROTATIONAL_SPEED = (float) 0.1;
 
 	// If we see a bump, then stop, otherwise we are controlled externally
 	//
@@ -229,7 +233,7 @@ public class FSM {
 		}
 	}
 
-	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.4;
+	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.2;
 
 	// If we're aligned, we move away from the obstacle
 	//
@@ -260,7 +264,7 @@ public class FSM {
 	private void rotating() {
 		setVelocities = true;
 		// based on our original pose at the wall, we rotate until we get pi/2 away from that directional pose
-		if (!rotatedEnough()) {
+		if (!rotatedEnough(Math.PI/2)) {
 			tv = 0;
 			rv = -ALIGNMENT_ROTATIONAL_SPEED;
 		} else {
@@ -298,7 +302,7 @@ public class FSM {
 		// in this state, we will have backed up and moved behind the wall
 		// we need to move forward to bring the wall back into view
 		//
-		if (!haveObstacle()) {
+		if (!bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			rv = 0;
 		} else {
@@ -315,17 +319,18 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
-		if (haveObstacle()) {
+		logError(sonars[g.BACK],sonars[g.FRONT]);
+		if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
 			double Ka = 0.1;
-			double desired = 0.3;
+			double desired = OBSTACLE_RETREAT_DISTANCE + 0.5;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
 				double theta_i = Kd*(desired-distanceError);
 				rv = -Ka*(theta_i - angleError);
-				logError(distanceError, angleError);
+				//logError(distanceError, angleError);
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
@@ -333,13 +338,35 @@ public class FSM {
 			tv = rv = 0;
 			sp.stopTracking();
 			changeState(WALL_ENDED);
+			alignedPose = pose.clone();
+			wallEndPose = pose.clone();
 		}
 	}
 
 	// after we have cleared the wall in front (and know the location of the wall)
 	//
 	private void wall_ended() {
+		double d = OBSTACLE_RETREAT_DISTANCE;
+		double back_sonar_delta = 0.335;
+		double angle = Math.acos(back_sonar_delta/Math.sqrt(d*d+back_sonar_delta*back_sonar_delta));
+		double radius = Math.sqrt(d*d+back_sonar_delta*back_sonar_delta);
+		setVelocities = true;
+		if (sp.obstacleDone()) {
+			tv=rv=0;
+			changeState(DONE);
+		} else if(!rotatedEnough(angle)) {
+			tv = 0;
+			rv = ALIGNMENT_ROTATIONAL_SPEED;
+		} else {
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
+			rv = ALIGNMENT_TRANSLATIONAL_SPEED/d;
+			changeState(ALIGN_ON_BUMP);
+		}
 	}
+
+	// Goes into this state when we have found a model of the obstacle
+	//
+	private void done() {}
 
 	// determines if EITHER sensor is encountering an obstacle, based on the sonar threshold
 	//
@@ -347,19 +374,25 @@ public class FSM {
 		return SonarPoints.obstacleInRange(sonars[g.BACK]) || SonarPoints.obstacleInRange(sonars[g.FRONT]);
 	}
 
-	// determine if the robot has moved pi/2 radians with respect to its pose when aligned at the wall
+	// determines if BOTH sensors are encountering an obstacle based on sonar threshold
 	//
-	public boolean rotatedEnough() {
-		return Math.abs(pose[g.THETA] - alignedPose[g.THETA]) > Math.PI/2;
+	private boolean bothHaveObstacle() {
+		return SonarPoints.obstacleInRange(sonars[g.BACK]) && SonarPoints.obstacleInRange(sonars[g.FRONT]);
 	}
 
-	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
+	// determine if the robot has moved angle radians with respect to its pose when aligned at the wall
+	//
+	public boolean rotatedEnough(double angle) {
+		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle - 0.2;
+	}
+
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.4;
 
 	// Tell if, based on our current pose, if we have retreated from the wall enough
 	//
 	private boolean retreatedEnough() {
 		double distanceSinceAligned = Math.sqrt(Math.pow(pose[g.X]-alignedPose[g.X],2) + Math.pow(pose[g.Y] - alignedPose[g.Y],2));
-		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE;
+		return distanceSinceAligned >= OBSTACLE_RETREAT_DISTANCE - 0.1;
 	}
 
 	// Changes state variable, and publishes it.
@@ -377,7 +410,13 @@ public class FSM {
 	//
 	private void setMotorVelocities(double tv, double rv) {
 		MotionMsg msg = new MotionMsg();
-		msg.translationalVelocity = tv;
+		// Motor commands do not handle NaN well. We should never get these.
+		//
+		if (tv == Double.NaN || rv == Double.NaN) {
+			throw new RuntimeException("NaN command sent!");
+		}
+
+		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
 		if(motorPub != null) {
 			motorPub.publish(msg);
@@ -398,9 +437,9 @@ public class FSM {
 		setMotorVelocities(0,0);
 		setRobotPose(0,0,0);
 	}
-	
+
 	/**
-	 * Takes the error terms and adds them to the file. 
+	 * Takes the error terms and adds them to the file.
 	 * @param translationError amount of translational error
 	 * @param angleError amount of angleError
 	 */
@@ -409,9 +448,8 @@ public class FSM {
 			try {
 				errorOutput.append(
 						Long.toString(System.currentTimeMillis()) + " " +
-								Double.toString(translationError) + " " +
-								Double.toString(angleError));
-				
+								Double.toString(OBSTACLE_RETREAT_DISTANCE-translationError) + " " +
+								Double.toString(angleError) + "\n");
 			} catch (Exception e){
 				System.err.println(e);
 			}

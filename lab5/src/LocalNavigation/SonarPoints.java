@@ -16,6 +16,9 @@ public class SonarPoints {
 	private double[] first;
 	private double[] mostRecent;
 	private Random rand = new Random();
+	private double[] previousVector;
+	private double outerAngle = 0;
+	private double angleThreshold = 0.01;
 
 	// Obstacle tracking must be explicit
 	//
@@ -48,9 +51,9 @@ public class SonarPoints {
 	// Threshold for finding obstacles.
 	// Values decided on based on parameters of the problem.
 	//
-	private static final double threshold_high = 0.5;
-	private static final double threshold_low = 0.1;
-	private static final double threshold_highest = 1.8;
+	private static final double threshold_high = 0.6;
+	private static final double threshold_low = 0.05;
+	private static final double threshold_highest = 1.6;
 
 	public static boolean obstacleInRange(double range) { // Utility method
 		return range <= threshold_high && range >= threshold_low;
@@ -201,6 +204,18 @@ public class SonarPoints {
 			msg.endY = end[g.Y];
 			msg.color = getColorMessage(randomColor());
 			segmentPub.publish(msg);
+
+			// Add to the max angle
+			//
+			double [] segVector = new double[] {end[g.X]-start[g.X],end[g.Y]-start[g.Y]};
+			double length = Math.pow(segVector[g.X]*segVector[g.X] + segVector[g.Y]*segVector[g.Y],0.5);
+			segVector[g.X] /= length;
+			segVector[g.Y] /= length;
+			if (previousVector != null) {
+				double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
+				outerAngle += Math.acos(dot);
+			}
+			previousVector = segVector.clone();
 		}
 
 		tracking = false;
@@ -220,5 +235,9 @@ public class SonarPoints {
 		} else {
 			return lineFilter.getAngleToLine(robotPose[g.THETA]);
 		}
+	}
+
+	public synchronized boolean obstacleDone() {
+		return Math.abs(outerAngle - 2*Math.PI) <= angleThreshold;
 	}
 }
