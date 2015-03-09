@@ -54,6 +54,7 @@ public class GlobalNavigation implements NodeMain{
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
 		}
+		displayMap();
     }
     
 	public void onShutdown(Node node){
