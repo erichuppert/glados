@@ -319,6 +319,7 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
+		logError(sonars[g.BACK],sonars[g.FRONT]);
 		if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 0.125;
@@ -329,7 +330,7 @@ public class FSM {
 				double angleError = sp.getAngleError();
 				double theta_i = Kd*(desired-distanceError);
 				rv = -Ka*(theta_i - angleError);
-				logError(distanceError, angleError);
+				//logError(distanceError, angleError);
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
