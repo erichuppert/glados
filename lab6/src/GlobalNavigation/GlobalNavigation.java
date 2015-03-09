@@ -123,22 +123,9 @@ public class GlobalNavigation implements NodeMain{
 	 * @param color the color of the rectangle 	
 	 */
 	private void drawRectangle(Rectangle2D.Double rectangle, Color color) {
-		/**
-		 *  GUIRectMsg attributes:
-		 *  lab5_msgs/ColorMsg c
-			float32 x
-			float32 y
-			float32 width
-			float32 height
-			int32 filled
-		 */
+
 		GUIRectMsg guiRectMsg = new GUIRectMsg();
-		guiRectMsg.x = (float) rectangle.x;
-		guiRectMsg.y = (float) rectangle.y;
-		guiRectMsg.height = (float) rectangle.height;
-		guiRectMsg.width = (float) rectangle.width;
-		guiRectMsg.filled = 0; // we don't want our whole map filled in
-		guiRectMsg.c = GUIHelpers.colorMessage(color);
+		fillRectMsg(guiRectMsg, rectangle, color, false);
 		guiRectPub.publish(guiRectMsg);
 	}
 	
@@ -158,9 +145,35 @@ public class GlobalNavigation implements NodeMain{
 		int32 closed
 		int32 filled */
 		GUIPolyMsg polyMsg = new GUIPolyMsg();
-		polyMsg.c = GUIHelpers.colorMessage(obstacle.color);
-		polyMsg.closed = obstacle.closed ? 1 : 0;
-		polyMsg.filled = FILL_GUI_OBSTACLES ? 1 : 0;
+		fillPolyMsg(polyMsg, obstacle, obstacle.color, FILL_GUI_OBSTACLES, obstacle.closed);
+		guiPolyPub.publish(polyMsg);
+	}
+	
+	
+	public static void fillRectMsg(GUIRectMsg rectMsg, Rectangle2D.Double rectangle, Color color, boolean filled) {
+		/**
+		 *  GUIRectMsg attributes:
+		 *  lab5_msgs/ColorMsg c
+			float32 x
+			float32 y
+			float32 width
+			float32 height
+			int32 filled
+		 */
+		rectMsg.x = (float) rectangle.x;
+		rectMsg.y = (float) rectangle.y;
+		rectMsg.height = (float) rectangle.height;
+		rectMsg.width = (float) rectangle.width;
+		rectMsg.filled = filled ? 1 : 0;
+		if (color != null) {
+			rectMsg.c = GUIHelpers.colorMessage(color);
+		}
+	};
+	
+	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
+		polyMsg.c = GUIHelpers.colorMessage(color);
+		polyMsg.closed = closed ? 1 : 0;
+		polyMsg.filled = filled ? 1 : 0;
 		List<Point2D.Double> obstacleVertices = obstacle.getVertices();
 		int numObstacleVertices = obstacleVertices.size();
 		polyMsg.numVertices = numObstacleVertices;
@@ -170,9 +183,7 @@ public class GlobalNavigation implements NodeMain{
 			xPoints[i] = (float) obstacleVertices.get(i).getX();
 			yPoints[i] = (float) obstacleVertices.get(i).getY();
 		}
-		guiPolyPub.publish(polyMsg);
 	}
-	
 	
 
 }
