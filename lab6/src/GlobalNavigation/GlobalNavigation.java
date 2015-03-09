@@ -1,6 +1,5 @@
 package GlobalNavigation;
 
-import GUIHelpers.GUIHelpers;
 
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
@@ -11,7 +10,6 @@ import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
-import src.LocalNavigation.FSM;
 
 import java.io.*;
 import java.awt.Color;
@@ -109,7 +107,7 @@ public class GlobalNavigation implements NodeMain{
 		pointMsg.x = (float) x;
 		pointMsg.y = (float) y;
 		pointMsg.shape = 1;
-		pointMsg.color = GUIHelpers.colorMsg(color);
+		pointMsg.color = GUIHelpers.colorMessage(color);
 		guiPointPub.publish(pointMsg);
 	}
 	
@@ -135,7 +133,7 @@ public class GlobalNavigation implements NodeMain{
 		guiRectMsg.height = rectangle.height;
 		guiRectMsg.width = rectangle.width;
 		guiRectMsg.filled = 0; // we don't want our whole map filled in
-		guiRectMsg.color = GUIHelpers.colorMsg(color);
+		guiRectMsg.color = GUIHelpers.colorMessage(color);
 		guiRectPub.publish(guiRectMsg);
 	}
 	
@@ -155,7 +153,7 @@ public class GlobalNavigation implements NodeMain{
 		int32 closed
 		int32 filled */
 		GUIPolyMsg polyMsg = new GUIPolyMsg();
-		polyMsg.c = GUIHelpers.colorMsg(obstacle.color);
+		polyMsg.c = GUIHelpers.colorMessage(obstacle.color);
 		polyMsg.closed = obstacle.closed ? 1 : 0;
 		polyMsg.filled = FILL_GUI_OBSTACLES ? 1 : 0;
 		List<Point2D.Double> obstacleVertices = obstacle.getVertices();
