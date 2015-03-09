@@ -163,15 +163,7 @@ public class GlobalNavigation implements NodeMain{
 	private static final boolean FILL_GUI_OBSTACLES = true;
 	
 	private void drawPolygon(PolygonObstacle obstacle) {
-		/* 
-		PolygonMsg attributes
 		
-		lab5_msgs/ColorMsg c
-		int32 numVertices
-		float32[] x
-		float32[] y
-		int32 closed
-		int32 filled */
 		GUIPolyMsg polyMsg = new GUIPolyMsg();
 		fillPolyMsg(polyMsg, obstacle, obstacle.color, FILL_GUI_OBSTACLES, obstacle.closed);
 		guiPolyPub.publish(polyMsg);
@@ -199,6 +191,15 @@ public class GlobalNavigation implements NodeMain{
 	};
 	
 	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
+		/* 
+		PolygonMsg attributes
+		
+		lab5_msgs/ColorMsg c
+		int32 numVertices
+		float32[] x
+		float32[] y
+		int32 closed
+		int32 filled */
 		polyMsg.c = GUIHelpers.colorMessage(color);
 		polyMsg.closed = closed ? 1 : 0;
 		polyMsg.filled = filled ? 1 : 0;
@@ -211,6 +212,8 @@ public class GlobalNavigation implements NodeMain{
 			xPoints[i] = (float) obstacleVertices.get(i).getX();
 			yPoints[i] = (float) obstacleVertices.get(i).getY();
 		}
+		polyMsg.x = xPoints;
+		polyMsg.y = yPoints;
 	}
 	
 
