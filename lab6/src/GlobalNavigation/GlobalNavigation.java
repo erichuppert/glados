@@ -44,7 +44,7 @@ public class GlobalNavigation implements NodeMain{
 		try {
 			System.out.printf("==============\n\nThe map file name is %s\n\n", mapFileName);
 			polygonMap = new PolygonMap(mapFileName);			
-			displayMap();
+//			displayMap();
 		} catch (Exception e) {
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
