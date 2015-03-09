@@ -41,8 +41,14 @@ public class GlobalNavigation implements NodeMain{
 	public void onStart(Node node){
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
-		polygonMap = new PolygonMap(mapFileName);
-		displayMap();
+		try {
+			System.out.printf("==============\n\nThe map file name is %s\n\n", mapFileName);
+			polygonMap = new PolygonMap(mapFileName);			
+			displayMap();
+		} catch (Exception e) {
+			System.err.println(e);
+			throw new RuntimeException(e.getMessage());
+		}
     }
     
 	public void onShutdown(Node node){
