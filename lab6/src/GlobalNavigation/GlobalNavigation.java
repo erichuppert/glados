@@ -31,6 +31,8 @@ public class GlobalNavigation implements NodeMain{
     private String mapFileName;
     private PolygonMap polygonMap;
     private ParameterTree paramTree;
+    
+    private boolean shutdown;
 
     public GlobalNavigation(){
     	
