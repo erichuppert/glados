@@ -50,6 +50,8 @@ public class GlobalNavigation implements NodeMain{
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
 			polygonMap = new PolygonMap(mapFileName);
+			Thread.sleep(30000);
+			displayMap();
 		} catch (Exception e) {
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
@@ -79,7 +81,6 @@ public class GlobalNavigation implements NodeMain{
 	}
 	
 	public void handle(OdometryMsg arg0) {
-		displayMap();
 	}
 
 	public void run() {
