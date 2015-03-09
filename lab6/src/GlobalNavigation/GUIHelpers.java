@@ -1,8 +1,7 @@
-package GUIHelpers;
-
+package GlobalNavigation;
 import java.awt.Color;
 
-import src.LocalNavigation.ColorMsg;
+import LocalNavigation.ColorMsg;
 
 public class GUIHelpers {
 	
