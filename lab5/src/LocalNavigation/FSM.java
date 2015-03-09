@@ -17,7 +17,6 @@ public class FSM {
 
 	// Possible States
 	//
-
 	public static final int STOP_ON_BUMP        = 0;
 	public static final int ALIGN_ON_BUMP       = 1;
 	public static final int ALIGNING            = 2;
@@ -60,7 +59,6 @@ public class FSM {
 	private double[] sonars;
 	private double[] pose;
 	private boolean[] bumpers;
-	
 
 	// SonarPoints to control the linear filter/segments
 	//
