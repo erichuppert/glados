@@ -6,7 +6,7 @@ import org.ros.message.lab5_msgs.*;
 
 public class GUIHelpers {
 	
-	private Random rand = new Random();
+	private static Random rand = new Random();
 	
 	public static Color randomColor() {
 		float r = rand.nextFloat();
