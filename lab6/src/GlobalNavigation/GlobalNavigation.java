@@ -6,6 +6,7 @@ import org.ros.node.topic.Subscriber;
 import org.ros.node.parameter.ParameterTree;
 import org.ros.message.lab6_msgs.*;
 import org.ros.message.lab5_msgs.*;
+import org.ros.message.rss_msgs.*;
 import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
@@ -61,7 +62,7 @@ public class GlobalNavigation implements NodeMain{
 		return new GraphName("/rss/GlobalNavigation");
 	}
 	
-	public void handle(BumpMsg arg0) {
+	public void handle(org.ros.message.lab5_msgs.BumpMsg arg0) {
 		
 	}
 
