@@ -62,7 +62,7 @@ public class GlobalNavigation implements NodeMain{
 		return new GraphName("/rss/GlobalNavigation");
 	}
 	
-	public void handle(org.ros.message.lab5_msgs.BumpMsg arg0) {
+	public void handle(BumpMsg arg0) {
 		
 	}
 
