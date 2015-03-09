@@ -46,7 +46,7 @@ public class GlobalNavigation implements NodeMain{
 			polygonMap = new PolygonMap(mapFileName);			
 			displayMap();
 		} catch (Exception e) {
-			System.err.println(e);
+			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
 		}
     }
