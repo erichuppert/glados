@@ -50,7 +50,8 @@ public class GlobalNavigation implements NodeMain{
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
 			System.out.printf("==============\n\nThe map file name is %s\n\n", mapFileName);
-			polygonMap = new PolygonMap(mapFileName);			
+			polygonMap = new PolygonMap(mapFileName);
+			System.out.printf("Finished creating polygonMap\n\n\n\n\n")
 		} catch (Exception e) {
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
