@@ -54,7 +54,6 @@ public class GlobalNavigation implements NodeMain{
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
 		}
-		displayMap();
     }
     
 	public void onShutdown(Node node){
@@ -80,11 +79,10 @@ public class GlobalNavigation implements NodeMain{
 	}
 	
 	public void handle(OdometryMsg arg0) {
-		
+		displayMap();
 	}
 
 	public void run() {
-
 	}
 	
 	private void displayMap() {
