@@ -50,8 +50,16 @@ public class GlobalNavigation implements NodeMain{
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
 			polygonMap = new PolygonMap(mapFileName);
-			Thread.sleep(30000);
-			displayMap();
+			Runnable myRunnable = new Runnable(){
+
+			     public void run(){
+			    	 Thread.sleep(4000);
+			        System.out.println("Runnable running");
+			        displayMap();
+			     }
+			   };
+			   Thread thread = new Thread(myRunnable);
+			   thread.start();
 		} catch (Exception e) {
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
