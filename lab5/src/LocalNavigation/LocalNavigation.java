@@ -33,62 +33,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 	boolean[] bumpers = new boolean[] {false,false}; // {left,right}
 
 	public void onStart(Node node) {
-		// Initialize helpers
-		//
-		sp = new SonarPoints(node); // sonar point publisher/line maker
-		fsm = new FSM(node,FSM.BACKING_UP,sp); // state machine
-
-		// Initialize subscriptions
-		//
-		sonarFrontSub = node.newSubscriber("/rss/Sonars/Front", "rss_msgs/SonarMsg"); // front sonar
-		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");   // back sonar
-		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");         // bump sensors
-		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
-
-		// Describe message listeners
-		//
-		MessageListener<SonarMsg> sonarListener = new MessageListener<SonarMsg>() {
-				@Override
-				public void onNewMessage(SonarMsg m) {
-					synchronized(this) {
-						sonars[m.isFront?g.FRONT:g.BACK] = m.range;
-					}
-					sp.newPoint(m.isFront,m.range);
-				}
-			};
-
-		MessageListener<BumpMsg> bumpListener = new MessageListener<BumpMsg>() {
-				@Override
-				public void onNewMessage(BumpMsg m) {
-					synchronized(this) {
-						bumpers[g.LEFT] = m.left;
-						bumpers[g.RIGHT] = m.right;
-					}
-				}
-			};
-
-		MessageListener<OdometryMsg> odoListener = new MessageListener<OdometryMsg>() {
-				@Override
-				public void onNewMessage(OdometryMsg m) {
-					double[] _pose;
-					synchronized(this) {
-						pose[g.X] = m.x;
-						pose[g.Y] = m.y;
-						pose[g.THETA] = m.theta;
-						_pose = pose.clone();
-					}
-					sp.updateRobotPose(_pose);
-				}
-			};
-
-		// Add message listeners to subscribers
-		//
-		sonarFrontSub.addMessageListener(sonarListener);
-		sonarBackSub.addMessageListener(sonarListener);
-		bumpSub.addMessageListener(bumpListener);
-		odoSub.addMessageListener(odoListener);
-
-		new Thread(this).start();
+		
 	}
 
 	public void onShutdown(Node node){
