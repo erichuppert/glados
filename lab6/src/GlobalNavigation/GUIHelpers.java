@@ -1,9 +1,12 @@
 package GlobalNavigation;
 import java.awt.Color;
+import java.util.Random;
 
 import org.ros.message.lab5_msgs.*;
 
 public class GUIHelpers {
+	
+	private Random rand = new Random();
 	
 	public static Color randomColor() {
 		float r = rand.nextFloat();
