@@ -61,6 +61,10 @@ public class GlobalNavigation implements NodeMain{
 	public GraphName getDefaultNodeName() {
 		return new GraphName("/rss/GlobalNavigation");
 	}
+	
+	public void handle() {
+		
+	}
 
 	public void run() {
 
@@ -169,6 +173,8 @@ public class GlobalNavigation implements NodeMain{
 		}
 		guiPolyPub.publish(polyMsg);
 	}
+	
+	
 
 }
 
