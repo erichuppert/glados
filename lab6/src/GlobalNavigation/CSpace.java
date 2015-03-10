@@ -43,7 +43,7 @@ public class CSpace {
 
         for (Point2D.Double vertex1 : poly1.getVertices()) {
             for (Point2D.Double vertex2 : poly2.getVertices()) {
-				points.add(new Point2D.Double(vertex1.getX() + vertex2.getX(), vertex1.getY() + vertex2.getY()))
+				points.add(new Point2D.Double(vertex1.getX() + vertex2.getX(), vertex1.getY() + vertex2.getY()));
             }
         }
 
