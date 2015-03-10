@@ -17,6 +17,7 @@ public class SonarPoints {
 	private double[] mostRecent;
 	private Random rand = new Random();
 	private double[] previousVector;
+	private double[] firstVector;
 	private double outerAngle = 0;
 	private double angleThreshold = 0.1;
 
@@ -214,6 +215,8 @@ public class SonarPoints {
 			if (previousVector != null) {
 				double dot = segVector[g.X]*previousVector[g.X]+segVector[g.Y]*previousVector[g.Y];
 				outerAngle += Math.acos(dot);
+			} else {
+				firstVector = segVector.clone();
 			}
 			previousVector = segVector.clone();
 		}
@@ -238,7 +241,9 @@ public class SonarPoints {
 	}
 
 	public synchronized boolean obstacleDone() {
-		System.out.printf("%.2f\n", outerAngle/(2*Math.PI));
-		return Math.abs(outerAngle - 2*Math.PI) <= angleThreshold;
+		double dot = previousVector[g.X]*firstVector[g.X]+previousVector[g.Y]*firstVector[g.Y];
+		outerAngle += Math.acos(dot);
+		System.out.printf("%.2f\t%.2f\n", outerAngle/(2*Math.PI), (outerAngle+Math.acos(dot))/(2*Math.PI));
+		return Math.abs(outerAngle+Math.acos(dot) - 2*Math.PI) <= angleThreshold;
 	}
 }
