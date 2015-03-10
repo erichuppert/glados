@@ -53,7 +53,7 @@ public class SonarPoints {
 	//
 	private static final double threshold_high = 0.8;
 	private static final double threshold_low = 0.05;
-	private static final double threshold_highest = 1.6;
+	private static final double threshold_highest = 1.4;
 
 	public static boolean obstacleInRange(double range) { // Utility method
 		return range <= threshold_high && range >= threshold_low;
