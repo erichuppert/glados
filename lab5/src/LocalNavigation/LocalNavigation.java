@@ -52,7 +52,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 				public void onNewMessage(SonarMsg m) {
 					synchronized(this) {
 						int sonar = m.isFront?g.FRONT:g.BACK;
-						sonars[sonar] = (m.range+sonars[sonar])/2.0;
+						sonars[sonar] = (0.3*m.range+0.7*sonars[sonar])/2.0;
 					}
 					sp.newPoint(m.isFront,m.range);
 				}
