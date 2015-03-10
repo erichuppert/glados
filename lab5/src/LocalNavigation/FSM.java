@@ -389,7 +389,7 @@ public class FSM {
 	// determine if the robot has moved angle radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough(double angle) {
-		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle - 0.2; // ugly hacks
+		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle;
 	}
 
 	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;

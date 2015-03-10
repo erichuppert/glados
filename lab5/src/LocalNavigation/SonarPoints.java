@@ -18,7 +18,7 @@ public class SonarPoints {
 	private Random rand = new Random();
 	private double[] previousVector;
 	private double outerAngle = 0;
-	private double angleThreshold = 0.01;
+	private double angleThreshold = 0.1;
 
 	// Obstacle tracking must be explicit
 	//
