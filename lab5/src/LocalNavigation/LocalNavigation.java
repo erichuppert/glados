@@ -36,7 +36,7 @@ public class LocalNavigation implements NodeMain,Runnable {
 		// Initialize helpers
 		//
 		sp = new SonarPoints(node); // sonar point publisher/line maker
-		fsm = new FSM(node,FSM.TRACKING_WALL,sp); // state machine
+		fsm = new FSM(node,FSM.FINDING_WALL,sp); // state machine
 
 		// Initialize subscriptions
 		//
