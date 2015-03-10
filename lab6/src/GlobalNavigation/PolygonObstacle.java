@@ -26,7 +26,7 @@ public class PolygonObstacle {
    * <p>Whether this polygon has been started.</p>
    **/
   protected boolean started = false;
-  
+
   /**
    * <p>Whether this polygon has been closed.</p>
    **/
@@ -78,7 +78,7 @@ public class PolygonObstacle {
 
     if (!started || closed)
       throw new IllegalStateException("already closed");
-    
+
     path.closePath();
 
     closed = true;
@@ -102,7 +102,7 @@ public class PolygonObstacle {
   public boolean contains(Point2D p) {
     return path.contains(p);
   }
-  
+
   /**
    * Determines if a line intersects with the obstacle
    * @param line the line to check agains the obstacle for intersection

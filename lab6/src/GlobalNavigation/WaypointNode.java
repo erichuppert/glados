@@ -1,15 +1,12 @@
 package GlobalNavigation;
+import java.awt.geom.Point2D;
 
-public class WaypointNode extends GraphNode<double[]> {
-	public WaypointNode(double[] _value) {
+public class WaypointNode extends GraphNode<Point2D.Double> {
+	public WaypointNode(Point2D.Double _value) {
 		super(_value);
 	}
 
-	public double costToNode(GraphNode<double[]> other) {
-		double[] src = this.value;
-		double[] dest = other.getValue();
-		double dx = dest[g.X]-src[g.X];
-		double dy = dest[g.Y]-src[g.Y];
-		return Math.sqrt(dx*dx + dy*dy);
+	public double costToNode(GraphNode<Point2D.Double> other) {
+		return this.value.distance(other.getValue());
 	}
 }
