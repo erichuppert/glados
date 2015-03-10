@@ -153,7 +153,7 @@ public class CSpace {
 		rightBound.close();
 		rightBound.color = Color.BLACK;
 
-		topBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY()+enbBounds.getHeight());
+		topBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY()+envBounds.getHeight());
 		topBound.addVertex(envBounds.getX(), envBounds.getY()+envBounds.getHeight());
 		topBound.close();
 		topBound.color = Color.BLACK;
@@ -163,10 +163,10 @@ public class CSpace {
 		leftBound.close();
 		leftBound.color = Color.BLACK;
 
-		obsCSpaces.add(obsCspace(bottomBound, RobotPolygon, null, false));
-		obsCSpaces.add(obsCspace(rightBound, RobotPolygon, null, false));
-		obsCSpaces.add(obsCspace(topBound, RobotPolygon, null, false));
-		obsCSpaces.add(obsCspace(leftBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCSpace(bottomBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCSpace(rightBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCSpace(topBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCSpace(leftBound, RobotPolygon, null, false));
         // PolygonObstacle boundaryObs = new PolygonObstacle();
 
         // boundaryObs.addVertex(envBounds.getX(), envBounds.getY());
