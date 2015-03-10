@@ -31,21 +31,18 @@ public class GlobalNavigation implements NodeMain{
     private String mapFileName;
     private PolygonMap polygonMap;
     private ParameterTree paramTree;
-    
-    private boolean shutdown;
-    
 
-    public GlobalNavigation(){
-    	
-    }
-    
+    private boolean shutdown;
+
+    public GlobalNavigation(){}
+
 	public void onStart(Node node){
 		guiRectPub = node.newPublisher("/gui/Rect", "lab6_msgs/GUIRectMsg");
 		guiPolyPub = node.newPublisher("/gui/Poly", "lab6_msgs/GUIPolyMsg");
 		guiErasePub = node.newPublisher("/gui/Erase", "lab5_msgs/GUIEraseMsg");
 		guiSegPub =  node.newPublisher("/gui/Segment", "lab5_msgs/GUISegmentMsg");
 		guiPointPub = node.newPublisher("/gui/Point", "lab5_msgs/GUIPointMsg");
-		
+
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
@@ -54,7 +51,7 @@ public class GlobalNavigation implements NodeMain{
 
 			     public void run(){
 			    	 try {
-			    		 Thread.sleep(4000);			    		 
+			    		 Thread.sleep(4000);
 			    	 } catch (Exception e) {
 			    		 throw new RuntimeException();
 			    	 }
@@ -69,7 +66,7 @@ public class GlobalNavigation implements NodeMain{
 			throw new RuntimeException(e.getMessage());
 		}
     }
-    
+
 	public void onShutdown(Node node){
 		synchronized(this) {
 			shutdown = true;
@@ -83,45 +80,42 @@ public class GlobalNavigation implements NodeMain{
 	public void onShutdownComplete(Node node) {
 	}
 
-    
 	public GraphName getDefaultNodeName() {
 		return new GraphName("/rss/GlobalNavigation");
 	}
-	
+
 	public void handle(BumpMsg arg0) {
-		
 	}
-	
+
 	public void handle(OdometryMsg arg0) {
 	}
 
 	public void run() {
 	}
-	
+
 	private void displayMap() {
 		// draw the robot starting point
 		//
 		Point2D.Double robotStart = polygonMap.getRobotStart();
 		drawPoint(robotStart.getX(), robotStart.getY(), Color.RED);
-		
+
 		// draw the robot goal
 		//
 		Point2D.Double robotGoal = polygonMap.getRobotGoal();
 		drawPoint(robotGoal.getX(), robotGoal.getY(), Color.GREEN);
-		
+
 		// draw the rectangular boundaries of the world
 		//
 		Rectangle2D.Double worldRect = polygonMap.getWorldRect();
 		drawRectangle(worldRect, Color.BLACK);
-		
-		
+
 		// draw obstacles onto the GUI
-		for (int i = 0; i < polygonMap.obstacles.size(); i++) {
-			PolygonObstacle obstacle = polygonMap.obstacles.get(i);
+		List<PolygonObstacle> obstacles = new CSpace().envConfSpace(polygonMap.obstacles);
+		for (PolygonObstacle obstacle : obstacles) {
 			drawPolygon(obstacle);
 		}
 	}
-	
+
 	/**
 	 * Publish a point message to the GUI
 	 * @param x the x value of the point on the GUI
@@ -143,12 +137,11 @@ public class GlobalNavigation implements NodeMain{
 		pointMsg.color = GUIHelpers.colorMessage(color);
 		guiPointPub.publish(pointMsg);
 	}
-	
-	
+
 	/**
 	 * Publish a rectangle to the GUI
 	 * @param rectangle the rectangle to be drawn
-	 * @param color the color of the rectangle 	
+	 * @param color the color of the rectangle
 	 */
 	private void drawRectangle(Rectangle2D.Double rectangle, Color color) {
 
@@ -156,20 +149,19 @@ public class GlobalNavigation implements NodeMain{
 		fillRectMsg(guiRectMsg, rectangle, color, false);
 		guiRectPub.publish(guiRectMsg);
 	}
-	
+
 	/**
 	 * Determines if the GUI should display obstacles as filled
 	 */
 	private static final boolean FILL_GUI_OBSTACLES = true;
-	
+
 	private void drawPolygon(PolygonObstacle obstacle) {
-		
+
 		GUIPolyMsg polyMsg = new GUIPolyMsg();
 		fillPolyMsg(polyMsg, obstacle, obstacle.color, FILL_GUI_OBSTACLES, obstacle.closed);
 		guiPolyPub.publish(polyMsg);
 	}
-	
-	
+
 	public static void fillRectMsg(GUIRectMsg rectMsg, Rectangle2D.Double rectangle, Color color, boolean filled) {
 		/**
 		 *  GUIRectMsg attributes:
@@ -189,11 +181,11 @@ public class GlobalNavigation implements NodeMain{
 			rectMsg.c = GUIHelpers.colorMessage(color);
 		}
 	};
-	
+
 	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
-		/* 
+		/*
 		PolygonMsg attributes
-		
+
 		lab5_msgs/ColorMsg c
 		int32 numVertices
 		float32[] x
@@ -215,7 +207,5 @@ public class GlobalNavigation implements NodeMain{
 		polyMsg.x = xPoints;
 		polyMsg.y = yPoints;
 	}
-	
-
 }
 
