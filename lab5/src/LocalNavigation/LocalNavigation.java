@@ -51,7 +51,8 @@ public class LocalNavigation implements NodeMain,Runnable {
 				@Override
 				public void onNewMessage(SonarMsg m) {
 					synchronized(this) {
-						sonars[m.isFront?g.FRONT:g.BACK] = m.range;
+						int sonar = m.isFront?g.FRONT:g.BACK;
+						sonars[sonar] = (m.range+sonars[sonar])/2.0;
 					}
 					sp.newPoint(m.isFront,m.range);
 				}
