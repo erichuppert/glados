@@ -317,18 +317,18 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
-		logError(sonars[g.BACK],sonars[g.FRONT]);
+		//logError(sonars[g.BACK],sonars[g.FRONT]);
 		if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 0.125;
-			double Ka = 0.1;
-			double desired = OBSTACLE_RETREAT_DISTANCE + 0.5;
+			double Kd = 5.0;
+			double Ka = 1.0;
+			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
 				double theta_i = Kd*(desired-distanceError);
 				rv = -Ka*(theta_i - angleError);
-				//logError(distanceError, angleError);
+				logError(distanceError, angleError);
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
@@ -381,7 +381,7 @@ public class FSM {
 	// determine if the robot has moved angle radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough(double angle) {
-		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle - 0.2;
+		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle;
 	}
 
 	public static double OBSTACLE_RETREAT_DISTANCE = 0.4;
