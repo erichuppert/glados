@@ -39,7 +39,7 @@ public class SonarPoints {
 	// Transforms between sonar and robot frames
 	//
 	private static final Mat sonarToRobotRot   = Mat.rotation(Math.PI / 2);
-	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.064, 0.19), sonarToRobotRot);
+	private static final Mat sonarFrontToRobot = Mat.mul(Mat.translation(-0.064, 0.2150), sonarToRobotRot);
 	private static final Mat sonarBackToRobot  = Mat.mul(Mat.translation(-0.3350, 0.2150), sonarToRobotRot);
 
 	// ROS Publishers
