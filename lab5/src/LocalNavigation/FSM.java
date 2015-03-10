@@ -226,7 +226,8 @@ public class FSM {
 			// Slight forward speed to avoid oscillations
 			// Happened due to depressed bumper becoming undepressed in pure rotation
 			//
-			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.01;
+			double robot_radius = 0.215;
+			tv = ALIGNMENT_ROTATIONAL_SPEED*robot_radius;
 			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
 			// Neither is depressed, just move slowly forward.
