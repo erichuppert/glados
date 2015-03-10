@@ -5,6 +5,7 @@ import java.util.List;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.Color;
 
 /**
  * Contains methods for configuration spaces
