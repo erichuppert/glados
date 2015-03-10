@@ -320,8 +320,8 @@ public class FSM {
 		//logError(sonars[g.BACK],sonars[g.FRONT]);
 		if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 0.5;
-			double Ka = 0.1;
+			double Kd = 1.5;
+			double Ka = 0.3;
 			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
