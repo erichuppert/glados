@@ -222,7 +222,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getDistanceError() {
-		if(robotPose == null || lineFilter.getNPoints() < 10) {
+		if(robotPose == null || lineFilter.getNPoints() < 50) {
 			return 0;
 		} else {
 			return lineFilter.getDistance(robotPose[g.X], robotPose[g.Y]);
@@ -230,7 +230,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getAngleError() {
-		if(robotPose == null || lineFilter.getNPoints() < 10) {
+		if(robotPose == null || lineFilter.getNPoints() < 50) {
 			return 0;
 		} else {
 			return lineFilter.getAngleToLine(robotPose[g.THETA]);
