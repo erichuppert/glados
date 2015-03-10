@@ -323,7 +323,7 @@ public class FSM {
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		//logError(sonars[g.BACK],sonars[g.FRONT]);
-		if (bothHaveObstacle()) {
+		if (true) {//if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 1.5;
 			double Ka = 0.3;
