@@ -98,7 +98,8 @@ public class VisibilityGraph {
 				Vector2D p3 = new Vector2D(nextPoint.getX(), nextPoint.getY());
 				Vector2D v1 = p2.minus(p1).unitVector();
 				Vector2D v2 = p2.minus(p3).unitVector();
-				Vector2D modV = p2.plus(v1.scalarMult(modScalar/2.0)).plus(v2.scalarMult(modScalar/2.0));
+				Vector2D delta = v2.plus(v1).unitVector();
+				Vector2D modV = p2.plus(delta.scalarMult(modScalar));
 				modVertices.add(new Point2D.Double(modV.getX(),modV.getY()));
 			}
 
