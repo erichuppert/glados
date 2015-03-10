@@ -47,7 +47,7 @@ public class CSpace {
             }
         }
 
-		return convexHull(points);
+		return GeomUtils.convexHull(points);
     }
 
     /**
