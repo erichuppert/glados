@@ -51,9 +51,9 @@ public class SonarPoints {
 	// Threshold for finding obstacles.
 	// Values decided on based on parameters of the problem.
 	//
-	private static final double threshold_high = 0.6;
+	private static final double threshold_high = 1.0;
 	private static final double threshold_low = 0.05;
-	private static final double threshold_highest = 1.6;
+	private static final double threshold_highest = 2.0;
 
 	public static boolean obstacleInRange(double range) { // Utility method
 		return range <= threshold_high && range >= threshold_low;
@@ -222,7 +222,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getDistanceError() {
-		if(robotPose == null) {
+		if(robotPose == null || lineFilter.getNPoints() < 15) {
 			return 0;
 		} else {
 			return lineFilter.getDistance(robotPose[g.X], robotPose[g.Y]);
@@ -230,7 +230,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getAngleError() {
-		if(robotPose == null) {
+		if(robotPose == null || lineFilter.getNPoints() < 50) {
 			return 0;
 		} else {
 			return lineFilter.getAngleToLine(robotPose[g.THETA]);

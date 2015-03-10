@@ -125,13 +125,18 @@ public class FSM {
 		switch(state) {
 		case START_STATE:
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(1500);
 			} catch(Exception e) {
 				return;
 			}
 			System.out.printf("Resetting\n");
-			changeState(initialState);
 			resetRobot();
+			try {
+				Thread.sleep(1500);
+			} catch(Exception e) {
+				return;
+			}
+			changeState(initialState);
 		case STOP_ON_BUMP:
 			stop_on_bump();
 			break;
@@ -221,7 +226,7 @@ public class FSM {
 			// Slight forward speed to avoid oscillations
 			// Happened due to depressed bumper becoming undepressed in pure rotation
 			//
-			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.1;
+			tv = ALIGNMENT_TRANSLATIONAL_SPEED*0.01;
 			rv = ALIGNMENT_ROTATIONAL_SPEED * (bumpers[g.LEFT]?1.0:-1.0);
 		} else {
 			// Neither is depressed, just move slowly forward.
@@ -231,15 +236,13 @@ public class FSM {
 		}
 	}
 
-	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.2;
-
 	// If we're aligned, we move away from the obstacle
 	//
 	private void aligned() {
 		setVelocities = true;
 
 		alignedPose = pose.clone();
-		tv = POST_RETREAT_ROTATION_SPEED;
+		tv = 0;
 		rv = 0;
 		changeState(RETREATING);
 	}
@@ -317,18 +320,22 @@ public class FSM {
 		setVelocities = true;
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
-		logError(sonars[g.BACK],sonars[g.FRONT]);
-		if (bothHaveObstacle()) {
+		//logError(sonars[g.BACK],sonars[g.FRONT]);
+		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 0.125;
-			double Ka = 0.1;
-			double desired = OBSTACLE_RETREAT_DISTANCE + 0.5;
+			double Kd = 2.5;
+			double Ka = 0.5;
+			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
-				double theta_i = Kd*(desired-distanceError);
-				rv = -Ka*(theta_i - angleError);
-				//logError(distanceError, angleError);
+				if (distanceError > 0.001 || angleError > 0.001) {
+					double theta_i = Kd*(desired-distanceError);
+					rv = -Ka*(theta_i - angleError);
+					logError(distanceError, angleError);
+				} else {
+					rv = 0;
+				}
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
@@ -381,10 +388,10 @@ public class FSM {
 	// determine if the robot has moved angle radians with respect to its pose when aligned at the wall
 	//
 	public boolean rotatedEnough(double angle) {
-		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle - 0.2;
+		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle;
 	}
 
-	public static double OBSTACLE_RETREAT_DISTANCE = 0.4;
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
 
 	// Tell if, based on our current pose, if we have retreated from the wall enough
 	//
