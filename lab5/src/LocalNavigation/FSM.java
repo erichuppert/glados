@@ -326,9 +326,11 @@ public class FSM {
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
-				double theta_i = Kd*(desired-distanceError);
-				rv = -Ka*(theta_i - angleError);
-				logError(distanceError, angleError);
+				if (distanceError != 0 && angleError != 0) {
+					double theta_i = Kd*(desired-distanceError);
+					rv = -Ka*(theta_i - angleError);
+					logError(distanceError, angleError);
+				}
 			} catch(RuntimeException e) {
 				rv = 0;
 			}
