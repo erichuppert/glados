@@ -3,6 +3,7 @@ package GlobalNavigation;
 import java.awt.geom.*;
 import java.util.*;
 import java.awt.Color;
+import java.awt.Rectangle;
 
 /**
  * <p>Represents a polygonal obstacle.<p>
@@ -100,6 +101,16 @@ public class PolygonObstacle {
    **/
   public boolean contains(Point2D p) {
     return path.contains(p);
+  }
+  
+  /**
+   * Determines if a line intersects with the obstacle
+   * @param line the line to check agains the obstacle for intersection
+   * @return true if the line intersects the object
+   */
+  public boolean lineIntersects(Line2D.Double line) {
+	  Rectangle boundingBox = path.getBounds();
+	  return boundingBox.intersectsLine(line);
   }
 
   /**
