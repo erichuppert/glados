@@ -39,17 +39,15 @@ public class CSpace {
      * @return the Minkowski sum of the polygons
      */
     public PolygonObstacle ComputeMinkowskiSum(PolygonObstacle poly1, PolygonObstacle poly2) {
-        PolygonObstacle mSum = new PolygonObstacle();
+		List<Point2D.Double> points = new ArrayList<Point2D.Double>();
 
         for (Point2D.Double vertex1 : poly1.getVertices()) {
             for (Point2D.Double vertex2 : poly2.getVertices()) {
-                mSum.addVertex(vertex1.getX() + vertex2.getX(), vertex1.getY() + vertex2.getY());
+				points.add(new Point2D.Double(vertex1.getX() + vertex2.getX(), vertex1.getY() + vertex2.getY()))
             }
         }
 
-        mSum.close();
-
-        return mSum;
+		return convexHull(points);
     }
 
     /**
@@ -74,8 +72,8 @@ public class CSpace {
         ySum /= numVertices;
 
         //        Computing the difference in the x and y components of the centroid and reference point
-        robotXShift = xSum - refPoint.getX();
-        robotYShift = ySum - refPoint.getY();
+        robotXShift = refPoint.getX()-xSum;
+        robotYShift = refPoint.getY()-ySum;
 
         //        Rescaling each vertex to have the reference point as the centroid
         return shiftObs(origPoly, robotXShift, robotYShift);
@@ -96,6 +94,7 @@ public class CSpace {
         }
 
         newPoly.close();
+		newPoly.color = origPoly.color;
 
         return newPoly;
     }
@@ -109,7 +108,7 @@ public class CSpace {
      */
     public PolygonObstacle obsCSpace(PolygonObstacle obsPoly, PolygonObstacle RobotPolygon, Point2D.Double refPoint, boolean computeRobotPolygon) {
         if (computeRobotPolygon) {
-            //          Setting the robot at the origin
+            // Setting the robot at the origin
             RobotPolygon = changeOrigin(RobotPolygon, refPoint);
         }
 
