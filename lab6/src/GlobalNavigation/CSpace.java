@@ -142,6 +142,7 @@ public class CSpace {
         boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY());
         boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY() + envBounds.getHeight());
         boundaryObs.addVertex(envBounds.getX(), envBounds.getY() + envBounds.getHeight());
+		boundaryObs.color = envBounds.color;
         obsCSpaces.add(obsCSpace(boundaryObs, RobotPolygon, null, false));
 
         return obsCSpaces;
