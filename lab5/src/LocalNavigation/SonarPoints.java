@@ -222,7 +222,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getDistanceError() {
-		if(robotPose == null || lineFilter.getNPoints() < 50) {
+		if(robotPose == null || lineFilter.getNPoints() < 15) {
 			return 0;
 		} else {
 			return lineFilter.getDistance(robotPose[g.X], robotPose[g.Y]);
