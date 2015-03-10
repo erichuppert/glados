@@ -325,13 +325,13 @@ public class FSM {
 		//logError(sonars[g.BACK],sonars[g.FRONT]);
 		if (true) {//if (bothHaveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
-			double Kd = 1.5;
-			double Ka = 0.3;
+			double Kd = 2.5;
+			double Ka = 0.5;
 			double desired = OBSTACLE_RETREAT_DISTANCE;
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
-				if (distanceError > 0.01 || angleError > 0.01) {
+				if (distanceError > 0.001 || angleError > 0.001) {
 					double theta_i = Kd*(desired-distanceError);
 					rv = -Ka*(theta_i - angleError);
 					logError(distanceError, angleError);
