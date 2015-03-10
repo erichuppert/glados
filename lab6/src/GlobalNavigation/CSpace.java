@@ -137,14 +137,44 @@ public class CSpace {
         }
 
         //        build obstacle for the boundaries
-        PolygonObstacle boundaryObs = new PolygonObstacle();
-        Rectangle2D.Double envBounds = polyMap.worldRect;
-        boundaryObs.addVertex(envBounds.getX(), envBounds.getY());
-        boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY());
-        boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY() + envBounds.getHeight());
-        boundaryObs.addVertex(envBounds.getX(), envBounds.getY() + envBounds.getHeight());
-		boundaryObs.color = Color.BLACK;
-        obsCSpaces.add(obsCSpace(boundaryObs, RobotPolygon, null, false));
+		PolygonObstacle bottomBound = new PolygonObstacle();
+		PolygonObstacle rightBound = new PolygonObstacle();
+		PolygonObstacle topBound = new PolygonObstacle();
+		PolygonObstacle leftBound = new PolygonObstacle();
+		Rectangle2D.Double envBounds = polyMap.worldRect;
+
+		bottomBound.addVertex(envBounds.getX(), envBounds.getY());
+		bottomBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY());
+		bottomBound.close();
+		bottomBound.color = Color.BLACK;
+
+		rightBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY());
+		rightBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY()+envBounds.getHeight());
+		rightBound.close();
+		rightBound.color = Color.BLACK;
+
+		topBound.addVertex(envBounds.getX()+envBounds.getWidth(), envBounds.getY()+enbBounds.getHeight());
+		topBound.addVertex(envBounds.getX(), envBounds.getY()+envBounds.getHeight());
+		topBound.close();
+		topBound.color = Color.BLACK;
+
+		leftBound.addVertex(envBounds.getX(), envBounds.getY()+envBounds.getHeight());
+		leftBound.addVertex(envBounds.getX(), envBounds.getY());
+		leftBound.close();
+		leftBound.color = Color.BLACK;
+
+		obsCSpaces.add(obsCspace(bottomBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCspace(rightBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCspace(topBound, RobotPolygon, null, false));
+		obsCSpaces.add(obsCspace(leftBound, RobotPolygon, null, false));
+        // PolygonObstacle boundaryObs = new PolygonObstacle();
+
+        // boundaryObs.addVertex(envBounds.getX(), envBounds.getY());
+        // boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY());
+        // boundaryObs.addVertex(envBounds.getX() + envBounds.getWidth(), envBounds.getY() + envBounds.getHeight());
+        // boundaryObs.addVertex(envBounds.getX(), envBounds.getY() + envBounds.getHeight());
+		// boundaryObs.color = Color.BLACK;
+        // obsCSpaces.add(obsCSpace(boundaryObs, RobotPolygon, null, false));
 
         return obsCSpaces;
     }
