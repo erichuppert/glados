@@ -118,7 +118,9 @@ public class CSpace {
         //        PolygonObstacle shiftedObsPoly = shiftObs(obsPoly, robotXShift, robotYShift);
 
         //        To compute the config space of the obstacle, probably need to have the ref point at origin or else when compute minkowski sum, values may be off
-        return ComputeMinkowskiSum(RobotPolygon, obsPoly);
+        PolygonObstacle cspaceObs = ComputeMinkowskiSum(RobotPolygon, obsPoly);
+		cspaceObs.color = obsPoly.color;
+		return cspaceObs;
     }
 
     /**
