@@ -238,6 +238,7 @@ public class SonarPoints {
 	}
 
 	public synchronized boolean obstacleDone() {
+		System.out.printf("%.2f\n", outerAngle/(2*Math.PI))
 		return Math.abs(outerAngle - 2*Math.PI) <= angleThreshold;
 	}
 }
