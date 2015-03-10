@@ -109,8 +109,17 @@ public class PolygonObstacle {
    * @return true if the line intersects the object
    */
   public boolean lineIntersects(Line2D.Double line) {
-	  Rectangle boundingBox = path.getBounds();
-	  return boundingBox.intersectsLine(line);
+	  List<Point2D.Double> vertices = getVertices();
+	  for (int i = 0; i < vertices.size(); i++) {
+		  int next = (i+1) % vertices.size();
+		  Line2D.Double side = new Line2D.Double(vertices.get(i),vertices.get(next));
+		  if (side.intersectsLine(line)) {
+			  return false;
+		  }
+	  }
+	  return true;
+	  // Rectangle boundingBox = path.getBounds();
+	  // return boundingBox.intersectsLine(line);
   }
 
   /**
