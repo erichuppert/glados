@@ -236,15 +236,13 @@ public class FSM {
 		}
 	}
 
-	private static final float POST_RETREAT_ROTATION_SPEED = (float) 0.2;
-
 	// If we're aligned, we move away from the obstacle
 	//
 	private void aligned() {
 		setVelocities = true;
 
 		alignedPose = pose.clone();
-		tv = POST_RETREAT_ROTATION_SPEED;
+		tv = 0;
 		rv = 0;
 		changeState(RETREATING);
 	}
@@ -323,7 +321,7 @@ public class FSM {
 		// when we have an obstacle in sonar view, continue moving forward and tracking it
 		//
 		//logError(sonars[g.BACK],sonars[g.FRONT]);
-		if (true) {//if (bothHaveObstacle()) {
+		if (haveObstacle()) {
 			tv = ALIGNMENT_TRANSLATIONAL_SPEED;
 			double Kd = 2.5;
 			double Ka = 0.5;
@@ -393,7 +391,7 @@ public class FSM {
 		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle;
 	}
 
-	public static double OBSTACLE_RETREAT_DISTANCE = 0.9;
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.5;
 
 	// Tell if, based on our current pose, if we have retreated from the wall enough
 	//
