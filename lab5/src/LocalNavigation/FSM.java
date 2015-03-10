@@ -125,13 +125,18 @@ public class FSM {
 		switch(state) {
 		case START_STATE:
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(1500);
 			} catch(Exception e) {
 				return;
 			}
 			System.out.printf("Resetting\n");
-			changeState(initialState);
 			resetRobot();
+			try {
+				Thread.sleep(1500);
+			} catch(Exception e) {
+				return;
+			}
+			changeState(initialState);
 		case STOP_ON_BUMP:
 			stop_on_bump();
 			break;
