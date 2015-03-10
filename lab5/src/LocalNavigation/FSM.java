@@ -330,6 +330,8 @@ public class FSM {
 					double theta_i = Kd*(desired-distanceError);
 					rv = -Ka*(theta_i - angleError);
 					logError(distanceError, angleError);
+				} else {
+					rv = 0;
 				}
 			} catch(RuntimeException e) {
 				rv = 0;
