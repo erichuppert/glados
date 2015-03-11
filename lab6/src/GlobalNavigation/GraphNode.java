@@ -17,7 +17,6 @@ public abstract class GraphNode<V> {
 	}
 
 	public Set<GraphNode<V>> getNeighbors() {
-		System.err.printf("There are %d values in neighbors", neighbors.size());
 		return new HashSet<GraphNode<V>>(neighbors);
 	}
 
@@ -26,7 +25,6 @@ public abstract class GraphNode<V> {
 	}
 
 	public boolean addNeighbor(GraphNode<V> newNeighbor) {
-		System.err.printf("Adding a new neighbor\n");
 		return neighbors.add(newNeighbor);
 	}
 
