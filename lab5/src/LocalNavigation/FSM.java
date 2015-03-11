@@ -392,7 +392,7 @@ public class FSM {
 		return Math.abs(Math.atan2(Math.sin(pose[g.THETA]-alignedPose[g.THETA]), Math.cos(pose[g.THETA]-alignedPose[g.THETA]))) > angle - 0.2;
 	}
 
-	public static double OBSTACLE_RETREAT_DISTANCE = 0.2;
+	public static double OBSTACLE_RETREAT_DISTANCE = 0.4;
 
 	// Tell if, based on our current pose, if we have retreated from the wall enough
 	//
