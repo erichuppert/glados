@@ -18,8 +18,8 @@ public class VisibilityGraph {
 		obstacles = _obstacles;
 		goal = _goal;
 		start = _start;
-		nodes = getAllNodes();
 		graphStart = new WaypointNode(start);
+		nodes = getAllNodes();
 		getVisibilityGraph();
 	}
 
