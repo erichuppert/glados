@@ -41,8 +41,8 @@ public class VisibilityGraph {
 				if (node1.equals(node2)) {
 					continue;
 				}
-				System.err.printf("Trying the pair:\n %s %s\n\n", p1.toString(), p2.toString());
 				Point2D.Double p2 = node2.getValue();
+				System.err.printf("Trying the pair:\n %s %s\n\n", p1.toString(), p2.toString());
 				// create a line from the pair of points to test against all obstacles for an intersection
 				//
 				Line2D.Double line = new Line2D.Double(p1, p2);
