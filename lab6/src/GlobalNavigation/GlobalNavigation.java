@@ -213,6 +213,29 @@ public class GlobalNavigation implements NodeMain{
 		}
 	};
 
+	/**
+	 * Draws a line on the GUI of the given color
+	 * @param p1 the first end point of the segment to be drawn
+	 * @param p2 the second end point of the segment to be drawn
+	 * @param color the color of the line
+	 */
+	public static void drawSegment(Point2D.Double p1, Point2D.Double p2, Color color) {
+		GUILineMsg lineMsg = new GUISegmentMsg();
+		/**
+		 *  float64 startX
+			float64 endX
+			float64 startY
+			float64 endY
+			ColorMsg color
+		 */
+		lineMsg.startX = (float) p1.getX();
+		lineMsg.startY = (float) p1.getY();
+		lineMsg.endX = (float) p2.getX();
+		lineMsg.endY = (float) p2.getY();
+		lineMsg.color = GUIHelpers.colorMessage(color);
+		guiSegPub.publish(lineMsg);
+	}
+	
 	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
 		/*
 		PolygonMsg attributes
