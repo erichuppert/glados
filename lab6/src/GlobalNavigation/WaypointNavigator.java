@@ -60,10 +60,10 @@ public class WaypointNavigator {
 		double Kd = 5*Ka;
 		// check if we still need to rotate towards the next point
 		//
-		if (Math.abs(angleError) > 0.05) {
-			rv = -Ka*(-angleError);
-			tv = 0;
-		} else {
+		// if (Math.abs(angleError) > 0.05) {
+		// 	rv = -Ka*(-angleError);
+		// 	tv = 0;
+		// } else {
 			// use a proportional controller to move forward
 			//
 			double rx = robotPose[g.X]-currentTrajectory.getX2();
@@ -72,11 +72,12 @@ public class WaypointNavigator {
 			double ty = currentTrajectory.getY2() - currentTrajectory.getY1();
 			int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
 			double distance = Math.sqrt(Math.pow((robotPose[g.X]-currentTrajectory.getX2()),2) + Math.pow((robotPose[g.Y]-currentTrajectory.getY2()),2));
-			tv = sign*TRANSLATIONAL_SPEED*distance;
+			double straightness = 1;
+			tv = sign*TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),10);
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
 			rv = -Ka*(theta_i - angleError);
-		}
+			//}
 		setMotorVelocities(tv, rv);
 		return false;
 	}
