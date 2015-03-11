@@ -36,7 +36,7 @@ public class WaypointNavigator {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float TRANSLATIONAL_SPEED = (float) 0.04;
+	private static float TRANSLATIONAL_SPEED = (float) 0.03;
 
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
