@@ -36,6 +36,7 @@ public class VisibilityGraph {
 		// iterate over all pairs of nodes to find out which pairs of points share visibility
 		//
 		for (WaypointNode node1 : allNodes) {
+			System.err.printf("Here!");
 			Point2D.Double p1 = node1.getValue();
 			for (WaypointNode node2 : allNodes) {
 				if (node1.equals(node2)) {
