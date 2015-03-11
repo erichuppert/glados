@@ -55,7 +55,7 @@ public class WaypointNavigator {
 		// check if we still need to rotate towards the next point
 		//
 		if (Math.abs(angleError) > 0.1) {
-			rv = ROTATIONAL_SPEED * (-angleError);
+			rv = ROTATIONAL_SPEED * (angleError);
 			tv = 0;
 		} else {
 			// use a proportional controller to move forward
