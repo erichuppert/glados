@@ -73,7 +73,7 @@ public class WaypointNavigator {
 			double ty = currentTrajectory.getY2() - currentTrajectory.getY1();
 			//int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
 			double distance = Math.sqrt(Math.pow((robotPose[g.X]-currentTrajectory.getX2()),2) + Math.pow((robotPose[g.Y]-currentTrajectory.getY2()),2));
-			int straightness = 50;
+			int straightness = 100;
 			tv = TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),straightness);
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
