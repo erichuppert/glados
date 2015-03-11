@@ -124,7 +124,7 @@ public class GlobalNavigation implements NodeMain{
 			Point2D.Double p = n.getValue();
 			for (WaypointNode neigh: (List<WaypointNode>)n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
-				drawSegment(n,pn,Color.RED);
+				drawSegment(p,pn,Color.RED);
 			}
 			drawPoint(p.getX(), p.getY(), Color.BLUE);
 		}
