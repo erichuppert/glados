@@ -28,9 +28,6 @@ public class AStar<V> {
 		}
 	}
 
-	public interface Predicate<V> {
-		public boolean test(V value);
-	}
 
 	public List<GraphNode<V>> search(Predicate<V> reachedEnd) {
 		Set<GraphNode<V>> closedSet = new HashSet<GraphNode<V>>();

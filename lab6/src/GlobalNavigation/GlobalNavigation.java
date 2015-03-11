@@ -14,6 +14,7 @@ import org.ros.node.NodeMain;
 import java.io.*;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,16 +136,17 @@ public class GlobalNavigation implements NodeMain{
 		 // Motion plan
 		 //
 		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
-		 List<WaypointNode> path = planner.search(new Predicate<Point2D.Double>() {
+		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
 		 		@Override
 		 		public boolean test(Point2D.Double value) {
 		 			double dx = value.getX()-robotGoal.getX();
 		 			double dy = value.getX()-robotGoal.getY();
 		 			return (dx*dx + dy*dy) <= 0.05;
 		 		}
-		 	});
-		 WaypointNode prev = path.get(0);
-		 for (WaypointNode n : path) {
+		 	};
+		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
+		 WaypointNode prev = (WaypointNode) path.get(0);
+		 for (GraphNode<Double> n : path) {
 		 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
 		 	prev = n;
 		 }
