@@ -41,8 +41,6 @@ public class VisibilityGraph {
 		for (GraphNode<Point2D.Double> node1 : nodes) {
 			Point2D.Double p1 = node1.getValue();
 			for (GraphNode<Point2D.Double> node2 : nodes) {
-				System.err.printf("At node2 number %d of %d",c, nodes.size());
-				System.err.printf("\n\n");
 				c++;
 				if (node1.equals(node2)) {
 					continue;

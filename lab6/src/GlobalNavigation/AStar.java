@@ -30,7 +30,7 @@ public class AStar<V> {
 
 
 	public List<GraphNode<V>> search(Predicate<V> reachedEnd) {
-		System.err.println("Inside graph search");
+		System.err.println("Inside graph search\n");
 		Set<GraphNode<V>> closedSet = new HashSet<GraphNode<V>>();
 		PriorityQueue<PQEntry> openSet = new PriorityQueue<PQEntry>();
 		Map<GraphNode<V>,Double> nodeToCost = new HashMap<GraphNode<V>,Double>();
@@ -43,7 +43,7 @@ public class AStar<V> {
 		
 		while (!openSet.isEmpty()) {
 			PQEntry entry = openSet.poll();
-			System.err.println("Expanding another node");
+			System.err.println("Expanding another node\n");
 			double cost = entry.cost;
 			System.err.printf("Current node cost is %d\n", cost);
 			GraphNode<V> current = entry.node;
@@ -56,7 +56,7 @@ public class AStar<V> {
 				continue;
 			}
 			closedSet.add(current);
-			System.err.printf("Current node has %d neighbors", current.getNeighbors().size());
+			System.err.printf("Current node has %d neighbors\n", current.getNeighbors().size());
 			for(GraphNode<V> neigh : current.getNeighbors()) {
 				double neighCost = cost+current.costToNode(neigh);
 				if (!nodeToCost.containsKey(neigh) || nodeToCost.get(neigh) > neighCost) {
