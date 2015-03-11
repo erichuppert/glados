@@ -39,7 +39,7 @@ public class AStar<V> {
 		Map<GraphNode<V>,Double> nodeToCost = new HashMap<GraphNode<V>,Double>();
 		Map<GraphNode<V>,GraphNode<V>> nodeToParent = new HashMap<GraphNode<V>,GraphNode<V>>();
 
-		openSet.add(new PQEntry(0.0,0.0,graph));
+		openSet.add(new PQEntry(graph.costToNode(goal),0.0,graph));
 		nodeToCost.put(graph,0.0);
 		nodeToParent.put(graph,null);
 		GraphNode<V> end = null;
