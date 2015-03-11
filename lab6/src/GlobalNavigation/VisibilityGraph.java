@@ -35,9 +35,12 @@ public class VisibilityGraph {
 
 		// iterate over all pairs of nodes to find out which pairs of points share visibility
 		//
+		int c = 0;
 		for (GraphNode<Point2D.Double> node1 : nodes) {
 			Point2D.Double p1 = node1.getValue();
 			for (GraphNode<Point2D.Double> node2 : nodes) {
+				c++;
+				System.out.printf("At node2 number %d\n\n", c);
 				if (node1.equals(node2)) {
 					continue;
 				}
