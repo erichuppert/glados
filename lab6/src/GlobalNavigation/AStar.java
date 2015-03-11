@@ -30,7 +30,6 @@ public class AStar<V> {
 
 
 	public List<GraphNode<V>> search(Predicate<V> reachedEnd) {
-		System.err.println("Inside graph search\n");
 		Set<GraphNode<V>> closedSet = new HashSet<GraphNode<V>>();
 		PriorityQueue<PQEntry> openSet = new PriorityQueue<PQEntry>();
 		Map<GraphNode<V>,Double> nodeToCost = new HashMap<GraphNode<V>,Double>();
@@ -43,10 +42,10 @@ public class AStar<V> {
 		
 		while (!openSet.isEmpty()) {
 			PQEntry entry = openSet.poll();
-			System.err.println("Expanding another node\n");
 			double cost = entry.cost;
 			System.err.printf("Current node cost is %f\n", cost);
 			GraphNode<V> current = entry.node;
+			System.err.printf("This node is at %s\nGoal node at %s\n", current.getValue().toString(), goal.);
 			if (reachedEnd.test(current.getValue())) {
 				System.err.println("Found the end!");
 				end = current;

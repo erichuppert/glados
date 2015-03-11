@@ -143,6 +143,7 @@ public class GlobalNavigation implements NodeMain{
 		 			return (dx*dx + dy*dy) <= 0.05;
 		 		}
 		 	};
+		 	System.err.printf("Robot goal is %s\n", robotGoal.toString());
 		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
 		 GraphNode<Point2D.Double> prev = path.get(0);
 		 for (GraphNode<Point2D.Double> n : path) {
