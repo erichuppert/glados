@@ -41,7 +41,7 @@ public class AStar<V> {
 		nodeToCost.put(graph,0.0);
 		nodeToParent.put(graph,null);
 		GraphNode<V> end = null;
-		
+
 		while (!openSet.isEmpty()) {
 			PQEntry entry = openSet.poll();
 			double cost = entry.cost;

@@ -52,8 +52,8 @@ public class WaypointNavigator {
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
-		double Kd = 1.25;
-		double Ka = 0.25;
+		double Ka = 0.1;
+		double Kd = 5*Ka;
 		// check if we still need to rotate towards the next point
 		//
 		if (Math.abs(angleError) > 0.05) {
