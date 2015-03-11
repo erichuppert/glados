@@ -51,8 +51,8 @@ public class WaypointNavigator {
 			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
-		System.err.printf("OUT1\n", diff);
-		System.out.printf("OUT2\n", diff);
+		System.err.printf("OUT1\n");
+		System.out.printf("OUT2\n");
 
 		double angleError = getAngleError();
 		// check if we still need to rotate towards the next point
