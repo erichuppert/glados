@@ -59,6 +59,7 @@ public class AStar<V> {
 				System.err.printf("Neighbor node is at %s\n", neigh.getValue().toString());
 				double neighCost = cost+current.costToNode(neigh);
 				if (!nodeToCost.containsKey(neigh) || nodeToCost.get(neigh) > neighCost) {
+					System.err.println("Added this neighbor to be expanded");
 					nodeToCost.put(neigh,neighCost);
 					nodeToParent.put(neigh,current);
 					openSet.add(new PQEntry(neighCost,neigh));
