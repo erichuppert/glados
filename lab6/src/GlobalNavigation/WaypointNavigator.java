@@ -46,11 +46,13 @@ public class WaypointNavigator {
 		GraphNode<Point2D.Double> nextNode = wayPoints.get(nextPointInd);
 
 		if ( nearPoint(robotPoint, nextNode.getValue()) ) {
+			System.err.printf("New trajectory\n");
 			nextPointInd++;
 			if ( nextPointInd == wayPoints.size() ) {
 				return true;
 			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
+			System.err.printf("P1:%s\tP2:%s\n", wayPoints.get(nextPointInd-1).getValue().toString(), wayPoints.get(nextPointInd).getValue().toString());
 		}
 		double angleError = getAngleError();
 		double Kd = 2.5;
@@ -111,7 +113,6 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
-			System.err.printf("R:%.2f\tE:%.2f\n", robotPose[g.THETA], diff);
 			return diff;
 		}
 	}
