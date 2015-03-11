@@ -35,16 +35,13 @@ public class VisibilityGraph {
 
 		// iterate over all pairs of nodes to find out which pairs of points share visibility
 		//
-		System.err.printf("Here!\n\n\n");
 		for (WaypointNode node1 : allNodes) {
-			System.err.printf("Here!2\n\n\n");
 			Point2D.Double p1 = node1.getValue();
 			for (WaypointNode node2 : allNodes) {
 				if (node1.equals(node2)) {
 					continue;
 				}
 				Point2D.Double p2 = node2.getValue();
-				System.err.printf("Trying the pair:\n %s %s\n\n", p1.toString(), p2.toString());
 				// create a line from the pair of points to test against all obstacles for an intersection
 				//
 				Line2D.Double line = new Line2D.Double(p1, p2);

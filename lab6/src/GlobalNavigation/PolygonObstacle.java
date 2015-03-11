@@ -114,10 +114,10 @@ public class PolygonObstacle {
 		  int next = (i+1) % vertices.size();
 		  Line2D.Double side = new Line2D.Double(vertices.get(i),vertices.get(next));
 		  if (side.intersectsLine(line)) {
-			  return false;
+			  return true;
 		  }
 	  }
-	  return true;
+	  return false;
 	  // Rectangle boundingBox = path.getBounds();
 	  // return boundingBox.intersectsLine(line);
   }
