@@ -86,7 +86,7 @@ public class VisibilityGraph {
 			// Modify vertices so they're not contained within the obstacle.
 			//
 			List<Point2D.Double> modVertices = new ArrayList<Point2D.Double>();
-			double modScalar = 0.05;
+			double modScalar = 0.01;
 			for(int i = 0; i < vertices.size(); ++i) {
 				int prev = (vertices.size() + i - 1) % vertices.size();
 				int next = (i+1) % vertices.size();
