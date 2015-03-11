@@ -51,6 +51,9 @@ public class WaypointNavigator {
 			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
+		System.err.printf("OUT1\n", diff);
+		System.out.printf("OUT2\n", diff);
+
 		double angleError = getAngleError();
 		// check if we still need to rotate towards the next point
 		//
@@ -74,7 +77,7 @@ public class WaypointNavigator {
 
 	// 10cm threshold
 	//
-	public static double POINT_THRESHOLD_DIST = 0.1; 
+	public static double POINT_THRESHOLD_DIST = 0.1;
 
 	// Checks if current robot position is close enough to its destination wayPoint 
 	// to continue towards the next wayPoint
@@ -112,7 +115,7 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
-			System.out.printf("%.2f\n", diff);
+			System.err.printf("%.2f\n", diff);
 			return diff;
 		}
 	}
