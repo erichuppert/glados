@@ -10,8 +10,7 @@ import org.ros.message.rss_msgs.*;
 import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
-
-import GlobalNavigation.WaypointNavigator;
+import org.ros.message.MessageListener;
 
 import java.io.*;
 import java.awt.Color;
