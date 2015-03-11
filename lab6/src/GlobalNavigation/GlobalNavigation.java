@@ -124,6 +124,9 @@ public class GlobalNavigation implements NodeMain{
 		for (GraphNode<Point2D.Double> n: g.nodes) {		
 			Point2D.Double p = n.getValue();
 			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
+			if (p.equals(robotGoal)) {
+				System.err.printf("\n\n\nThe robotGoal has %d neighbors", n.size());
+			}
 			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
 				drawSegment(p,pn,Color.RED);
@@ -133,7 +136,6 @@ public class GlobalNavigation implements NodeMain{
 
 		 // Motion plan
 		 //
-		 System.err.printf("graphStart has %d neighbors\n", g.graphStart.getNeighbors().size());
 		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
 		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
 		 		@Override
