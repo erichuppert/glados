@@ -133,7 +133,7 @@ public class GlobalNavigation implements NodeMain{
 
 		 // Motion plan
 		 //
-		 System.err.printf("graphStart has %d neighbors", g.graphStart.getNeighbors().size());
+		 System.err.printf("graphStart has %d neighbors\n", g.graphStart.getNeighbors().size());
 		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
 		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
 		 		@Override

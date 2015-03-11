@@ -33,7 +33,6 @@ public class VisibilityGraph {
 		if (graphConstructed) {
 			return graphStart;
 		}
-		graphStart = new WaypointNode(start);
 
 		// iterate over all pairs of nodes to find out which pairs of points share visibility
 		//
