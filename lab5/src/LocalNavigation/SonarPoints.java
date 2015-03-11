@@ -233,7 +233,7 @@ public class SonarPoints {
 	}
 
 	public synchronized double getAngleError() {
-		if(robotPose == null || lineFilter.getNPoints() < 50) {
+		if(robotPose == null || lineFilter.getNPoints() < 20) {
 			return 0;
 		} else {
 			return lineFilter.getAngleToLine(robotPose[g.THETA]);
@@ -243,7 +243,6 @@ public class SonarPoints {
 	public synchronized boolean obstacleDone() {
 		double dot = previousVector[g.X]*firstVector[g.X]+previousVector[g.Y]*firstVector[g.Y];
 		outerAngle += Math.acos(dot);
-		System.out.printf("%.2f\t%.2f\n", outerAngle/(2*Math.PI), (outerAngle+Math.acos(dot))/(2*Math.PI));
 		return Math.abs(outerAngle+Math.acos(dot) - 2*Math.PI) <= angleThreshold;
 	}
 }
