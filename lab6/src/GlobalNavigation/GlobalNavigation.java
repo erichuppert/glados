@@ -125,7 +125,7 @@ public class GlobalNavigation implements NodeMain{
 			Point2D.Double p = n.getValue();
 			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
 			if (p.equals(robotGoal)) {
-				System.err.printf("\n\n\nThe robotGoal has %d neighbors", n.size());
+				System.err.printf("\n\n\nThe robotGoal has %d neighbors\n\n", neighbors.size());
 			}
 			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
