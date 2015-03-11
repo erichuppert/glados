@@ -19,14 +19,16 @@ public class AStar<V> {
 	}
 
 	private class PQEntry implements Comparable<PQEntry> {
+		public double priority;
 		public double cost;
 		public GraphNode<V> node;
-		public PQEntry(double _cost, GraphNode<V> _node) {
+		public PQEntry(double _priority, double _cost, GraphNode<V> _node) {
+			priority = _priority;
 			cost = _cost;
 			node = _node;
 		}
 		public int compareTo(PQEntry o) {
-			return (int)(cost - o.cost);
+			return (int)(priority - o.priority);
 		}
 	}
 
@@ -37,7 +39,7 @@ public class AStar<V> {
 		Map<GraphNode<V>,Double> nodeToCost = new HashMap<GraphNode<V>,Double>();
 		Map<GraphNode<V>,GraphNode<V>> nodeToParent = new HashMap<GraphNode<V>,GraphNode<V>>();
 
-		openSet.add(new PQEntry(0.0,graph));
+		openSet.add(new PQEntry(0.0,0.0,graph));
 		nodeToCost.put(graph,0.0);
 		nodeToParent.put(graph,null);
 		GraphNode<V> end = null;
@@ -60,7 +62,7 @@ public class AStar<V> {
 				if (!nodeToCost.containsKey(neigh) || nodeToCost.get(neigh) > neighCost) {
 					nodeToCost.put(neigh,neighCost);
 					nodeToParent.put(neigh,current);
-					openSet.add(new PQEntry(neighCost,neigh));
+					openSet.add(new PQEntry(neighCost+neigh.costToNode(goal),neighCost,neigh));
 				}
 			}
 		}

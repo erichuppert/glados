@@ -76,7 +76,8 @@ public class WaypointNavigator {
 			tv = sign*TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),10);
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
-			rv = -Ka*(theta_i - angleError);
+			rv = Ka*angleError;
+			// rv = -Ka*(theta_i - angleError);
 			//}
 		setMotorVelocities(tv, rv);
 		return false;
@@ -106,24 +107,27 @@ public class WaypointNavigator {
 		if(robotPose == null) {
 			return 0;
 		} else {
-			double a = currentTrajectory.getY1() - currentTrajectory.getY2();
-			double b = -(currentTrajectory.getX1() - currentTrajectory.getX2());
-			double mag = Math.sqrt(a*a + b*b);
-			a /= mag;
-			b /= mag;
+			Vector2D toWayPoint = new Vector2D(currentTrajectory.getX2()-robotPose[g.X], currentTrajectory.getX1()-robotPose[g.Y]);
+			double diff = robotPose[g.THETA]-toWayPoint.getTheta();
+			return Math.atan2(Math.sin(diff), Math.cos(diff));
+			// double a = currentTrajectory.getY1() - currentTrajectory.getY2();
+			// double b = -(currentTrajectory.getX1() - currentTrajectory.getX2());
+			// double mag = Math.sqrt(a*a + b*b);
+			// a /= mag;
+			// b /= mag;
 
-			double angle = Math.atan2(a,-b);
-			double x = Math.cos(robotPose[g.THETA]);
-			double y = Math.sin(robotPose[g.THETA]);
-			double dot = (x*(-b) + y*a); // Vector parallel to the line
-			if (dot < 0) {
-				a = -a;
-				b = -b;
-				dot = (x*(-b) + y*a);
-			}
-			double sign = (x*a+y*b)>=0?1:-1;
-			double diff = Math.acos(dot)*sign;
-			return diff;
+			// double angle = Math.atan2(a,-b);
+			// double x = Math.cos(robotPose[g.THETA]);
+			// double y = Math.sin(robotPose[g.THETA]);
+			// double dot = (x*(-b) + y*a); // Vector parallel to the line
+			// if (dot < 0) {
+			// 	a = -a;
+			// 	b = -b;
+			// 	dot = (x*(-b) + y*a);
+			// }
+			// double sign = (x*a+y*b)>=0?1:-1;
+			// double diff = Math.acos(dot)*sign;
+			// return diff;
 		}
 	}
 
