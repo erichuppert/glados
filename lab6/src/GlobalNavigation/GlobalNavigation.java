@@ -134,7 +134,7 @@ public class GlobalNavigation implements NodeMain{
 
 		 // Motion plan
 		 //
-		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.getVisibilityGraph());
+		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
 		 List<WaypointNode> path = planner.search(new Predicate<Point2D.Double>() {
 		 		@Override
 		 		public boolean test(Point2D.Double value) {
