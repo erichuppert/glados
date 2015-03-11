@@ -12,6 +12,7 @@ public class VisibilityGraph {
 	public Point2D.Double goal;
 	public List<WaypointNode> nodes;
 	WaypointNode graphStart = null;
+	WaypointNode goalNode = null;
 	private boolean graphConstructed = false;
 
 	public VisibilityGraph(List<PolygonObstacle> _obstacles, Point2D.Double _start, Point2D.Double _goal) {
@@ -19,6 +20,7 @@ public class VisibilityGraph {
 		goal = _goal;
 		start = _start;
 		graphStart = new WaypointNode(start);
+		goalNode = new WaypointNode(goal);
 		nodes = getAllNodes();
 		getVisibilityGraph();
 	}
@@ -120,7 +122,7 @@ public class VisibilityGraph {
 			}
 		}
 		nodes.add(graphStart);
-		nodes.add(new WaypointNode(goal));
+		nodes.add(goalNode);
 		return nodes;
 	}
 }

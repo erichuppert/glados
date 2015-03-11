@@ -136,7 +136,7 @@ public class GlobalNavigation implements NodeMain{
 
 		 // Motion plan
 		 //
-		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
+		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart, g.goalNode);
 		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
 		 		@Override
 		 		public boolean test(Point2D.Double value) {
