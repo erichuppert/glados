@@ -65,10 +65,10 @@ public class VisibilityGraph {
 		for (int k = 0; k < obstacles.size(); k++) {
 			PolygonObstacle obstacle = obstacles.get(k);
 			if (obstacle.lineIntersects(line)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
