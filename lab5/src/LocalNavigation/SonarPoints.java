@@ -52,7 +52,7 @@ public class SonarPoints {
 	// Threshold for finding obstacles.
 	// Values decided on based on parameters of the problem.
 	//
-	private static final double threshold_high = 1.0;
+	private static final double threshold_high = 0.6;
 	private static final double threshold_low = 0.05;
 	private static final double threshold_highest = 2.0;
 
