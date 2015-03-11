@@ -42,7 +42,7 @@ public class WaypointNavigator {
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
 		Point2D.Double robotPoint = new Point2D.Double(robotPose[g.X], robotPose[g.Y]);
-		WaypointNode nextNode = wayPoints.get(nextPointInd);
+		GraphNode<Point2D.Double> nextNode = wayPoints.get(nextPointInd);
 
 		if ( nearPoint(robotPoint, nextNode.getValue()) ) {
 			nextPointInd++;
