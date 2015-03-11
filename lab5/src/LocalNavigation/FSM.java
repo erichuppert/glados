@@ -170,6 +170,9 @@ public class FSM {
 		case WALL_ENDED:
 			wall_ended();
 			break;
+		case DONE:
+			done();
+			break;
 		default:
 			throw new RuntimeException();
 		}

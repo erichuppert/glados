@@ -242,7 +242,6 @@ public class SonarPoints {
 
 	public synchronized boolean obstacleDone() {
 		double dot = previousVector[g.X]*firstVector[g.X]+previousVector[g.Y]*firstVector[g.Y];
-		outerAngle += Math.acos(dot);
 		return Math.abs(outerAngle+Math.acos(dot) - 2*Math.PI) <= angleThreshold;
 	}
 }
