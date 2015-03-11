@@ -21,7 +21,7 @@ public class WaypointNavigator {
 	private Line2D.Double currentTrajectory;
 	private Node node;
 
-	public WaypointNavigator(Node _node, List<WaypointNode> _wayPoints) {
+	public WaypointNavigator(Node _node, List<Point2D.Double> _wayPoints) {
 		wayPoints = _wayPoints;
 		node = _node;
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
