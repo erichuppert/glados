@@ -62,8 +62,8 @@ public class WaypointNavigator {
 		// } else {
 			// use a proportional controller to move forward
 			//
-			double rx = Math.cos(robotPose[g.THETA]);
-			double ry = Math.sin(robotPose[g.THETA]);
+		double rx = robotPose[g.X]-currentTrajectory.getX2();
+		double ry = robotPose[g.Y]-currentTrajectory.getY2();
 			double tx = currentTrajectory.getX2() - currentTrajectory.getX1();
 			double ty = currentTrajectory.getY2() - currentTrajectory.getY1();
 			int sign = (rx*tx + ry*ty) < 0 ? (-1):(1);
