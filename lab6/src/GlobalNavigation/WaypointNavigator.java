@@ -1,8 +1,7 @@
-package src.GlobalNavigation;
+package GlobalNavigation;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Line2D;
-import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.ros.node.topic.Publisher;
