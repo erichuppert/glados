@@ -106,7 +106,7 @@ public class VisibilityGraph {
 			for(Point2D.Double vertex : modVertices) {
 				boolean add = true;
 				for (PolygonObstacle other : obstacles) {
-					if (other.contains(vertex) && !other.equals(obstacle)) {
+					if (other.contains(vertex) && other != obstacle) {
 						add = false;
 					}
 				}
