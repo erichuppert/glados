@@ -36,7 +36,7 @@ public class WaypointNavigator {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float TRANSLATIONAL_SPEED = (float) 0.05;
+	private static float TRANSLATIONAL_SPEED = (float) 0.02;
 
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
@@ -52,12 +52,11 @@ public class WaypointNavigator {
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
-		double Ka = 0.1;
+		double Ka = 0.25;
 		double Kd = 5*Ka;
 		// check if we still need to rotate towards the next point
 		//
 		if (Math.abs(angleError) > 0.05) {
-			Ka = 0.25;
 			rv = -Ka*(-angleError);
 			tv = 0;
 		} else {
