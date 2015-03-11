@@ -49,6 +49,10 @@ public class WaypointNavigator {
 
 		if ( nearPoint(robotPoint, nextNode.getValue()) ) {
 			nextPointInd++;
+			if (nextPointInd == wayPoints.size()) {
+				setMotorVelocities(0,0);
+				return true;
+			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
