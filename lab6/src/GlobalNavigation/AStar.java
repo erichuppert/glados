@@ -43,7 +43,6 @@ public class AStar<V> {
 		while (!openSet.isEmpty()) {
 			PQEntry entry = openSet.poll();
 			double cost = entry.cost;
-			System.err.printf("Current node cost is %f\n", cost);
 			GraphNode<V> current = entry.node;
 			System.err.printf("This node is at %s\n", current.getValue().toString());
 			if (reachedEnd.test(current.getValue())) {
@@ -64,7 +63,6 @@ public class AStar<V> {
 					openSet.add(new PQEntry(neighCost,neigh));
 				}
 			}
-			System.err.printf("\n\n\n");
 		}
 
 		List<GraphNode<V>> path = new ArrayList<GraphNode<V>>();
