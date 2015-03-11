@@ -32,7 +32,7 @@ public class AStar<V> {
 		public boolean test(V value);
 	}
 
-	public List<GraphNode<V>> search(GraphNode<V> start, Predicate<V> reachedEnd) {
+	public List<GraphNode<V>> search(Predicate<V> reachedEnd) {
 		Set<GraphNode<V>> closedSet = new HashSet<GraphNode<V>>();
 		PriorityQueue<PQEntry> openSet = new PriorityQueue<PQEntry>();
 		Map<GraphNode<V>,Double> nodeToCost = new HashMap<GraphNode<V>,Double>();

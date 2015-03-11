@@ -124,10 +124,27 @@ public class GlobalNavigation implements NodeMain{
 			Point2D.Double p = n.getValue();
 			for (WaypointNode neigh: n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
-				drawLine(n,pn,Color.RED);
+				drawSegment(n,pn,Color.RED);
 			}
 			drawPoint(p.getX(), p.getY(), Color.BLUE);
 		}
+
+		// // Motion plan
+		// //
+		// AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.getVisibilityGraph());
+		// List<WaypointNode> path = planner.search(new Predicate<Point2D.Double>() {
+		// 		@Override
+		// 		public boolean test(Point2D.Double value) {
+		// 			double dx = value.getX()-robotGoal.getX();
+		// 			double dy = value.getX()-robotGoal.getY();
+		// 			return (dx*dx + dy*dy) <= 0.05;
+		// 		}
+		// 	});
+		// WaypointNode prev = path.get(0);
+		// for (WaypointNode n : path) {
+		// 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
+		// 	prev = n;
+		// }
 	}
 
 	/**

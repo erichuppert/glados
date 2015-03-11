@@ -9,7 +9,7 @@ import java.util.List;
 public class VisibilityGraph {
 	private List<PolygonObstacle> obstacles;
 	private Point2D.Double start;
-	private Point2D.Double goal;
+	public Point2D.Double goal;
 	WaypointNode graphStart = null;
 
 	public VisibilityGraph(List<PolygonObstacle> _obstacles, Point2D.Double _start, Point2D.Double _goal) {
