@@ -97,12 +97,13 @@ public class WaypointNavigator {
 		if(robotPose == null) {
 			return 0;
 		} else {
-			double a = -(currentTrajectory.x1 - currentTrajectory.x2);
-			double b = currentTrajectory.y1 - currentTrajectory.y2;
+			double a = -(currentTrajectory.getX1() - currentTrajectory.getX2());
+			double b = currentTrajectory.getY1() - currentTrajectory.getY2();
 			double mag = Math.sqrt(a*a + b*b);
 			a /= mag;
 			b /= mag;
 
+			double angle = Math.atan2(a,-b);
 			double x = Math.cos(robotPose[g.THETA]);
 			double y = Math.sin(robotPose[g.THETA]);
 			double dot = (x*(-b) + y*a); // Vector parallel to the line
