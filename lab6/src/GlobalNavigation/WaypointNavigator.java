@@ -109,7 +109,7 @@ public class WaypointNavigator {
 			return 0;
 		} else {
 			Vector2D toWayPoint = new Vector2D(currentTrajectory.getX2()-robotPose[g.X], currentTrajectory.getY2()-robotPose[g.Y]);
-			double diff = robotPose[g.THETA]-toWayPoint.getTheta();
+			double diff = toWayPoint.getTheta()-robotPose[g.THETA];
 			return Math.atan2(Math.sin(diff), Math.cos(diff));
 			// double a = currentTrajectory.getY1() - currentTrajectory.getY2();
 			// double b = -(currentTrajectory.getX1() - currentTrajectory.getX2());
