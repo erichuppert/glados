@@ -5,6 +5,11 @@ import java.awt.geom.Line2D;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
+import org.ros.node.topic.Publisher
+import org.ros.node.Node;
+import org.ros.message.lab6_msgs.*;
+import org.ros.message.lab5_msgs.*;
+import org.ros.message.rss_msgs.*;
 
 public class WaypointNavigator {
 	
