@@ -110,7 +110,7 @@ public class GlobalNavigation implements NodeMain{
 		drawRectangle(worldRect, Color.BLACK);
 
 		// draw obstacles onto the GUI
-		for (PolygonObstacle obstacle : polygonMap.getObstacles) {
+		for (PolygonObstacle obstacle: polygonMap.getObstacles()) {
 			drawPolygon(obstacle);
 		}
 		List<PolygonObstacle> obstacles = new CSpace().envConfSpace(polygonMap);
