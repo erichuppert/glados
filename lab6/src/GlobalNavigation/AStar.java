@@ -45,7 +45,7 @@ public class AStar<V> {
 			PQEntry entry = openSet.poll();
 			System.err.println("Expanding another node\n");
 			double cost = entry.cost;
-			System.err.printf("Current node cost is %d\n", cost);
+			System.err.printf("Current node cost is %f\n", cost);
 			GraphNode<V> current = entry.node;
 			if (reachedEnd.test(current.getValue())) {
 				System.err.println("Found the end!");
