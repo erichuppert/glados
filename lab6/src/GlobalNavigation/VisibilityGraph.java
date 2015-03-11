@@ -38,14 +38,14 @@ public class VisibilityGraph {
 		for (WaypointNode node1 : allNodes) {
 			Point2D.Double p1 = node1.getValue();
 			for (WaypointNode node2 : allNodes) {
-				if (node1 == node2) {
+				if (node1.equals(node2)) {
 					continue;
 				}
 				Point2D.Double p2 = node2.getValue();
 				// create a line from the pair of points to test against all obstacles for an intersection
 				//
 				Line2D.Double line = new Line2D.Double(p1, p2);
-				if (!lineIntersectsAnyObstacle(line) && !p1.equals(p2)) {
+				if (!lineIntersectsAnyObstacle(line)) {
 					// if the two nodes are visible from one another. then they are neighbors in the graph
 					//
 					node1.addNeighbor(node2);
@@ -78,7 +78,6 @@ public class VisibilityGraph {
 	public List<WaypointNode> getAllNodes() {
 		List<WaypointNode> nodes = new ArrayList<WaypointNode>();
 		for (PolygonObstacle obstacle : obstacles) {
-			System.err.printf("On obstacle: %s\n", obstacle.toString());
 			// add every vertex in each obstacle to the nodes list
 			// If it's not contained in any other obstacle.
 			//
@@ -108,11 +107,9 @@ public class VisibilityGraph {
 				boolean add = true;
 				for (PolygonObstacle other : obstacles) {
 					if (other.contains(vertex) && other != obstacle) {
-						System.err.printf("Tripped n obstacle: %s\n", other.toString());
 						add = false;
 					}
 				}
-				System.err.println("\n\n\n\n");
 				if (add) {
 					nodes.add(new WaypointNode(vertex));
 				}
