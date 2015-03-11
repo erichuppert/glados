@@ -220,7 +220,7 @@ public class GlobalNavigation implements NodeMain{
 	 * @param color the color of the line
 	 */
 	public static void drawSegment(Point2D.Double p1, Point2D.Double p2, Color color) {
-		GUILineMsg lineMsg = new GUISegmentMsg();
+		GUISegmentMsg lineMsg = new GUISegmentMsg();
 		/**
 		 *  float64 startX
 			float64 endX
