@@ -36,7 +36,7 @@ public class WaypointNavigator {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float TRANSLATIONAL_SPEED = (float) 0.1;
+	private static float TRANSLATIONAL_SPEED = (float) 0.5;
 
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
@@ -56,14 +56,14 @@ public class WaypointNavigator {
 		double Kd = 5*Ka;
 		// check if we still need to rotate towards the next point
 		//
-		// if (Math.abs(angleError) > 0.05) {
-		// 	rv = -Ka*(-angleError);
-		// 	tv = 0;
-		// } else {
+		if (Math.abs(angleError) > 0.05) {
+			rv = -Ka*(-angleError);
+			tv = 0;
+		} else {
 			// use a proportional controller to move forward
 			//
-		double rx = robotPose[g.X]-currentTrajectory.getX2();
-		double ry = robotPose[g.Y]-currentTrajectory.getY2();
+			double rx = robotPose[g.X]-currentTrajectory.getX2();
+			double ry = robotPose[g.Y]-currentTrajectory.getY2();
 			double tx = currentTrajectory.getX2() - currentTrajectory.getX1();
 			double ty = currentTrajectory.getY2() - currentTrajectory.getY1();
 			int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
@@ -72,7 +72,7 @@ public class WaypointNavigator {
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
 			rv = -Ka*(theta_i - angleError);
-			//}
+		}
 		setMotorVelocities(tv, rv);
 		return false;
 	}
