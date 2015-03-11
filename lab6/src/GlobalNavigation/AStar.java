@@ -56,6 +56,7 @@ public class AStar<V> {
 			closedSet.add(current);
 			System.err.printf("Current node has %d neighbors\n", current.getNeighbors().size());
 			for(GraphNode<V> neigh : current.getNeighbors()) {
+				System.err.printf("Neighbor node is at %s\n", neigh.getValue().toString());
 				double neighCost = cost+current.costToNode(neigh);
 				if (!nodeToCost.containsKey(neigh) || nodeToCost.get(neigh) > neighCost) {
 					nodeToCost.put(neigh,neighCost);
@@ -63,6 +64,7 @@ public class AStar<V> {
 					openSet.add(new PQEntry(neighCost,neigh));
 				}
 			}
+			System.err.println(" ");
 		}
 
 		List<GraphNode<V>> path = new ArrayList<GraphNode<V>>();
