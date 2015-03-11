@@ -118,9 +118,8 @@ public class GlobalNavigation implements NodeMain{
 		for (PolygonObstacle obstacle : obstacles) {
 			drawPolygon(obstacle);
 		}
-		System.err.printf("HERE1\n\n\nn\n\n");
 		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
-		System.err.printf("HERE2\n\n\n\n\n");
+		System.err.printf("\n\nThe graph has %d nodes\n\n\n\n", g.getAllNodes().size());
 		for (WaypointNode n: g.getAllNodes()) {
 			Point2D.Double p = n.getValue();
 			List<GraphNode<Point2D.Double>> neighbors = new ArrayList<GraphNode<Point2D.Double>>(n.getNeighbors());
