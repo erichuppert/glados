@@ -11,9 +11,11 @@ import java.util.HashMap;
 
 public class AStar<V> {
 	protected GraphNode<V> graph;
+	protected GraphNode<V> goal;
 
-	public AStar(GraphNode<V> _graph) {
+	public AStar(GraphNode<V> _graph, GraphNode<V> _goal) {
 		graph = _graph;
+		goal = _goal;
 	}
 
 	private class PQEntry implements Comparable<PQEntry> {
@@ -44,8 +46,12 @@ public class AStar<V> {
 			PQEntry entry = openSet.poll();
 			double cost = entry.cost;
 			GraphNode<V> current = entry.node;
-			System.err.printf("This node is at %s\n", current.getValue().toString());
-			if (reachedEnd.test(current.getValue())) {
+//			if (reachedEnd.test(current.getValue())) {
+//				System.err.println("Found the end!");
+//				end = current;
+//				break;
+//			}
+			if (current.getValue().equals(goal.getValue())) {
 				System.err.println("Found the end!");
 				end = current;
 				break;
@@ -54,12 +60,9 @@ public class AStar<V> {
 				continue;
 			}
 			closedSet.add(current);
-			System.err.printf("Current node has %d neighbors\n", current.getNeighbors().size());
 			for(GraphNode<V> neigh : current.getNeighbors()) {
-				System.err.printf("Neighbor node is at %s\n", neigh.getValue().toString());
 				double neighCost = cost+current.costToNode(neigh);
 				if (!nodeToCost.containsKey(neigh) || nodeToCost.get(neigh) > neighCost) {
-					System.err.println("Added this neighbor to be expanded");
 					nodeToCost.put(neigh,neighCost);
 					nodeToParent.put(neigh,current);
 					openSet.add(new PQEntry(neighCost,neigh));
