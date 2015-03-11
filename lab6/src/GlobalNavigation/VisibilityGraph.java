@@ -45,6 +45,8 @@ public class VisibilityGraph {
 				// create a line from the pair of points to test against all obstacles for an intersection
 				//
 				Line2D.Double line = new Line2D.Double(p1, p2);
+				node1.addNeighbor(node2);
+				node2.addNeighbor(node1);
 				if (!lineIntersectsAnyObstacle(line)) {
 					System.err.printf("Should add a new node!\n\n\n");
 					// if the two nodes are visible from one another. then they are neighbors in the graph
