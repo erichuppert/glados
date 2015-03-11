@@ -156,7 +156,7 @@ public class GlobalNavigation implements NodeMain{
 	/**
 	 * Determines if the GUI should display obstacles as filled
 	 */
-	private static final boolean FILL_GUI_OBSTACLES = false;
+	private static final boolean FILL_GUI_OBSTACLES = true;
 
 	private void drawPolygon(PolygonObstacle obstacle) {
 

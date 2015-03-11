@@ -168,8 +168,8 @@ public class CSpace {
 		obsCSpaces.add(obsCSpace(topBound, RobotPolygon, null, false));
 		obsCSpaces.add(obsCSpace(leftBound, RobotPolygon, null, false));
 
-		RobotPolygon.color = Color.RED;
-		obsCSpaces.add(RobotPolygon);
+		//RobotPolygon.color = Color.RED;
+		//obsCSpaces.add(RobotPolygon);
         // PolygonObstacle boundaryObs = new PolygonObstacle();
 
         // boundaryObs.addVertex(envBounds.getX(), envBounds.getY());
