@@ -129,7 +129,7 @@ public class GlobalNavigation implements NodeMain{
 			}
 			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
-				drawSegment(p,pn,Color.RED);
+//				drawSegment(p,pn,Color.RED);
 			}
 			drawPoint(p.getX(), p.getY(), Color.BLUE);
 		}
