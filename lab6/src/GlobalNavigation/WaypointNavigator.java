@@ -36,7 +36,7 @@ public class WaypointNavigator {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float TRANSLATIONAL_SPEED = (float) 0.5;
+	private static float TRANSLATIONAL_SPEED = (float) 0.2;
 
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
@@ -73,7 +73,7 @@ public class WaypointNavigator {
 			int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
 			double distance = Math.sqrt(Math.pow((robotPose[g.X]-currentTrajectory.getX2()),2) + Math.pow((robotPose[g.Y]-currentTrajectory.getY2()),2));
 			double straightness = 1;
-			tv = sign*TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),10);
+			tv = sign*TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),100);
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
 			rv = Ka*angleError;
