@@ -219,8 +219,8 @@ public class GlobalNavigation implements NodeMain{
 	 * @param p2 the second end point of the segment to be drawn
 	 * @param color the color of the line
 	 */
-	public static void drawSegment(Point2D.Double p1, Point2D.Double p2, Color color) {
-		GUISegmentMsg lineMsg = new GUISegmentMsg();
+	public void drawSegment(Point2D.Double p1, Point2D.Double p2, Color color) {
+		GUISegmentMsg segMesg = new GUISegmentMsg();
 		/**
 		 *  float64 startX
 			float64 endX
@@ -228,12 +228,12 @@ public class GlobalNavigation implements NodeMain{
 			float64 endY
 			ColorMsg color
 		 */
-		lineMsg.startX = (float) p1.getX();
-		lineMsg.startY = (float) p1.getY();
-		lineMsg.endX = (float) p2.getX();
-		lineMsg.endY = (float) p2.getY();
-		lineMsg.color = GUIHelpers.colorMessage(color);
-		guiSegPub.publish(lineMsg);
+		segMesg.startX = (float) p1.getX();
+		segMesg.startY = (float) p1.getY();
+		segMesg.endX = (float) p2.getX();
+		segMesg.endY = (float) p2.getY();
+		segMesg.color = GUIHelpers.colorMessage(color);
+		guiSegPub.publish(segMesg);
 	}
 	
 	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
