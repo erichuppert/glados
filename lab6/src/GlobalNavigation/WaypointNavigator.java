@@ -54,11 +54,11 @@ public class WaypointNavigator {
 			System.err.printf("P1:%s\tP2:%s\n", wayPoints.get(nextPointInd-1).getValue().toString(), wayPoints.get(nextPointInd).getValue().toString());
 		}
 		double angleError = getAngleError();
-		double Kd = 2.5;
-		double Ka = 0.5;
+		double Kd = 1.25;
+		double Ka = 0.25;
 		// check if we still need to rotate towards the next point
 		//
-		if (Math.abs(angleError) > 0.02) {
+		if (Math.abs(angleError) > 0.05) {
 			rv = -Ka*(-angleError);
 			tv = 0;
 		} else {
@@ -75,7 +75,7 @@ public class WaypointNavigator {
 
 	// 10cm threshold
 	//
-	public static double POINT_THRESHOLD_DIST = 0.01;
+	public static double POINT_THRESHOLD_DIST = 0.05;
 
 	// Checks if current robot position is close enough to its destination wayPoint 
 	// to continue towards the next wayPoint
