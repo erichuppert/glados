@@ -12,10 +12,6 @@ import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
 import GlobalNavigation.WaypointNavigator;
-import src.LocalNavigation.FSM;
-import src.LocalNavigation.MessageListener;
-import src.LocalNavigation.OdometryMsg;
-import src.LocalNavigation.g;
 
 import java.io.*;
 import java.awt.Color;
