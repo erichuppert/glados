@@ -145,8 +145,8 @@ public class GlobalNavigation implements NodeMain{
 		 		}
 		 	};
 		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
-		 WaypointNode prev = (WaypointNode) path.get(0);
-		 for (GraphNode<Double> n : path) {
+		 GraphNode<Point2D.Double> prev = path.get(0);
+		 for (GraphNode<Point2D.Double> n : path) {
 		 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
 		 	prev = n;
 		 }
