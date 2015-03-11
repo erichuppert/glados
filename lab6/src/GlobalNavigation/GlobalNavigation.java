@@ -236,7 +236,6 @@ public class GlobalNavigation implements NodeMain{
 		segMesg.endX = (float) p2.getX();
 		segMesg.endY = (float) p2.getY();
 		segMesg.color = GUIHelpers.colorMessage(color);
-		System.out.printf("Added segment from (%d,%d) to (%d,%d)", p1.getX(), p1.getY(), p2.getX(), p2.getY());
 		guiSegPub.publish(segMesg);
 	}
 	
