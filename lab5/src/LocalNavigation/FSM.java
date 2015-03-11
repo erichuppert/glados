@@ -330,7 +330,7 @@ public class FSM {
 			try {
 				double distanceError = sp.getDistanceError();
 				double angleError = sp.getAngleError();
-				if (distanceError > 0.001 || angleError > 0.001) {
+				if (Math.abs(distanceError) > 0.001 || Math.abs(angleError) > 0.001) {
 					double theta_i = Kd*(desired-distanceError);
 					rv = -Ka*(theta_i - angleError);
 					logError(distanceError, angleError);
