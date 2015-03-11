@@ -16,8 +16,8 @@ public class CSpace {
 
     //    We are assuming that the robot rotates at its center of the square approximation
     //    This will almost certainly need to be accounted for as the robot does not turn at its center
-    private final double ROBOT_WIDTH = 2*0.36359317925; // in meters
-    private final double ROBOT_HEIGHT = 2*0.36359317925; // in meters
+    private final double ROBOT_WIDTH = 2*0.33837848631; // in meters
+    private final double ROBOT_HEIGHT = 2*0.33837848631; // in meters
 
     private PolygonObstacle RobotPolygon;
 
