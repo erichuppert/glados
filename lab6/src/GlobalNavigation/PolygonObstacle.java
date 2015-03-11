@@ -105,7 +105,7 @@ public class PolygonObstacle {
 
   /**
    * Determines if a line intersects with the obstacle
-   * @param line the line to check agains the obstacle for intersection
+   * @param line the line to check against the obstacle for intersection
    * @return true if the line intersects the object
    */
   public boolean lineIntersects(Line2D.Double line) {
