@@ -45,7 +45,7 @@ public class AStar<V> {
 			double cost = entry.cost;
 			System.err.printf("Current node cost is %f\n", cost);
 			GraphNode<V> current = entry.node;
-			System.err.printf("This node is at %s\nGoal node at %s\n", current.getValue().toString(), goal.toString());
+			System.err.printf("This node is at %s\n", current.getValue().toString());
 			if (reachedEnd.test(current.getValue())) {
 				System.err.println("Found the end!");
 				end = current;
