@@ -95,8 +95,12 @@ public class WaypointNavigator {
 		if(robotPose == null) {
 			return 0;
 		} else {
-			double a = currentTrajectory.x1 - currentTrajectory.x2;
-			double b = currentTrajectory.y1 - currentTrajectory.y2;;
+			double a = -(currentTrajectory.x1 - currentTrajectory.x2);
+			double b = currentTrajectory.y1 - currentTrajectory.y2;
+			double mag = Math.sqrt(a*a + b*b);
+			a /= mag;
+			b /= mag;
+
 			double angle = Math.tan(b/a);
 			double x = Math.cos(robotPose[g.THETA]);
 			double y = Math.sin(angle);
@@ -108,6 +112,7 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
+			System.err.printf("%.2f\n", diff);
 			return diff;
 		}
 	}
