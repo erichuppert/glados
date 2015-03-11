@@ -18,7 +18,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 
 public class GlobalNavigation implements NodeMain{
