@@ -18,6 +18,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 
 public class GlobalNavigation implements NodeMain{
@@ -102,7 +103,7 @@ public class GlobalNavigation implements NodeMain{
 
 		// draw the robot goal
 		//
-		Point2D.Double robotGoal = polygonMap.getRobotGoal();
+		final Point2D.Double robotGoal = polygonMap.getRobotGoal();
 		drawPoint(robotGoal.getX(), robotGoal.getY(), Color.GREEN);
 
 		// draw the rectangular boundaries of the world
