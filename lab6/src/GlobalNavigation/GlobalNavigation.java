@@ -122,8 +122,8 @@ public class GlobalNavigation implements NodeMain{
 		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
 		for (WaypointNode n: g.getAllNodes()) {
 			Point2D.Double p = n.getValue();
-			List<WaypointNode> neighborList = new ArrayList<WaypointNode>(n.getNeighbors());
-			for (WaypointNode neigh: neighborList) {
+			List<GraphNode> neighbors = new ArrayList<GraphNode>(n.getNeighbors());
+			for (GraphNode neigh: neighbors) {
 				Point2D.Double pn = neigh.getValue();
 				drawSegment(p,pn,Color.RED);
 			}
