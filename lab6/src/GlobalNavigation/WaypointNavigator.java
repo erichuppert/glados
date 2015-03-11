@@ -56,6 +56,7 @@ public class WaypointNavigator {
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
+		System.err.printf("%.2f\n", angleError);
 		double Ka = 0.25;
 		double Kd = 5*Ka;
 		// check if we still need to rotate towards the next point
@@ -70,10 +71,10 @@ public class WaypointNavigator {
 			double ry = robotPose[g.Y]-currentTrajectory.getY2();
 			double tx = currentTrajectory.getX2() - currentTrajectory.getX1();
 			double ty = currentTrajectory.getY2() - currentTrajectory.getY1();
-			int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
+			//int sign = (rx*tx + ry*ty) < 0 ? (1):(-1);
 			double distance = Math.sqrt(Math.pow((robotPose[g.X]-currentTrajectory.getX2()),2) + Math.pow((robotPose[g.Y]-currentTrajectory.getY2()),2));
-			double straightness = 1;
-			tv = sign*TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),100);
+			int straightness = 100;
+			tv = TRANSLATIONAL_SPEED*distance*Math.pow(Math.cos(angleError),straightness);
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
 			rv = Ka*angleError;
