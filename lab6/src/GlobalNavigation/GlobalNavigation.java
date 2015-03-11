@@ -35,7 +35,9 @@ public class GlobalNavigation implements NodeMain{
     private String mapFileName;
     private PolygonMap polygonMap;
     private ParameterTree paramTree;
+    VisibilityGraph visibilityGraph;
     List<GraphNode<Point2D.Double>> path;
+    List<PolygonObstacle> cSpaceObstacles;
     double[] pose = new double[3];
     private WaypointNavigator nav;
 
@@ -50,6 +52,7 @@ public class GlobalNavigation implements NodeMain{
 		guiSegPub =  node.newPublisher("/gui/Segment", "lab5_msgs/GUISegmentMsg");
 		guiPointPub = node.newPublisher("/gui/Point", "lab5_msgs/GUIPointMsg");
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
+		visibilityGraph = getGraph();
 		MessageListener<OdometryMsg> odoListener = new MessageListener<OdometryMsg>() {
 			@Override
 			public void onNewMessage(OdometryMsg m) {
@@ -63,11 +66,21 @@ public class GlobalNavigation implements NodeMain{
 		odoSub.addMessageListener(odoListener);
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
-		nav = new WaypointNavigator(node, path);
 		try {
 			polygonMap = new PolygonMap(mapFileName);
-			Runnable myRunnable = new Runnable(){
-
+			cSpaceObstacles = new CSpace().envConfSpace(polygonMap);
+			visibilityGraph = getGraph();
+			AStar<Point2D.Double> planner = new AStar<Point2D.Double>(visibilityGraph.graphStart, visibilityGraph.goalNode);
+			path = planner.search();
+			nav = new WaypointNavigator(node, path);
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new RuntimeException(e.getMessage());
+		}
+		
+		
+		try {
+			Runnable guiRun = new Runnable(){
 			     public void run(){
 			    	 try {
 			    		 Thread.sleep(4000);
@@ -75,15 +88,16 @@ public class GlobalNavigation implements NodeMain{
 			    		 throw new RuntimeException();
 			    	 }
 			        displayMap();
-			        navigate();
 			     }
 			   };
-			   Thread thread = new Thread(myRunnable);
+			   Thread thread = new Thread(guiRun);
 			   thread.start();
 		} catch (Exception e) {
 			System.out.println(e);
 			throw new RuntimeException(e.getMessage());
 		}
+		
+		navigate();
     }
 
 	public void onShutdown(Node node){
@@ -107,6 +121,7 @@ public class GlobalNavigation implements NodeMain{
 		long initial_time;
 		long duration;
 		long sleep_time;
+		int freq = 20;
 
 		// For thread safe copying
 		//
@@ -127,13 +142,19 @@ public class GlobalNavigation implements NodeMain{
 			nav.step(_pose);
 
 			duration = System.currentTimeMillis()-initial_time;
-			sleep_time = Math.max(0,((long) (1000.0/FSM.FREQ)) - duration);
+			sleep_time = Math.max(0,((long) (1000.0/freq)) - duration);
 			try {
 				Thread.sleep(sleep_time);
 			} catch (InterruptedException e) {
 				throw new RuntimeException();
 			}
 		}
+	}
+	
+	private VisibilityGraph getGraph() {
+		Point2D.Double robotStart = polygonMap.getRobotStart();
+		final Point2D.Double robotGoal = polygonMap.getRobotGoal();
+		return new VisibilityGraph(cSpaceObstacles, robotStart, robotGoal);
 	}
 
 	private void displayMap() {
@@ -157,12 +178,10 @@ public class GlobalNavigation implements NodeMain{
 			drawPolygon(obstacle);
 		}
 
-		List<PolygonObstacle> obstacles = new CSpace().envConfSpace(polygonMap);
-		for (PolygonObstacle obstacle : obstacles) {
+		for (PolygonObstacle obstacle : cSpaceObstacles) {
 			drawPolygon(obstacle);
 		}
-		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
-		for (GraphNode<Point2D.Double> n: g.nodes) {		
+		for (GraphNode<Point2D.Double> n: visibilityGraph.nodes) {		
 			Point2D.Double p = n.getValue();
 			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
 			if (p.equals(robotGoal)) {
@@ -170,24 +189,13 @@ public class GlobalNavigation implements NodeMain{
 			}
 			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
 				Point2D.Double pn = neigh.getValue();
-//				drawSegment(p,pn,Color.RED);
+				drawSegment(p,pn,Color.RED);
 			}
 			drawPoint(p.getX(), p.getY(), Color.BLUE);
 		}
 
 		 // Motion plan
 		 //
-		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart, g.goalNode);
-		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
-		 		@Override
-		 		public boolean test(Point2D.Double value) {
-		 			double dx = value.getX()-robotGoal.getX();
-		 			double dy = value.getX()-robotGoal.getY();
-		 			return (dx*dx + dy*dy) <= 0.05;
-		 		}
-		 	};
-		 	System.err.printf("Robot goal is %s\n", robotGoal.toString());
-		 path = planner.search(pred);
 		 GraphNode<Point2D.Double> prev = path.get(0);
 		 for (GraphNode<Point2D.Double> n : path) {
 			 System.err.println("Drawing goal segments");
