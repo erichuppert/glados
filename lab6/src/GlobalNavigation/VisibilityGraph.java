@@ -75,7 +75,7 @@ public class VisibilityGraph {
 	 * Get all the nodes in the visibility graph
 	 * @return a list of all the nodes that make up the nodes in the visibility graph
 	 */
-	private List<WaypointNode> getAllNodes() {
+	public List<WaypointNode> getAllNodes() {
 		List<WaypointNode> nodes = new ArrayList<WaypointNode>();
 		for (PolygonObstacle obstacle : obstacles) {
 			// add every vertex in each obstacle to the nodes list
