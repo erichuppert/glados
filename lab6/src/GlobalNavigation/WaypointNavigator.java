@@ -114,6 +114,7 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
+			System.err.printf("R:%.2f\tL:%.2f\tE:%.2f\n", robotPose[g.THETA], angle, diff);
 			return diff;
 		}
 	}
