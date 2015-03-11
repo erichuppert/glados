@@ -52,7 +52,6 @@ public class GlobalNavigation implements NodeMain{
 		guiSegPub =  node.newPublisher("/gui/Segment", "lab5_msgs/GUISegmentMsg");
 		guiPointPub = node.newPublisher("/gui/Point", "lab5_msgs/GUIPointMsg");
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
-		visibilityGraph = getGraph();
 		MessageListener<OdometryMsg> odoListener = new MessageListener<OdometryMsg>() {
 			@Override
 			public void onNewMessage(OdometryMsg m) {
