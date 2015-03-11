@@ -36,19 +36,19 @@ public class WaypointNavigator {
 
 	// Below are values that have been tuned based on experimentation
 	//
-	private static float TRANSLATIONAL_SPEED = (float) 1.0;
+	private static float TRANSLATIONAL_SPEED = (float) 0.1;
 
 	public boolean step(double[] _robotPose) {
 		robotPose = _robotPose;
+		if (nextPointInd == wayPoints.size()) {
+			setMotorVelocities(0,0);
+			return true;
+		}
 		Point2D.Double robotPoint = new Point2D.Double(robotPose[g.X], robotPose[g.Y]);
 		GraphNode<Point2D.Double> nextNode = wayPoints.get(nextPointInd);
 
 		if ( nearPoint(robotPoint, nextNode.getValue()) ) {
 			nextPointInd++;
-			if ( nextPointInd == wayPoints.size() ) {
-				setMotorVelocities(0,0);
-				return true;
-			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
