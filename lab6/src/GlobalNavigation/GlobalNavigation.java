@@ -113,9 +113,15 @@ public class GlobalNavigation implements NodeMain{
 		for (PolygonObstacle obstacle: polygonMap.getObstacles()) {
 			drawPolygon(obstacle);
 		}
+
 		List<PolygonObstacle> obstacles = new CSpace().envConfSpace(polygonMap);
 		for (PolygonObstacle obstacle : obstacles) {
 			drawPolygon(obstacle);
+		}
+
+		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
+		for (WaypointNode n: g.getAllNodes) {
+			drawPoint(n.getValue());
 		}
 	}
 
