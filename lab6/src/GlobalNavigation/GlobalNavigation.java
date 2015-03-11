@@ -120,36 +120,36 @@ public class GlobalNavigation implements NodeMain{
 		for (PolygonObstacle obstacle : obstacles) {
 			drawPolygon(obstacle);
 		}
-		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
-		for (GraphNode<Point2D.Double> n: g.nodes) {		
-			Point2D.Double p = n.getValue();
-			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
-			System.err.printf("This node has %d neightbors\n", neighbors.size());
-			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
-				System.err.printf("\nHere\n");
-				Point2D.Double pn = neigh.getValue();
-				drawSegment(p,pn,Color.RED);
-			}
-			drawPoint(p.getX(), p.getY(), Color.BLUE);
-		}
-
-		 // Motion plan
-		 //
-		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
-		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
-		 		@Override
-		 		public boolean test(Point2D.Double value) {
-		 			double dx = value.getX()-robotGoal.getX();
-		 			double dy = value.getX()-robotGoal.getY();
-		 			return (dx*dx + dy*dy) <= 0.05;
-		 		}
-		 	};
-		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
-		 GraphNode<Point2D.Double> prev = path.get(0);
-		 for (GraphNode<Point2D.Double> n : path) {
-		 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
-		 	prev = n;
-		 }
+//		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
+//		for (GraphNode<Point2D.Double> n: g.nodes) {		
+//			Point2D.Double p = n.getValue();
+//			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
+//			System.err.printf("This node has %d neightbors\n", neighbors.size());
+//			for (GraphNode<Point2D.Double> neigh: n.getNeighbors()) {
+//				System.err.printf("\nHere\n");
+//				Point2D.Double pn = neigh.getValue();
+//				drawSegment(p,pn,Color.RED);
+//			}
+//			drawPoint(p.getX(), p.getY(), Color.BLUE);
+//		}
+//
+//		 // Motion plan
+//		 //
+//		 AStar<Point2D.Double> planner = new AStar<Point2D.Double>(g.graphStart);
+//		 Predicate<Point2D.Double> pred = new Predicate<Point2D.Double>() {
+//		 		@Override
+//		 		public boolean test(Point2D.Double value) {
+//		 			double dx = value.getX()-robotGoal.getX();
+//		 			double dy = value.getX()-robotGoal.getY();
+//		 			return (dx*dx + dy*dy) <= 0.05;
+//		 		}
+//		 	};
+//		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
+//		 GraphNode<Point2D.Double> prev = path.get(0);
+//		 for (GraphNode<Point2D.Double> n : path) {
+//		 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
+//		 	prev = n;
+//		 }
 	}
 
 	/**
