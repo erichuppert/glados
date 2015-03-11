@@ -25,6 +25,7 @@ public abstract class GraphNode<V> {
 	}
 
 	public boolean addNeighbor(GraphNode<V> newNeighbor) {
+		System.err.printf("Adding a new neighbor\n");
 		return neighbors.add(newNeighbor);
 	}
 
