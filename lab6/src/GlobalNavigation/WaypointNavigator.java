@@ -11,7 +11,7 @@ import org.ros.message.lab5_msgs.*;
 import org.ros.message.rss_msgs.*;
 
 public class WaypointNavigator {
-	private List<WaypointNode> wayPoints;
+	private List<GraphNode<Point2D.Double>> wayPoints;
 	//ROS Publishers
 	//
 	private Publisher<MotionMsg> motorPub; // motor commands
@@ -21,7 +21,7 @@ public class WaypointNavigator {
 	private Line2D.Double currentTrajectory;
 	private Node node;
 
-	public WaypointNavigator(Node _node, List<Point2D.Double> _wayPoints) {
+	public WaypointNavigator(Node _node, List<GraphNode<Point2D.Double>> _wayPoints) {
 		wayPoints = _wayPoints;
 		node = _node;
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
