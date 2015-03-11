@@ -120,8 +120,7 @@ public class GlobalNavigation implements NodeMain{
 			drawPolygon(obstacle);
 		}
 		VisibilityGraph g = new VisibilityGraph(obstacles, robotStart, robotGoal);
-		g.getVisibilityGraph();
-		for (GraphNode<Point2D.Double> n: g.getAllNodes()) {		
+		for (GraphNode<Point2D.Double> n: g.nodes) {		
 			Point2D.Double p = n.getValue();
 			Set<GraphNode<Point2D.Double>> neighbors = n.getNeighbors();
 			System.err.printf("This node has %d neightbors\n", neighbors.size());

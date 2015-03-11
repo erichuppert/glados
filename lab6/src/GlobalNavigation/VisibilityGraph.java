@@ -10,34 +10,34 @@ public class VisibilityGraph {
 	private List<PolygonObstacle> obstacles;
 	private Point2D.Double start;
 	public Point2D.Double goal;
+	public List<WaypointNode> nodes;
 	WaypointNode graphStart = null;
 
 	public VisibilityGraph(List<PolygonObstacle> _obstacles, Point2D.Double _start, Point2D.Double _goal) {
 		obstacles = _obstacles;
 		goal = _goal;
 		start = _start;
+		nodes = getAllNodes();
+		getVisibilityGraph();
 	}
 
 	/**
 	 * Gets the visibility graph
 	 * @return the start node of the graph
 	 */
-	public WaypointNode getVisibilityGraph() {
+	private WaypointNode getVisibilityGraph() {
 		// get all the nodes in our graph
 		//
 		if (graphStart != null) {
 			return graphStart;
 		}
-		List<WaypointNode> allNodes = getAllNodes();
 		graphStart = new WaypointNode(start);
-		allNodes.add(graphStart);
-		allNodes.add(new WaypointNode(goal));
 
 		// iterate over all pairs of nodes to find out which pairs of points share visibility
 		//
-		for (GraphNode<Point2D.Double> node1 : allNodes) {
+		for (GraphNode<Point2D.Double> node1 : nodes) {
 			Point2D.Double p1 = node1.getValue();
-			for (GraphNode<Point2D.Double> node2 : allNodes) {
+			for (GraphNode<Point2D.Double> node2 : nodes) {
 				if (node1.equals(node2)) {
 					continue;
 				}
@@ -75,7 +75,7 @@ public class VisibilityGraph {
 	 * Get all the nodes in the visibility graph
 	 * @return a list of all the nodes that make up the nodes in the visibility graph
 	 */
-	public List<WaypointNode> getAllNodes() {
+	private List<WaypointNode> getAllNodes() {
 		List<WaypointNode> nodes = new ArrayList<WaypointNode>();
 		for (PolygonObstacle obstacle : obstacles) {
 			// add every vertex in each obstacle to the nodes list
@@ -115,6 +115,8 @@ public class VisibilityGraph {
 				}
 			}
 		}
+		nodes.add(graphStart);
+		nodes.add(new WaypointNode(goal));
 		return nodes;
 	}
 }
