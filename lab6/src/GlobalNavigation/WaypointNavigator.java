@@ -100,9 +100,8 @@ public class WaypointNavigator {
 			a /= mag;
 			b /= mag;
 
-			double angle = Math.tan(b/a);
 			double x = Math.cos(robotPose[g.THETA]);
-			double y = Math.sin(angle);
+			double y = Math.sin(robotPose[g.THETA]);
 			double dot = (x*(-b) + y*a); // Vector parallel to the line
 			if (dot < 0) {
 				a = -a;
@@ -111,7 +110,7 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
-			System.err.printf("%.2f\n", diff);
+			System.err.printf("R:%.2f\tL:%.2f\tE:%.2f\n", robotPose[g.THETA], angle, diff);
 			return diff;
 		}
 	}
