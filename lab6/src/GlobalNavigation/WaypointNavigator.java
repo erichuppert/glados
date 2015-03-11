@@ -52,17 +52,17 @@ public class WaypointNavigator {
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
 		double angleError = getAngleError();
+		double Kd = 2.5;
+		double Ka = 0.5;
 		// check if we still need to rotate towards the next point
 		//
 		if (Math.abs(angleError) > 0.1) {
-			rv = ROTATIONAL_SPEED * (angleError);
+			rv = -Ka*(angleError);
 			tv = 0;
 		} else {
 			// use a proportional controller to move forward
 			//
 			tv = TRANSLATIONAL_SPEED;
-			double Kd = 2.5;
-			double Ka = 0.5;
 			double distanceError = getDistanceError();
 			double theta_i = -Kd*distanceError;
 			rv = -Ka*(theta_i - angleError);
