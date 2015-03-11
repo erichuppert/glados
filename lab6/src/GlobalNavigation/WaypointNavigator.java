@@ -51,15 +51,11 @@ public class WaypointNavigator {
 			}
 			currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 		}
-		System.err.printf("OUT1\n");
-		System.out.printf("OUT2\n");
-
 		double angleError = getAngleError();
 		// check if we still need to rotate towards the next point
 		//
 		if (Math.abs(angleError) > 0.1) {
-			//int angleDirectionFactor = angleError > 0 ? -1 : 1;
-			rv = ROTATIONAL_SPEED * angleError;
+			rv = ROTATIONAL_SPEED * (-angleError);
 			tv = 0;
 		} else {
 			// use a proportional controller to move forward
