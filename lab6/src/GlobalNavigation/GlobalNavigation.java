@@ -37,6 +37,7 @@ public class GlobalNavigation implements NodeMain{
     private ParameterTree paramTree;
     List<GraphNode<Point2D.Double>> path;
     double[] pose = new double[3];
+    private WaypointNavigator nav;
 
     private boolean shutdown;
 
@@ -62,6 +63,7 @@ public class GlobalNavigation implements NodeMain{
 		odoSub.addMessageListener(odoListener);
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
+		nav = new WaypointNavigator(node, path);
 		try {
 			polygonMap = new PolygonMap(mapFileName);
 			Runnable myRunnable = new Runnable(){
@@ -102,7 +104,6 @@ public class GlobalNavigation implements NodeMain{
 	}
 
 	public void navigate() {
-		WaypointNavigator nav = new WaypointNavigator(node, path);
 		long initial_time;
 		long duration;
 		long sleep_time;
