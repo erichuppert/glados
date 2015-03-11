@@ -92,8 +92,8 @@ public class WaypointNavigator {
 		if(robotPose == null) {
 			return 0;
 		} else {
-			int sign = currentTrajectory.relativeCCW(robotPosep[g.X], robotPose[g.Y]);
-			return sign*currentTrajectory.ptLineDist(robotPose[g.X],  robotPose[g.Y]);
+			int sign = currentTrajectory.relativeCCW(robotPose[g.X], robotPose[g.Y]);
+			return sign*currentTrajectory.ptLineDist(robotPose[g.X], robotPose[g.Y]);
 		}
 	}
 
