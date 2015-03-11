@@ -23,7 +23,7 @@ public class WaypointNavigator {
 		wayPoints = _wayPoints;
 		node = _node;
 		motorPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
-		currentTrajectory = new Line2D.Double(wayPoints.get(nextPoint-1).getValue(), wayPoints.get(nextPoint).getValue());
+		currentTrajectory = new Line2D.Double(wayPoints.get(nextPointInd-1).getValue(), wayPoints.get(nextPointInd).getValue());
 	}
 	
 		
