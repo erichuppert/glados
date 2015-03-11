@@ -40,7 +40,7 @@ public class VisibilityGraph {
 			Point2D.Double p1 = node1.getValue();
 			for (GraphNode<Point2D.Double> node2 : nodes) {
 				c++;
-				System.out.printf("At node2 number %d\n\n", c);
+				System.err.printf("At node2 number %d\n\n", c);
 				if (node1.equals(node2)) {
 					continue;
 				}
