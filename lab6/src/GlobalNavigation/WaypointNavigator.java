@@ -112,7 +112,7 @@ public class WaypointNavigator {
 			}
 			double sign = (x*a+y*b)>=0?1:-1;
 			double diff = Math.acos(dot)*sign;
-			System.err.printf("%.2f\n", diff);
+			System.out.printf("%.2f\n", diff);
 			return diff;
 		}
 	}
