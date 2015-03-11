@@ -68,7 +68,6 @@ public class AStar<V> {
 					openSet.add(new PQEntry(neighCost,neigh));
 				}
 			}
-			System.err.println(" ");
 		}
 
 		List<GraphNode<V>> path = new ArrayList<GraphNode<V>>();
