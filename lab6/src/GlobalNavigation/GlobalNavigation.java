@@ -68,6 +68,8 @@ public class GlobalNavigation implements NodeMain{
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
 			polygonMap = new PolygonMap(mapFileName);
+			System.err.println("Map is null:");
+			System.err.println(polygonMap == null);
 			cSpaceObstacles = new CSpace().envConfSpace(polygonMap);
 			visibilityGraph = getGraph();
 			AStar<Point2D.Double> planner = new AStar<Point2D.Double>(visibilityGraph.graphStart, visibilityGraph.goalNode);
