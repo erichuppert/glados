@@ -11,6 +11,12 @@ import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
+import GlobalNavigation.WaypointNavigator;
+import src.LocalNavigation.FSM;
+import src.LocalNavigation.MessageListener;
+import src.LocalNavigation.OdometryMsg;
+import src.LocalNavigation.g;
+
 import java.io.*;
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -29,10 +35,13 @@ public class GlobalNavigation implements NodeMain{
     private Publisher<org.ros.message.lab5_msgs.GUIEraseMsg> guiErasePub;
     private Publisher<org.ros.message.lab5_msgs.GUISegmentMsg>guiSegPub;
     private Publisher<org.ros.message.lab5_msgs.GUIPointMsg>guiPointPub;
+    private Subscriber<OdometryMsg> odoSub;        // Odometry
 
     private String mapFileName;
     private PolygonMap polygonMap;
     private ParameterTree paramTree;
+    List<GraphNode<Point2D.Double>> path;
+    double[] pose = new double[3];
 
     private boolean shutdown;
 
@@ -44,7 +53,18 @@ public class GlobalNavigation implements NodeMain{
 		guiErasePub = node.newPublisher("/gui/Erase", "lab5_msgs/GUIEraseMsg");
 		guiSegPub =  node.newPublisher("/gui/Segment", "lab5_msgs/GUISegmentMsg");
 		guiPointPub = node.newPublisher("/gui/Point", "lab5_msgs/GUIPointMsg");
-
+		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
+		MessageListener<OdometryMsg> odoListener = new MessageListener<OdometryMsg>() {
+			@Override
+			public void onNewMessage(OdometryMsg m) {
+				synchronized(this) {
+					pose[g.X] = m.x;
+					pose[g.Y] = m.y;
+					pose[g.THETA] = m.theta;
+				}
+			}
+		};
+		odoSub.addMessageListener(odoListener);
 		paramTree = node.newParameterTree();
 		mapFileName = paramTree.getString(node.resolveName("~/mapFileName"));
 		try {
@@ -57,8 +77,8 @@ public class GlobalNavigation implements NodeMain{
 			    	 } catch (Exception e) {
 			    		 throw new RuntimeException();
 			    	 }
-			        System.out.println("Runnable running");
 			        displayMap();
+			        navigate();
 			     }
 			   };
 			   Thread thread = new Thread(myRunnable);
@@ -86,13 +106,38 @@ public class GlobalNavigation implements NodeMain{
 		return new GraphName("/rss/GlobalNavigation");
 	}
 
-	public void handle(BumpMsg arg0) {
-	}
+	public void navigate() {
+		WaypointNavigator nav = new WaypointNavigator(node, path);
+		long initial_time;
+		long duration;
+		long sleep_time;
 
-	public void handle(OdometryMsg arg0) {
-	}
+		// For thread safe copying
+		//
+		boolean _shutdown;
+		double[] _sonars;
+		double[] _pose;
+		boolean[] _bumpers;
+		
+		while (true) {
 
-	public void run() {
+			initial_time = System.currentTimeMillis();
+
+			// Update variables in a thread-safe manner
+			//
+			synchronized(this) {
+				_pose = pose.clone();
+			}
+			nav.step(_pose);
+
+			duration = System.currentTimeMillis()-initial_time;
+			sleep_time = Math.max(0,((long) (1000.0/FSM.FREQ)) - duration);
+			try {
+				Thread.sleep(sleep_time);
+			} catch (InterruptedException e) {
+				throw new RuntimeException();
+			}
+		}
 	}
 
 	private void displayMap() {
@@ -146,13 +191,14 @@ public class GlobalNavigation implements NodeMain{
 		 		}
 		 	};
 		 	System.err.printf("Robot goal is %s\n", robotGoal.toString());
-		 List<GraphNode<Point2D.Double>> path = planner.search(pred);
+		 path = planner.search(pred);
 		 GraphNode<Point2D.Double> prev = path.get(0);
 		 for (GraphNode<Point2D.Double> n : path) {
 			 System.err.println("Drawing goal segments");
 		 	drawSegment(prev.getValue(), n.getValue(), Color.BLUE);
 		 	prev = n;
 		 }
+		 
 	}
 
 	/**
