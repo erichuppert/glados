@@ -78,6 +78,7 @@ public class VisibilityGraph {
 	public List<WaypointNode> getAllNodes() {
 		List<WaypointNode> nodes = new ArrayList<WaypointNode>();
 		for (PolygonObstacle obstacle : obstacles) {
+			System.err.printf("On obstacle: %s\n", obstacle.toString());
 			// add every vertex in each obstacle to the nodes list
 			// If it's not contained in any other obstacle.
 			//
@@ -107,9 +108,11 @@ public class VisibilityGraph {
 				boolean add = true;
 				for (PolygonObstacle other : obstacles) {
 					if (other.contains(vertex) && other != obstacle) {
+						System.err.printf("Tripped n obstacle: %s\n", other.toString());
 						add = false;
 					}
 				}
+				System.err.println("\n\n\n\n");
 				if (add) {
 					nodes.add(new WaypointNode(vertex));
 				}
