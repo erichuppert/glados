@@ -62,7 +62,7 @@ public class Servo implements Runnable {
 				g.pubs.setArm(outIndex,0);
 				break;
 			}
-		} while(currentPWM != targetPWM)
+		} while(currentPWM != targetPWM);
 		this.notifyAll();
 	}
 }

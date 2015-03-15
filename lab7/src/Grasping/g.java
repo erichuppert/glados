@@ -47,10 +47,10 @@ public class g {
 
 	// Safe-ish first values
 	//
-	private static double[] pose   = new double[3]{0,0,0};
-	private static double[] sonars = new double[2]{-1,-1,-1};
-	private static boolean[] bumps = new boolean[3]{false,false,false};
-	private static double[] arm    = new double[3]{0,0,0};
+	private static double[] pose   = {0,0,0};
+	private static double[] sonars = {-1,-1,-1};
+	private static boolean[] bumps = {false,false,false};
+	private static double[] arm    = {0,0,0};
 
 	// Controlling arm servos
 	//
