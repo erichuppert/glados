@@ -3,29 +3,24 @@ package Grasping;
 public class Servo implements Runnable {
 	private final int minPWM;
 	private final int maxPWM;
-	private final double maxSpeed; // delta_pwm per second
-
-	private final double minAngle;
-	private final double maxAngle;
-
+	private final double maxSpeed; // delta_rad per second
 	private final int outIndex;
+	// PWM = alpha theta + beta
+	//
+	private final double alpha;
+	private final double beta;
 
 	private int targetPWM;
 
-	// FSM definition
-	//
-	private final static String DONE = "Done with Servo rotation";
-	private final static String ROTATING = "Rotating Servo";
-	private final FSM fsm = new FSM<Integer>(DONE);
-
 	public Servo(int _minPWM, int _maxPWM, double _maxSpeed,
-				 double _minAngle, double _maxAngle,
+				 double PWM1, double PWM2,
+				 double angle1, double angle2,
 				 int _outIndex) {
 		minPWM = _minPWM;
 		maxPWM = _maxPWM;
+		alpha = (PWM2-PWM1)/(angle2-angle1);
+		beta = PWM1-alpha*angle1;
 		maxSpeed = _maxSpeed;
-		minAngle = _minAngle;
-		maxAngle = _maxAngle;
 		outIndex = _outIndex;
 	}
 
@@ -36,14 +31,16 @@ public class Servo implements Runnable {
 	 * @return PWM value for that angle.
 	 */
 	public int angleToPWM(double angle) {
-		//g.assertTrue(angle >= minAngle && angle <= maxAngle);
-		double alpha = (angle-minAngle)/(maxAngle-minAngle);
-		int PWM = (int)(alpha*(maxPWM-minPWM)) + minPWM;
-		return PWM;
+		return (int)(alpha*angle + beta);
+	}
+
+	private double PWMToAngle(int pwm) {
+		return ((double)pwm-beta)/alpha
 	}
 
 	public void setTargetAngle(double angle) {
 		targetPWM = angleToPWM(angle);
+		g.assertTrue(targetPWM >= minPWM && targetPWM <= maxPWM);
 	}
 
 	/**
@@ -52,5 +49,20 @@ public class Servo implements Runnable {
 	 * It is implemented in the run() method so that it is easily Threadable.
 	 * If methods want to block while waiting for this to finish, it synchronizes on this object.
 	 */
-	public synchronized void run() {}
+	public synchronized void run() {
+		double currentPWM;
+		do {
+			currentPWM = g.getArm()[outIndex];
+			double nextAngle = PWMToAngle(currentPWM)+maxSpeed;
+			int nextPWM = angleToPWM(nextAngle);
+			g.pubs.setArm(outIndex,nextPWM);
+			try{
+				Thread.sleep(1000);
+			} catch(InterruptedException e) {
+				g.pubs.setArm(outIndex,0);
+				break;
+			}
+		} while(currentPWM != targetPWM)
+		this.notifyAll();
+	}
 }

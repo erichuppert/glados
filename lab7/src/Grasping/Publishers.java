@@ -4,16 +4,19 @@ import org.ros.node.topic.Publisher;
 import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
 import org.ros.message.rss_msgs.OdometryMsg;
+import org.ros.message.rss_msgs.ArmMsg;
 
 class Publishers {
 	private Publisher<org.ros.message.std_msgs.String> statePub;
 	private Publisher<MotionMsg> motionPub;
 	private Publisher<OdometryMsg> odometryPub;
+	private Publisher<ArmMsg> armPub;
 
 	public Publishers(Node node) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motionPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		odometryPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
+		armPub = node.newPublisher("/command/Arm", "rss_msgs/ArmMsg");
 		g.pubs = this;
 	}
 
@@ -23,9 +26,7 @@ class Publishers {
 		MotionMsg msg = new MotionMsg();
 		// Motor commands do not handle NaN well. We should never get these.
 		//
-		if (tv == Double.NaN || rv == Double.NaN) {
-			throw new RuntimeException("NaN command sent!");
-		}
+		Double.assertTrue("NaN command sent!", tv != Double.NaN && rv != Double.NaN);
 
 		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
@@ -54,6 +55,20 @@ class Publishers {
 		msg.data = state;
 		if(statePub != null) {
 			statePub.publish(msg);
+		}
+	}
+
+	public void setArmPWMs(int index, double value) {
+		g.assertTrue("NaN command sent to arms!", value >= 0 && value != Double.NaN);
+		double[] previousArm = g.getArm();
+		double shoulder = outIndex!=g.SHOULDER?previousArm[g.SHOULDER]:value;
+		double wrist = outIndex!=g.WRIST?previousArm[g.WRIST]:value;
+		double gripper = outIndex!=g.GRIPPER?previousArm[g.GRIPPER]:value;
+
+		ArmMsg msg = new ArmMsg();
+		msg.pwms = new double[]{shoulder,wrist,gripper,0,0,0,0,0};
+		if (armPub != null) {
+			armPub.publish(msg);
 		}
 	}
 }

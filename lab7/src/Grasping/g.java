@@ -11,14 +11,16 @@ import org.ros.message.rss_msgs.OdometryMsg;
 public class g {
 	// Indices for sonars, poses, and bumpers
 	//
-	public static final int FRONT   = 0;
-	public static final int BACK    = 1;
-	public static final int X       = 0;
-	public static final int Y       = 1;
-	public static final int THETA   = 2;
-	public static final int LEFT    = 0;
-	public static final int RIGHT   = 1;
-	public static final int GRIPPER = 2;
+	public static final int FRONT    = 0;
+	public static final int BACK     = 1;
+	public static final int X        = 0;
+	public static final int Y        = 1;
+	public static final int THETA    = 2;
+	public static final int LEFT     = 0;
+	public static final int RIGHT    = 1;
+	public static final int GRIPPER  = 2;
+	public static final int SHOULDER = 0;
+	public static final int WRIST    = 1;
 
 	/**
 	 * Publishers to send commands to the robot.
@@ -43,11 +45,18 @@ public class g {
 	private static final boolean	reverseRGB = false;
 	private static Image			camera     = null;
 
-	private static double[] pose   = new double[3];
-	private static double[] sonars = new double[2];
-	private static boolean[] bumps = new boolean[3];
+	// Safe-ish first values
+	//
+	private static double[] pose   = new double[3]{0,0,0};
+	private static double[] sonars = new double[2]{-1,-1,-1};
+	private static boolean[] bumps = new boolean[3]{false,false,false};
+	private static double[] arm    = new double[3]{0,0,0};
 
-	public static Subscribers subs = null;
+	// Controlling arm servos
+	//
+	public static Servo shoulder = new Servo(400,2350,1,1400,2075,0,Math.PI/2.0,0);
+	public static Servo wrist = new Servo(500,2450,1,1750,950,0,Math.PI/2.0,1);
+	public static Servo gripper = new Servo(1490,2130,1,2130,1490,0,1,2);
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
@@ -109,6 +118,20 @@ public class g {
 	public static boolean[] getBumps() {
 		synchronized(bumps) {
 			return bumps.clone();
+		}
+	}
+
+	public static void setArm(ArmMsg m) {
+		synchronized(arm) {
+			arm[SHOULDER] = m.pwms[SHOULDER];
+			arm[WRIST] = m.pwms[WRIST];
+			arm[GRIPPER] = m.pwms[GRIPPER];
+		}
+	}
+
+	public static double[] getArm() {
+		synchronized(arm) {
+			return arm.clone();
 		}
 	}
 
