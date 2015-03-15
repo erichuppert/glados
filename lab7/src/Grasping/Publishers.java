@@ -58,7 +58,7 @@ class Publishers {
 		}
 	}
 
-	public void setArm(int index, int value) {
+	public void setArm(int index, long value) {
 		g.assertTrue("NaN command sent to arms!", value >= 0 && value != Double.NaN);
 		long[] previousArm = g.getArm();
 		long shoulder = index!=g.SHOULDER?previousArm[g.SHOULDER]:value;
