@@ -15,6 +15,7 @@ public class Grasping implements NodeMain, Runnable {
 	@Override
 	public void run() {
 		try{
+			Thread.sleep(5000);
 			synchronized(g.shoulder) {
 				synchronized(g.wrist) {
 					synchronized(g.gripper) {
