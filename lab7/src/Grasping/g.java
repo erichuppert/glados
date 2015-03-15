@@ -60,11 +60,7 @@ public class g {
 		assertTrue("Height is wrong", height == m.height);
 
 		synchronized(cameraLock) {
-			try {
-				camera = new Image(rgbData, width, height);
-			} catch(InterruptedException e) {
-				e.printStackTrace();
-			}
+			camera = new Image(rgbData, width, height);
 		}
 	}
 
