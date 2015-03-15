@@ -40,7 +40,7 @@ public class Servo implements Runnable {
 
 	public void setTargetAngle(double angle) {
 		targetPWM = angleToPWM(angle);
-		g.assertTrue(targetPWM >= minPWM && targetPWM <= maxPWM);
+		g.assertTrue("TargetPWM exceeds bounds", targetPWM >= minPWM && targetPWM <= maxPWM);
 	}
 
 	/**
