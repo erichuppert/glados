@@ -1,8 +1,8 @@
 package Grasping;
 
 public class Servo implements Runnable {
-	private final int minPWM;
-	private final int maxPWM;
+	private final long minPWM;
+	private final long maxPWM;
 	private final double maxSpeed; // delta_rad per second
 	private final int outIndex;
 	// PWM = alpha theta + beta
@@ -10,16 +10,16 @@ public class Servo implements Runnable {
 	private final double alpha;
 	private final double beta;
 
-	private int targetPWM;
+	private long targetPWM;
 
-	public Servo(int _minPWM, int _maxPWM, double _maxSpeed,
-				 double PWM1, double PWM2,
+	public Servo(long _minPWM, long _maxPWM, double _maxSpeed,
+				 long PWM1, long PWM2,
 				 double angle1, double angle2,
 				 int _outIndex) {
 		minPWM = _minPWM;
 		maxPWM = _maxPWM;
-		alpha = (PWM2-PWM1)/(angle2-angle1);
-		beta = PWM1-alpha*angle1;
+		alpha = ((double)(PWM2-PWM1))/(angle2-angle1);
+		beta = (double)PWM1-alpha*angle1;
 		maxSpeed = _maxSpeed;
 		outIndex = _outIndex;
 	}
@@ -30,11 +30,11 @@ public class Servo implements Runnable {
 	 * @param angle angle to rotate to.
 	 * @return PWM value for that angle.
 	 */
-	public int angleToPWM(double angle) {
+	public long angleToPWM(double angle) {
 		return (int)(alpha*angle + beta);
 	}
 
-	private double PWMToAngle(int pwm) {
+	private double PWMToAngle(long pwm) {
 		return ((double)pwm-beta)/alpha;
 	}
 
@@ -54,7 +54,7 @@ public class Servo implements Runnable {
 		do {
 			currentPWM = g.getArm()[outIndex];
 			double nextAngle = PWMToAngle(currentPWM)+maxSpeed;
-			int nextPWM = angleToPWM(nextAngle);
+			long nextPWM = angleToPWM(nextAngle);
 			g.pubs.setArm(outIndex,nextPWM);
 			try{
 				Thread.sleep(1000);
