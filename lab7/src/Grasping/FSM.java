@@ -54,7 +54,7 @@ public class FSM<InputType> {
 	 * @param newState: new state string
 	 */
 	public void changeCurrentState(String newState) {
-		//assert stateToAction.containsKey(newState);
+		//g.assertTrue(stateToAction.containsKey(newState));
 		state = newState;
 	}
 
@@ -64,8 +64,8 @@ public class FSM<InputType> {
 	 * @param stateToRemove: state string to remove; should not be current state
 	 */
 	public void removeState(String stateToRemove) {
-		//assert stateToAction.containsKey(stateToRemove);
-		//assert stateToRemove != state;
+		//g.assertTrue(stateToAction.containsKey(stateToRemove));
+		//g.assertTrue(stateToRemove != state);
 		stateToAction.remove(stateToRemove);
 	}
 
@@ -76,7 +76,7 @@ public class FSM<InputType> {
 	public void step(InputType input) {
 		// Execute the method for the current state
 		//
-		//assert stateToAction.containsKey(state);
+		//g.assertTrue(stateToAction.containsKey(state));
 		String newState = stateToAction.get(state).action(input);
 		state = (newState==null)?state:newState;
 	}
