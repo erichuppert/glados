@@ -35,7 +35,7 @@ public class Servo implements Runnable {
 	}
 
 	private double PWMToAngle(int pwm) {
-		return ((double)pwm-beta)/alpha
+		return ((double)pwm-beta)/alpha;
 	}
 
 	public void setTargetAngle(double angle) {
