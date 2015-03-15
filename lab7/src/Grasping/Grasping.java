@@ -16,24 +16,18 @@ public class Grasping implements NodeMain, Runnable {
 	public void run() {
 		try{
 			Thread.sleep(5000);
-			synchronized(g.shoulder) {
-				synchronized(g.wrist) {
-					synchronized(g.gripper) {
-						g.shoulder.setTargetAngle(0);
-						g.wrist.setTargetAngle(0);
-						g.gripper.setTargetAngle(0);
-						new Thread(g.shoulder).start();
-						new Thread(g.wrist).start();
-						new Thread(g.gripper).start();
-						g.gripper.wait();
-					}
-					g.wrist.wait();
-				}
-				g.shoulder.wait();
-			}
 		} catch(InterruptedException e) {
 			return;
 		}
+		g.shoulder.setTargetAngle(0);
+		g.wrist.setTargetAngle(0);
+		g.gripper.setTargetAngle(0);
+		new Thread(g.shoulder).start();
+		new Thread(g.wrist).start();
+		new Thread(g.gripper).start();
+		synchronized(g.wrist) {}
+		synchronized(g.gripper) {}
+		synchronized(g.shoulder) {}
 	}
 
 	@Override
