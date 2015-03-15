@@ -29,7 +29,7 @@ public class Subscribers {
 			case SONAR: g.setSonars((SonarMsg)m); break;
 			case BUMP: g.setBumps((BumpMsg)m); break;
 			case ODO: g.setPose((OdometryMsg)m); break;
-			case CAMERA: g.setCamera((org.ros.message.sensor_msg.Image)m); break;
+			case CAMERA: g.setCamera((org.ros.message.sensor_msgs.Image)m); break;
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}
@@ -49,7 +49,7 @@ public class Subscribers {
 		sonarBackSub.addMessageListener(new Listener<SonarMsg>(ListenerType.SONAR));
 		bumpSub.addMessageListener(new Listener<BumpMsg>(ListenerType.BUMP));
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
-		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msg.Image>(ListenerType.CAMERA));
+		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
 
 		// Make the conditions accessible
 		//
