@@ -49,7 +49,7 @@ public class Subscribers {
 		sonarBackSub.addMessageListener(new Listener<SonarMsg>(SONAR));
 		bumpSub.addMessageListener(new Listener<BumpMsg>(BUMP));
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ODO));
-		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(CAMERA))
+		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(CAMERA));
 
 		// Make the conditions accessible
 		//
