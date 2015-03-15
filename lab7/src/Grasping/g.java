@@ -29,7 +29,7 @@ public class g {
 	 * - Motor velocities
 	 * - Robot Pose
 	 * - State
-	 * - Arm PWMs // TODO
+	 * - Arm PWMs
 	 */
 	public static Publishers pubs = null;
 
@@ -39,6 +39,7 @@ public class g {
 	 * - Camera data
 	 * - Sonars
 	 * - Bump sensors
+	 * - Arm PWMs
 	 */
 	private static final int		width	   = 160;
 	private static final int		height	   = 120;
@@ -51,7 +52,7 @@ public class g {
 	private static double[] pose   = {0,0,0};
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
-	private static double[] arm    = {0,0,0};
+	private static long[] arm    = {0,0,0};
 
 	// Controlling arm servos
 	//
