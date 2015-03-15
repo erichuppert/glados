@@ -50,7 +50,7 @@ public class Grasping implements NodeMain, Runnable {
 
 			shoulderSign = Math.abs(shoulder)>Math.PI/4?-shoulderSign:shoulderSign;
 			wristSign = Math.abs(wrist)>Math.PI/4?-wristSign:wristSign;
-			gripperSign = gripper<0?-1:gripper>1?1:gripperSign;
+			gripperSign = gripper<0.2?-1:gripper>0.8?1:gripperSign;
 		}
 	}
 

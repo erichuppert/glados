@@ -51,7 +51,7 @@ public class Servo implements Runnable {
 	 */
 	public synchronized void run() {
 		long currentPWM;
-		double T = 1.0;
+		double T = 0.1;
 		do {
 			currentPWM = g.getArm()[outIndex];
 			currentPWM = currentPWM == 0?minPWM:currentPWM;
