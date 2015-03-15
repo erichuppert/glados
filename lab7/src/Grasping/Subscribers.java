@@ -45,7 +45,7 @@ public class Subscribers {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");   // back sonar
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");         // bumps
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
-		cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
+		//cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
 		armSub = node.newSubscriber("/rss/ArmStatus", "rss_msgs/ArmMsg"); // Arm
 
 		// Add message listeners to subscribers
@@ -54,7 +54,7 @@ public class Subscribers {
 		sonarBackSub.addMessageListener(new Listener<SonarMsg>(ListenerType.SONAR));
 		bumpSub.addMessageListener(new Listener<BumpMsg>(ListenerType.BUMP));
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
-		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
+		//cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
 		armSub.addMessageListener(new Listener<ArmMsg>(ListenerType.ARM));
 	}
 }
