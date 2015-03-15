@@ -28,11 +28,11 @@ public class Subscribers {
 
 		public void onNewMessage(T m) {
 			switch(type) {
-			case SONAR: g.setSonars((SonarMsg)m); break;
-			case BUMP: g.setBumps((BumpMsg)m); break;
-			case ODO: g.setPose((OdometryMsg)m); break;
-			case CAMERA: g.setCamera((org.ros.message.sensor_msgs.Image)m); break;
-			case ARM: g.setArm((ArmMsg)m);
+			case ListenerType.SONAR: g.setSonars((SonarMsg)m); break;
+			case ListenerType.BUMP: g.setBumps((BumpMsg)m); break;
+			case ListenerType.ODO: g.setPose((OdometryMsg)m); break;
+			case ListenerType.CAMERA: g.setCamera((org.ros.message.sensor_msgs.Image)m); break;
+			case ListenerType.ARM: g.setArm((ArmMsg)m);
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}
