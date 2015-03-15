@@ -1,0 +1,7 @@
+
+<launch>
+  <include file="$(find lab4)/launch/config.launch" />
+  <node name="grasping" pkg="rosjava_bootstrap" type="run.py" args="lab7 Grasping.Grasping" machine="workstation" output="screen">
+  </node>
+
+</launch>

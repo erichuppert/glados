@@ -58,15 +58,14 @@ class Publishers {
 		}
 	}
 
-	public void setArm(int index, int value) {
-		g.assertTrue("NaN command sent to arms!", value >= 0 && value != Double.NaN);
-		double[] previousArm = g.getArm();
-		double shoulder = index!=g.SHOULDER?previousArm[g.SHOULDER]:value;
-		double wrist = index!=g.WRIST?previousArm[g.WRIST]:value;
-		double gripper = index!=g.GRIPPER?previousArm[g.GRIPPER]:value;
+	public void setArm(int index, long value) {
+		long[] previousArm = g.getArm();
+		long shoulder = index!=g.SHOULDER?previousArm[g.SHOULDER]:value;
+		long wrist = index!=g.WRIST?previousArm[g.WRIST]:value;
+		long gripper = index!=g.GRIPPER?previousArm[g.GRIPPER]:value;
 
 		ArmMsg msg = new ArmMsg();
-		msg.pwms = {shoulder,wrist,gripper,0,0,0,0,0};
+		msg.pwms = new long[]{shoulder,wrist,gripper,0,0,0,0,0};
 		if (armPub != null) {
 			armPub.publish(msg);
 		}

@@ -29,7 +29,7 @@ public class g {
 	 * - Motor velocities
 	 * - Robot Pose
 	 * - State
-	 * - Arm PWMs // TODO
+	 * - Arm PWMs
 	 */
 	public static Publishers pubs = null;
 
@@ -39,6 +39,7 @@ public class g {
 	 * - Camera data
 	 * - Sonars
 	 * - Bump sensors
+	 * - Arm PWMs
 	 */
 	private static final int		width	   = 160;
 	private static final int		height	   = 120;
@@ -51,13 +52,13 @@ public class g {
 	private static double[] pose   = {0,0,0};
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
-	private static double[] arm    = {0,0,0};
+	private static long[] arm    = {0,0,0};
 
 	// Controlling arm servos
 	//
-	public static Servo shoulder = new Servo(400,2350,1,1400,2075,0,Math.PI/2.0,0);
-	public static Servo wrist = new Servo(500,2450,1,1750,950,0,Math.PI/2.0,1);
-	public static Servo gripper = new Servo(1490,2130,1,2130,1490,0,1,2);
+	public static Servo shoulder = new Servo(400,2350,2,1400,2075,0,Math.PI/2.0,0);
+	public static Servo wrist = new Servo(500,2450,2,1750,950,0,Math.PI/2.0,1);
+	public static Servo gripper = new Servo(1490,2130,0.1,2130,1490,0,1,2);
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
@@ -130,7 +131,7 @@ public class g {
 		}
 	}
 
-	public static double[] getArm() {
+	public static long[] getArm() {
 		synchronized(arm) {
 			return arm.clone();
 		}
@@ -159,4 +160,7 @@ public class g {
 		}
 	}
 
+	public static int sign(double v) {
+		return (v < 0) ? (-1):1;
+	}
 }
