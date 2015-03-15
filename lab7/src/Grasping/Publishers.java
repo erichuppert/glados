@@ -66,6 +66,7 @@ class Publishers {
 		double gripper = index!=g.GRIPPER?previousArm[g.GRIPPER]:value;
 
 		ArmMsg msg = new ArmMsg();
+		msg.pwms = new long[]{shoulder,wrist,gripper,0,0,0,0,0};
 		msg.pwms = {shoulder,wrist,gripper,0,0,0,0,0};
 		if (armPub != null) {
 			armPub.publish(msg);
