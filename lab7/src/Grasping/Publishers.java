@@ -6,7 +6,7 @@ import org.ros.message.rss_msgs.MotionMsg;
 import org.ros.message.rss_msgs.OdometryMsg;
 
 class Publishers {
-	private Publisher<org.ros.message.rss_msgs.String> statePub;
+	private Publisher<org.ros.message.std_msgs.String> statePub;
 	private Publisher<MotionMsg> motionPub;
 	private Publisher<OdometryMsg> odometryPub;
 
@@ -49,7 +49,7 @@ class Publishers {
 		setRobotPose(0,0,0);
 	}
 
-	public void setState(java.util.String state) {
+	public void setState(java.lang.String state) {
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = state;
 		if(statePub != null) {

@@ -37,10 +37,11 @@ public class g {
 	 * - Sonars
 	 * - Bump sensors
 	 */
-	private static final int width   = 160;
-	private static final int height  = 120;
-	private static Object cameraLock = new Object();
-	private static Image camera      = null;
+	private static final int		width	   = 160;
+	private static final int		height	   = 120;
+	private static Object			cameraLock = new Object();
+	private static final boolean	reverseRGB = false;
+	private static Image			camera     = null;
 
 	private static double[] pose   = new double[3];
 	private static double[] sonars = new double[2];
@@ -57,12 +58,12 @@ public class g {
 		}
 		assertTrue("Width is wrong", width == m.width);
 		assertTrue("Height is wrong", height == m.height);
+
 		synchronized(cameraLock) {
 			try {
 				camera = new Image(rgbData, width, height);
 			} catch(InterruptedException e) {
 				e.printStackTrace();
-				continue;
 			}
 		}
 	}
@@ -89,7 +90,7 @@ public class g {
 
 	public static void setSonars(SonarMsg m) {
 		synchronized(sonars) {
-			alpha = 0.3; // LP-filter weight, 0 <= alpha <= 1
+			double alpha = 0.3; // LP-filter weight, 0 <= alpha <= 1
 			int sonar = m.isFront?FRONT:BACK;
 			sonars[sonar] = alpha*m.range+(1-alpha)*sonars[sonar];
 		}

@@ -26,10 +26,10 @@ public class Subscribers {
 
 		public void onNewMessage(T m) {
 			switch(type) {
-			case SONAR: g.setSonars(m); break;
-			case BUMP: g.setBumps(m); break;
-			case ODO: g.setPose(m); break;
-			case CAMERA: g.setCamera(m); break;
+			case SONAR: g.setSonars((SonarMsg)m); break;
+			case BUMP: g.setBumps((BumpMsg)m); break;
+			case ODO: g.setPose((OdometryMsg)m); break;
+			case CAMERA: g.setCamera((org.ros.message.sensor_msg.Image)m); break;
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}
@@ -45,11 +45,11 @@ public class Subscribers {
 
 		// Add message listeners to subscribers
 		//
-		sonarFrontSub.addMessageListener(new Listener<SonarMsg>(SONAR));
-		sonarBackSub.addMessageListener(new Listener<SonarMsg>(SONAR));
-		bumpSub.addMessageListener(new Listener<BumpMsg>(BUMP));
-		odoSub.addMessageListener(new Listener<OdometryMsg>(ODO));
-		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(CAMERA));
+		sonarFrontSub.addMessageListener(new Listener<SonarMsg>(ListenerType.SONAR));
+		sonarBackSub.addMessageListener(new Listener<SonarMsg>(ListenerType.SONAR));
+		bumpSub.addMessageListener(new Listener<BumpMsg>(ListenerType.BUMP));
+		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
+		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msg.Image>(ListenerType.CAMERA));
 
 		// Make the conditions accessible
 		//
