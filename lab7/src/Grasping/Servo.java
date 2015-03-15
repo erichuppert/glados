@@ -56,7 +56,7 @@ public class Servo implements Runnable {
 			currentPWM = g.getArm()[outIndex];
 			int sign = g.sign(PWMToAngle(targetPWM) - PWMToAngle(currentPWM));
 			double nextAngle = PWMToAngle(currentPWM)+maxSpeed*sign;
-			long nextPWM = Math.Max(Math.Min(angleToPWM(nextAngle),maxPWM),minPWM);
+			long nextPWM = Math.max(Math.min(angleToPWM(nextAngle),maxPWM),minPWM);
 			System.out.println(nextPWM);
 			g.pubs.setArm(outIndex,nextPWM);
 			try{
