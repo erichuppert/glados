@@ -19,15 +19,39 @@ public class Grasping implements NodeMain, Runnable {
 		} catch(InterruptedException e) {
 			return;
 		}
-		g.shoulder.setTargetAngle(0);
-		g.wrist.setTargetAngle(0);
-		g.gripper.setTargetAngle(0);
-		new Thread(g.shoulder).start();
-		new Thread(g.wrist).start();
-		new Thread(g.gripper).start();
-		synchronized(g.wrist) {}
-		synchronized(g.gripper) {}
-		synchronized(g.shoulder) {}
+		double shoulder = -Math.PI/4;
+		double wrist = 0;
+		double gripper = 1;
+		int shoulderSign = 1;
+		int wristSign = 1;
+		int gripperSign = -1;
+
+		while (true) {
+			g.shoulder.setTargetAngle(shoulder);
+			g.wrist.setTargetAngle(wrist);
+			g.gripper.setTargetAngle(gripper);
+			new Thread(g.shoulder).start();
+			new Thread(g.wrist).start();
+			new Thread(g.gripper).start();
+
+			try{
+				Thread.sleep(50);
+			} catch(InterruptedException e) {
+				return;
+			}
+
+			synchronized(g.wrist) {}
+			synchronized(g.gripper) {}
+			synchronized(g.shoulder) {}
+
+			shoulder = shoulder+0.3*shoulderSign;
+			wrist = wrist+0.3*wristSign;
+			gripper = gripper+0.1*gripperSign;
+
+			shoulderSign = Math.abs(shoulder)>Math.PI/4?-shoulderSign:shoulderSign;
+			wristSign = Math.abs(wrist)>Math.PI/4?-wristSign:wristSign;
+			gripperSign = gripper<0?-1:gripper>1?1:gripperSign;
+		}
 	}
 
 	@Override
