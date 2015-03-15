@@ -12,7 +12,7 @@ public class Subscribers {
 	private Subscriber<SonarMsg>							sonarBackSub;
 	private Subscriber<BumpMsg>								bumpSub;		// Bumps
 	private Subscriber<OdometryMsg>							odoSub;			// Odometry
-	private Subscriber<org.ros.message.sensors_msgs.Image>	cameraSub;		// Camera
+	private Subscriber<org.ros.message.sensor_msgs.Image>	cameraSub;		// Camera
 
 	private enum ListenerType {
 		SONAR,BUMP,ODO,CAMERA
@@ -42,6 +42,7 @@ public class Subscribers {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");   // back sonar
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");         // bump sensors
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
+		cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
 
 		// Add message listeners to subscribers
 		//
