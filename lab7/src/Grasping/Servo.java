@@ -51,11 +51,12 @@ public class Servo implements Runnable {
 	 */
 	public synchronized void run() {
 		long currentPWM;
+		double T = 0.5;
 		do {
 			currentPWM = g.getArm()[outIndex];
 			currentPWM = currentPWM == 0?minPWM:currentPWM;
 			int sign = g.sign(PWMToAngle(targetPWM) - PWMToAngle(currentPWM));
-			double nextAngle = PWMToAngle(currentPWM)+maxSpeed*sign;
+			double nextAngle = PWMToAngle(currentPWM)+maxSpeed*sign*T;
 			long nextPWM = Math.max(Math.min(angleToPWM(nextAngle),maxPWM),minPWM);
 			if(Math.abs(nextPWM-currentPWM) > Math.abs(targetPWM-currentPWM)) {
 				nextPWM = targetPWM;
@@ -63,7 +64,7 @@ public class Servo implements Runnable {
 			System.out.printf("Current: %d\tNext: %d\tTarget: %d\n", currentPWM,nextPWM,targetPWM);
 			g.pubs.setArm(outIndex,nextPWM);
 			try{
-				Thread.sleep(1000);
+				Thread.sleep(1000*T);
 			} catch(InterruptedException e) {
 				g.pubs.setArm(outIndex,0);
 				break;
