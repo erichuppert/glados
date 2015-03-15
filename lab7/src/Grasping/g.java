@@ -56,9 +56,9 @@ public class g {
 
 	// Controlling arm servos
 	//
-	public static Servo shoulder = new Servo(400,2350,3,1400,2075,0,Math.PI/2.0,0);
-	public static Servo wrist = new Servo(500,2450,3,1750,950,0,Math.PI/2.0,1);
-	public static Servo gripper = new Servo(1490,2130,0.7,2130,1490,0,1,2);
+	public static Servo shoulder = new Servo(400,2350,5,1400,2075,0,Math.PI/2.0,0);
+	public static Servo wrist = new Servo(500,2450,7,1750,950,0,Math.PI/2.0,1);
+	public static Servo gripper = new Servo(1490,2130,1.0,2130,1490,0,1,2);
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
