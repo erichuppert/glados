@@ -20,6 +20,7 @@ public class Servo implements Runnable {
 		maxPWM = _maxPWM;
 		alpha = ((double)(PWM2-PWM1))/(angle2-angle1);
 		beta = (double)PWM1-alpha*angle1;
+		System.out.printf("Alpha: %.2f\tBeta: %.2f\n", alpha, beta);
 		maxSpeed = _maxSpeed;
 		outIndex = _outIndex;
 	}
@@ -31,7 +32,7 @@ public class Servo implements Runnable {
 	 * @return PWM value for that angle.
 	 */
 	public long angleToPWM(double angle) {
-		return (int)(alpha*angle + beta);
+		return (long)(alpha*angle + beta);
 	}
 
 	private double PWMToAngle(long pwm) {
