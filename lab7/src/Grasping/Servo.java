@@ -64,7 +64,7 @@ public class Servo implements Runnable {
 			System.out.printf("Current: %d\tNext: %d\tTarget: %d\n", currentPWM,nextPWM,targetPWM);
 			g.pubs.setArm(outIndex,nextPWM);
 			try{
-				Thread.sleep(1000*T);
+				Thread.sleep((int)(1000*T));
 			} catch(InterruptedException e) {
 				g.pubs.setArm(outIndex,0);
 				break;
