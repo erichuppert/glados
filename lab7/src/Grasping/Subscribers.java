@@ -14,13 +14,6 @@ public class Subscribers {
 	private Subscriber<OdometryMsg>							odoSub;			// Odometry
 	private Subscriber<org.ros.message.sensors_msgs.Image>	cameraSub;		// Camera
 
-	public Object sonarCondition      = new Object();
-	//public Object sonarFrontCondition = new Object();
-	//public Object sonarBackCondition  = new Object();
-	public Object bumpCondition       = new Object();
-	public Object odoCondition        = new Object();
-	public Object cameraCondition     = new Object();
-
 	private enum ListenerType {
 		SONAR,BUMP,ODO,CAMERA
 	}
@@ -33,30 +26,10 @@ public class Subscribers {
 
 		public void onNewMessage(T m) {
 			switch(type) {
-			case SONAR:
-				synchronized(sonarCondition) {
-					g.setSonars(m);
-					sonarCondition.notifyAll();
-				}
-				break;
-			case BUMP:
-				synchronized(bumpCondition) {
-					g.setBumps(m);
-					sonarCondition.notifyAll();
-				}
-				break;
-			case ODO:
-				synchronized(odoCondition) {
-					g.setPose(m);
-					sonarCondition.notifyAll();
-				}
-				break;
-			case CAMERA:
-				synchronized(cameraCondition) {
-					g.setCamera(m);
-					sonarCondition.notifyAll();
-				}
-				break;
+			case SONAR: g.setSonars(m); break;
+			case BUMP: g.setBumps(m); break;
+			case ODO: g.setPose(m); break;
+			case CAMERA: g.setCamera(m); break;
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}
