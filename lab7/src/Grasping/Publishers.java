@@ -26,7 +26,7 @@ class Publishers {
 		MotionMsg msg = new MotionMsg();
 		// Motor commands do not handle NaN well. We should never get these.
 		//
-		Double.assertTrue("NaN command sent!", tv != Double.NaN && rv != Double.NaN);
+		g.assertTrue("NaN command sent!", tv != Double.NaN && rv != Double.NaN);
 
 		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
@@ -58,15 +58,15 @@ class Publishers {
 		}
 	}
 
-	public void setArmPWMs(int index, double value) {
+	public void setArm(int index, int value) {
 		g.assertTrue("NaN command sent to arms!", value >= 0 && value != Double.NaN);
 		double[] previousArm = g.getArm();
-		double shoulder = outIndex!=g.SHOULDER?previousArm[g.SHOULDER]:value;
-		double wrist = outIndex!=g.WRIST?previousArm[g.WRIST]:value;
-		double gripper = outIndex!=g.GRIPPER?previousArm[g.GRIPPER]:value;
+		double shoulder = index!=g.SHOULDER?previousArm[g.SHOULDER]:value;
+		double wrist = index!=g.WRIST?previousArm[g.WRIST]:value;
+		double gripper = index!=g.GRIPPER?previousArm[g.GRIPPER]:value;
 
 		ArmMsg msg = new ArmMsg();
-		msg.pwms = new double[]{shoulder,wrist,gripper,0,0,0,0,0};
+		msg.pwms = {shoulder,wrist,gripper,0,0,0,0,0};
 		if (armPub != null) {
 			armPub.publish(msg);
 		}

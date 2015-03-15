@@ -3,6 +3,7 @@ package Grasping;
 import org.ros.message.rss_msgs.SonarMsg;
 import org.ros.message.rss_msgs.BumpMsg;
 import org.ros.message.rss_msgs.OdometryMsg;
+import org.ros.message.rss_msgs.ArmMsg;
 //import org.ros.message.sensor_msgs.Image;
 
 // Useful methods, and values that many classes might need to access.

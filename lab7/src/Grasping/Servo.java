@@ -50,7 +50,7 @@ public class Servo implements Runnable {
 	 * If methods want to block while waiting for this to finish, it synchronizes on this object.
 	 */
 	public synchronized void run() {
-		double currentPWM;
+		int currentPWM;
 		do {
 			currentPWM = g.getArm()[outIndex];
 			double nextAngle = PWMToAngle(currentPWM)+maxSpeed;
