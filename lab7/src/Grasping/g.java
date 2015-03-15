@@ -131,7 +131,7 @@ public class g {
 		}
 	}
 
-	public static double[] getArm() {
+	public static long[] getArm() {
 		synchronized(arm) {
 			return arm.clone();
 		}
