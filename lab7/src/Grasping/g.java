@@ -160,7 +160,7 @@ public class g {
 		}
 	}
 
-	public int sign(double v) {
+	public static int sign(double v) {
 		return (v < 0) ? (-1):1;
 	}
 }
