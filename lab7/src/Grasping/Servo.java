@@ -62,6 +62,7 @@ public class Servo implements Runnable {
 
 			double deltaAngle = PWMToAngle(nextPWM-currentPWM);
 			double T = Math.abs(deltaAngle/maxSpeed);
+			System.out.printf("Current: %.2f\tNext: %.2f\n",nextPWM);
 			g.pubs.setArm(outIndex,nextPWM);
 
 			try{
