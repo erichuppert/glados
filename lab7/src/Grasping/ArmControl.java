@@ -25,7 +25,7 @@ public class ArmControl {
 		return thetaWrist;
 	}
 
-	public static double getDeltaX(){
+	public statinc double getDeltaX(){
 		return deltaX;
 	}
 
@@ -38,7 +38,7 @@ public class ArmControl {
 		*/
 
 		thetaShoulder = atan2(deltaZ, sqrt(deltaZ*deltaZ - shoulder*shoulder));
-		thetaWrist = thetaShoulder;
+		thetaWrist = -thetaShoulder;
 		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
 	}
 }
