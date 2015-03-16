@@ -53,7 +53,7 @@ public class g {
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
 	private static long[] arm    = {0,0,0};
-	private static int userInput = 0.5;
+	private static double userInput = 0.5;
 
 	// Controlling arm servos
 	//
@@ -138,11 +138,11 @@ public class g {
 		}
 	}
 
-	public static void setUser(org.ros.message.std_msgs.Integer m) {
+	public static void setUser(org.ros.message.std_msgs.Double m) {
 		userInput = m.data;
 	}
 
-	public static int getUser() {
+	public static double getUser() {
 		return userInput;
 	}
 
