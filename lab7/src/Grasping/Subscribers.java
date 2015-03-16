@@ -15,9 +15,10 @@ public class Subscribers {
 	private Subscriber<OdometryMsg>							odoSub;			// Odometry
 	private Subscriber<org.ros.message.sensor_msgs.Image>	cameraSub;		// Camera
 	private Subscriber<ArmMsg>                              armSub;         // Arm
+	private Subscriber<org.ros.message.std_msgs.Float64>    userSub;        // User
 
 	private enum ListenerType {
-		SONAR,BUMP,ODO,CAMERA,ARM
+		SONAR,BUMP,ODO,CAMERA,ARM,USER
 	}
 
 	private class Listener<T> implements MessageListener<T> {
@@ -33,6 +34,7 @@ public class Subscribers {
 			case ODO: g.setPose((OdometryMsg)m); break;
 			case CAMERA: g.setCamera((org.ros.message.sensor_msgs.Image)m); break;
 			case ARM: g.setArm((ArmMsg)m); break;
+			case USER: g.setUser((org.ros.message.std_msgs.Float64)m); break;
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}
@@ -47,6 +49,7 @@ public class Subscribers {
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
 		//cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
 		armSub = node.newSubscriber("/rss/ArmStatus", "rss_msgs/ArmMsg"); // Arm
+		userSub = node.newSubscriber("/rss/User", "std_msgs/Float64"); // User
 
 		// Add message listeners to subscribers
 		//
@@ -56,5 +59,6 @@ public class Subscribers {
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
 		//cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
 		armSub.addMessageListener(new Listener<ArmMsg>(ListenerType.ARM));
+		userSub.addMessageListener(new Listener<org.ros.message.std_msgs.Float64>(ListenerType.USER));
 	}
 }

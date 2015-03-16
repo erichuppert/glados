@@ -24,6 +24,13 @@ public class g {
 	public static final int WRIST    = 1;
 
 	/**
+	 * Gripper states
+	 */
+	public static final double CLOSED = 0.95;
+	public static final double OPEN   = 0.05;
+	public static final double MIDDLE = 0.5;
+
+	/**
 	 * Publishers to send commands to the robot.
 	 * Control:
 	 * - Motor velocities
@@ -53,12 +60,11 @@ public class g {
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
 	private static long[] arm    = {0,0,0};
+	private static double userInput = 0.3;
 
-	// Controlling arm servos
+	// Arm control
 	//
-	public static Servo shoulder = new Servo(400,2350,7,1400,2075,0,Math.PI/2.0,0);
-	public static Servo wrist = new Servo(500,2450,10,1750,950,0,Math.PI/2.0,1);
-	public static Servo gripper = new Servo(1490,2130,2.0,2130,1490,0,1,2);
+	public static ArmControl ac = null; // Arm Controller
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
@@ -135,6 +141,15 @@ public class g {
 		synchronized(arm) {
 			return arm.clone();
 		}
+	}
+
+	public static void setUser(org.ros.message.std_msgs.Float64 m) {
+		System.out.printf("Got data: %.2f\n", m.data);
+		userInput = m.data;
+	}
+
+	public static double getUser() {
+		return userInput;
 	}
 
 	/**

@@ -4,6 +4,7 @@ public class Servo implements Runnable {
 	private final long minPWM;
 	private final long maxPWM;
 	private final double maxSpeed; // delta_rad per second
+	private final int maxPWMDelta;
 	private final int outIndex;
 	// PWM = alpha theta + beta
 	//
@@ -21,6 +22,7 @@ public class Servo implements Runnable {
 		alpha = ((double)(PWM2-PWM1))/(angle2-angle1);
 		beta = (double)PWM1-alpha*angle1;
 		maxSpeed = _maxSpeed;
+		maxPWMDelta = (int)Math.abs(angleToPWM(maxSpeed)*0.1); // Can move for 2 seconds continuously.
 		outIndex = _outIndex;
 	}
 
@@ -51,18 +53,17 @@ public class Servo implements Runnable {
 	 */
 	public synchronized void run() {
 		long currentPWM;
-		double T = 0.1;
 		do {
 			currentPWM = g.getArm()[outIndex];
 			currentPWM = currentPWM == 0?minPWM:currentPWM;
-			int sign = g.sign(PWMToAngle(targetPWM) - PWMToAngle(currentPWM));
-			double nextAngle = PWMToAngle(currentPWM)+maxSpeed*sign*T;
-			long nextPWM = Math.max(Math.min(angleToPWM(nextAngle),maxPWM),minPWM);
-			if(Math.abs(nextPWM-currentPWM) > Math.abs(targetPWM-currentPWM)) {
-				nextPWM = targetPWM;
-			}
-			System.out.printf("Current: %d\tNext: %d\tTarget: %d\n", currentPWM,nextPWM,targetPWM);
+			int sign = g.sign(targetPWM - currentPWM);
+			long nextPWM = Math.abs(targetPWM-currentPWM) > maxPWMDelta?
+				(currentPWM+sign*maxPWMDelta):targetPWM;
+
+			double deltaAngle = PWMToAngle(nextPWM-currentPWM);
+			double T = Math.abs(deltaAngle/maxSpeed);
 			g.pubs.setArm(outIndex,nextPWM);
+
 			try{
 				Thread.sleep((int)(1000*T));
 			} catch(InterruptedException e) {
