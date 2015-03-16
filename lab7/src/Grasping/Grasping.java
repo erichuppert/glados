@@ -54,9 +54,11 @@ public class Grasping implements NodeMain, Runnable {
 		Thread.sleep(2000);
 		System.out.println("HERE");
 		g.ac.setGripperStatus(g.CLOSED);
+		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
 		System.out.println("HERE2");
 		while(true) {
 			double height = g.getUser();
+			System.out.println(height);
 			synchronized(g.ac) {
 				g.ac.setParams(height);
 				new Thread(g.ac).start();
