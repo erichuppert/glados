@@ -49,7 +49,7 @@ public class Subscribers {
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
 		//cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
 		armSub = node.newSubscriber("/rss/ArmStatus", "rss_msgs/ArmMsg"); // Arm
-		userSub = node.newSubscriber("/rss/User", "std_msgs/Integer"); // User
+		userSub = node.newSubscriber("/rss/User", "std_msgs/Float64"); // User
 
 		// Add message listeners to subscribers
 		//
