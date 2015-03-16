@@ -29,7 +29,7 @@ public class Grasping implements NodeMain, Runnable {
 		try{
 			System.out.println(System.in.available());
 		} catch(java.io.IOException e) {
-			e.printStackStrace();
+			e.printStackTrace();
 		}
 		Scanner heightInput = new Scanner(System.in);
 		int height;
