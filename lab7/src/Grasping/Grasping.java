@@ -19,6 +19,7 @@ public class Grasping implements NodeMain, Runnable {
 		try{
 			Thread.sleep(5000);
 		} catch(InterruptedException e) {
+			e.printStackTrace();
 			return;
 		}
 
@@ -26,18 +27,10 @@ public class Grasping implements NodeMain, Runnable {
 	}
 
 	public void inputHeights() {
-		try{
-			System.out.println(System.in.available());
-		} catch(java.io.IOException e) {
-			e.printStackTrace();
-		}
-		Scanner heightInput = new Scanner(System.in);
-		int height;
-		g.gripper.setTargetAngle(1);
+		g.gripper.setTargetAngle(0.9);
 		new Thread(g.gripper).start();
 		while(true) {
-			System.out.print("Enter desired gripper height: ");
-			height = heightInput.nextInt();
+			int height = g.getUser();
 			ArmControl.setParams(height);
 			g.wrist.setTargetAngle(ArmControl.getThetaWrist());
 			g.shoulder.setTargetAngle(ArmControl.getThetaShoulder());
@@ -45,6 +38,12 @@ public class Grasping implements NodeMain, Runnable {
 			new Thread(g.shoulder).start();
 			synchronized(g.wrist) {}
 			synchronized(g.shoulder) {}
+			try {
+				Thread.sleep(100);
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+				return;
+			}
 		}
 	}
 

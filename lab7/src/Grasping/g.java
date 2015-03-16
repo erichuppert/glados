@@ -53,6 +53,7 @@ public class g {
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
 	private static long[] arm    = {0,0,0};
+	private static int userInput = 0.5;
 
 	// Controlling arm servos
 	//
@@ -135,6 +136,14 @@ public class g {
 		synchronized(arm) {
 			return arm.clone();
 		}
+	}
+
+	public static void setUser(org.ros.message.std_msgs.Integer m) {
+		userInput = m.data;
+	}
+
+	public static int getUser() {
+		return userInput;
 	}
 
 	/**
