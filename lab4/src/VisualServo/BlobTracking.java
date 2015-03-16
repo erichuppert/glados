@@ -90,7 +90,8 @@ public class BlobTracking {
 	stepTiming(); // monitors the frame rate
 	//
 	// Begin Student Code
-	// Histogram.getHistogram(src,dest,true);
+	Image tempIm = new Image(src.getWidth(), src.getHeight());
+	Histogram.getHistogram(src,tempIm,true);
 	int middle = src.getPixel(src.getWidth()/2, src.getHeight()/2);
 	int r = (int) Image.pixelRed(middle) & 0xFF;
 	int g = (int) Image.pixelGreen(middle) & 0xFF;
@@ -135,7 +136,7 @@ public class BlobTracking {
 	double brightnessThreshold = 0.15;
 	System.out.printf("HELLO\n");
 	//saturateBallPixels(src, dest, saturationThreshold, brightnessThreshold);
-	blobPresent(src, dest, saturationThreshold, brightnessThreshold, 50);
+	blobPresent(tempIm, dest, saturationThreshold, brightnessThreshold, 50);
 	// End Student Code
     }
 	
