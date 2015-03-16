@@ -4,6 +4,8 @@ import org.ros.namespace.GraphName;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
+import java.util.Scanner;
+
 public class Grasping implements NodeMain, Runnable {
 	@Override
 	public void onStart(Node node) {
@@ -19,6 +21,29 @@ public class Grasping implements NodeMain, Runnable {
 		} catch(InterruptedException e) {
 			return;
 		}
+
+		inputHeights();
+	}
+
+	public void inputHeights() {
+		Scanner heightInput = new Scanner(System.in);
+		int height;
+		g.gripper.setTargetAngle(0);
+		new Thread(g.gripper).start();
+		while(true) {
+			System.out.print("Enter desired gripper height: ");
+			height = heightInput.nextInt();
+			ArmControl.setParams(height);
+			g.wrist.setTargetAngle(ArmControl.getThetaWrist());
+			g.shoulder.setTargetAngle(ArmControl.getThetaShoulder());
+			new Thread(g.wrist).start();
+			new Thread(g.shoulder).start();
+			synchronized(g.wrist) {}
+			synchronized(g.shoulder) {}
+		}
+	}
+
+	public void fullRangeMotion() {
 		double shoulder = -Math.PI/4;
 		double wrist = 0;
 		double gripper = 1;
