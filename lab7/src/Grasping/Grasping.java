@@ -11,6 +11,7 @@ public class Grasping implements NodeMain, Runnable {
 	public void onStart(Node node) {
 		new Subscribers(node);
 		new Publishers(node);
+		new ArmControl();
 		new Thread(this).start();
 	}
 
@@ -26,19 +27,20 @@ public class Grasping implements NodeMain, Runnable {
 		inputHeights();
 	}
 
+	public void armGymnastics() {
+		
+	}
+
 	public void inputHeights() {
-		g.gripper.setTargetAngle(0.9);
-		new Thread(g.gripper).start();
+		g.ac.setGripperStatus(Gripper.CLOSED);
 		while(true) {
 			double height = g.getUser();
-			ArmControl.setParams(height);
-			System.out.println(ArmControl.getThetaShoulder());
-			g.wrist.setTargetAngle(ArmControl.getThetaWrist());
-			g.shoulder.setTargetAngle(ArmControl.getThetaShoulder());
-			new Thread(g.wrist).start();
-			new Thread(g.shoulder).start();
-			synchronized(g.wrist) {}
-			synchronized(g.shoulder) {}
+			synchronized(g.armController) {
+				g.ac.setParams(height);
+				new Thread(g.ac).start();
+				g.ac.wait();
+			}
+
 			try {
 				Thread.sleep(100);
 			} catch(InterruptedException e) {
@@ -57,29 +59,25 @@ public class Grasping implements NodeMain, Runnable {
 		int gripperSign = -1;
 
 		while (true) {
-			g.shoulder.setTargetAngle(shoulder);
-			g.wrist.setTargetAngle(wrist);
-			g.gripper.setTargetAngle(gripper);
-			new Thread(g.shoulder).start();
-			new Thread(g.wrist).start();
-			new Thread(g.gripper).start();
+			g.ac.shoulder.setTargetAngle(shoulder);
+			g.ac.wrist.setTargetAngle(wrist);
+			g.ac.gripper.setTargetAngle(gripper);
 
-			try{
-				Thread.sleep(50);
-			} catch(InterruptedException e) {
-				return;
+			synchronized(g.ac.shoulder) {
+				new Thread(g.ac.shoulder).start();
+				new Thread(g.ac.wrist).start();
+				new Thread(g.ac.gripper).start();
+				g.ac.shoulder.wait();
 			}
-
-			synchronized(g.wrist) {}
-			synchronized(g.gripper) {}
-			synchronized(g.shoulder) {}
+			synchronized(g.ac.wrist) {}
+			synchronized(g.ac.gripper) {}
 
 			shoulder = shoulder+0.3*shoulderSign;
 			wrist = wrist+0.3*wristSign;
 			gripper = gripper+0.1*gripperSign;
 
-			shoulderSign = Math.abs(shoulder)>Math.PI/4?-shoulderSign:shoulderSign;
-			wristSign = Math.abs(wrist)>Math.PI/4?-wristSign:wristSign;
+			shoulderSign = Math.abs(shoulder)>Math.PI/3?-shoulderSign:shoulderSign;
+			wristSign = Math.abs(wrist)>Math.PI/3?-wristSign:wristSign;
 			gripperSign = gripper<0.2?1:gripper>0.8?-1:gripperSign;
 		}
 	}
