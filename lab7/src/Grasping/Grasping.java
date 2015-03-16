@@ -50,6 +50,11 @@ public class Grasping implements NodeMain, Runnable {
 
 	public void inputHeights() throws InterruptedException {
 		g.ac.setGripperStatus(g.OPEN);
+		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+		Thread.sleep(2000);
+		System.out.println("HERE");
+		g.ac.setGripperStatus(g.CLOSED);
+		System.out.println("HERE2");
 		while(true) {
 			double height = g.getUser();
 			synchronized(g.ac) {
@@ -58,9 +63,6 @@ public class Grasping implements NodeMain, Runnable {
 				g.ac.wait();
 			}
 
-			Thread.sleep(2000);
-			g.ac.setGripperStatus(g.CLOSED);
-			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
 		}
 	}
 
