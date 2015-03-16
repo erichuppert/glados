@@ -25,9 +25,9 @@ public class Grasping implements NodeMain, Runnable {
 		}
 
 		try {
-			fullRangeMotion();
+			//fullRangeMotion();
 			//inputHeights();
-			//armGymnastics();
+			armGymnastics();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
