@@ -28,7 +28,7 @@ public class Grasping implements NodeMain, Runnable {
 	public void inputHeights() {
 		try{
 			System.out.println(System.in.available());
-		} catch(IOException e) {
+		} catch(java.io.IOException e) {
 			e.printStackStrace();
 		}
 		Scanner heightInput = new Scanner(System.in);
