@@ -57,7 +57,7 @@ public class g {
 
 	// Arm control
 	//
-	public ArmControl ac = null; // Arm Controller
+	public static ArmControl ac = null; // Arm Controller
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;

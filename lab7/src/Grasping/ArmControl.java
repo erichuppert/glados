@@ -20,15 +20,15 @@ public class ArmControl implements Runnable {
 	// X Distance [m] between Robot Origin, and Shoulder Pivot
 	private static final double shoulderOffset = 0.1;
 	// Distance [m] between Shoulder Pivot, and Wrist Pivot
-	private static final double shoulder = 0.244;
+	private static final double shoulderLength = 0.244;
 	// Z Distance (height) [m] between Robot Origin, and Shoulder Pivot
 	private static final double shoulderHeight = 0.26;
 	// Distance [m] between Wrist Pivot, and Gripper Pivot
-	private static final double wrist = 0.065;
+	private static final double wristLength = 0.065;
 
 	// Minimum, and maximum Z positions that we can set
-	private static final double minHeight = shoulderHeight-shoulder;
-	private static final double maxHeight = shoulderHeight+shoulder-0.005;
+	private static final double minHeight = shoulderHeight-shoulderLength;
+	private static final double maxHeight = shoulderHeight+shoulderLength-0.005;
 
 	// Gripper control
 	//
@@ -64,9 +64,9 @@ public class ArmControl implements Runnable {
 	public void setParams(double height) {
 		height = max(minHeight,min(maxHeight,height));
 		double delta = height-shoulderHeight;
-		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
+		thetaShoulder = atan2(delta, sqrt(shoulderLength * shoulderLength - delta * delta));
 		thetaWrist = -thetaShoulder;
-		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
+		deltaX = shoulderOffset + shoulderLength*cos(thetaShoulder) + wristLength;
 	}
 
 	/**
