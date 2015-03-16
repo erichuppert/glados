@@ -25,25 +25,27 @@ public class Grasping implements NodeMain, Runnable {
 		}
 
 		try {
-			//fullRangeMotion();
+			fullRangeMotion();
 			//inputHeights();
-			armGymnastics();
+			//armGymnastics();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void armGymnastics() throws InterruptedException {
-		g.ac.setGripperStatus(g.OPEN);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-		g.ac.setGripperStatus(g.CLOSED);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-		g.ac.setParams(0.5);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-		g.ac.wrist.setTargetAngle(-0.5);
-		synchronized(g.ac.wrist) { new Thread(g.ac.wrist).start(); g.ac.wrist.wait(); }
-		g.ac.setParams(0);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+		while (true) {
+			g.ac.setGripperStatus(g.OPEN);
+			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+			g.ac.setGripperStatus(g.CLOSED);
+			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+			g.ac.setParams(0.5);
+			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+			g.ac.wrist.setTargetAngle(-0.5);
+			synchronized(g.ac.wrist) { new Thread(g.ac.wrist).start(); g.ac.wrist.wait(); }
+			g.ac.setParams(0);
+			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+		}
 	}
 
 	public void inputHeights() throws InterruptedException {
