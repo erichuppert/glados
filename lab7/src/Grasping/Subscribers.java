@@ -59,6 +59,6 @@ public class Subscribers {
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
 		//cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
 		armSub.addMessageListener(new Listener<ArmMsg>(ListenerType.ARM));
-		userSub.addMessageListener(new Listener<org.ros.message.std_msgs.Integer>(ListenerType.USER));
+		userSub.addMessageListener(new Listener<org.ros.message.std_msgs.Float64>(ListenerType.USER));
 	}
 }
