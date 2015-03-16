@@ -15,7 +15,7 @@ public class Subscribers {
 	private Subscriber<OdometryMsg>							odoSub;			// Odometry
 	private Subscriber<org.ros.message.sensor_msgs.Image>	cameraSub;		// Camera
 	private Subscriber<ArmMsg>                              armSub;         // Arm
-	private Subscriber<org.ros.message.std_msgs.Double>     userSub;        // User
+	private Subscriber<org.ros.message.std_msgs.Float64>    userSub;        // User
 
 	private enum ListenerType {
 		SONAR,BUMP,ODO,CAMERA,ARM,USER
@@ -34,7 +34,7 @@ public class Subscribers {
 			case ODO: g.setPose((OdometryMsg)m); break;
 			case CAMERA: g.setCamera((org.ros.message.sensor_msgs.Image)m); break;
 			case ARM: g.setArm((ArmMsg)m); break;
-			case USER: g.setUser((org.ros.message.std_msgs.Double)m); break;
+			case USER: g.setUser((org.ros.message.std_msgs.Float64)m); break;
 			default: g.assertTrue("Invalid Listener Type", false);
 			}
 		}

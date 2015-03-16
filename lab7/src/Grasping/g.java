@@ -138,7 +138,7 @@ public class g {
 		}
 	}
 
-	public static void setUser(org.ros.message.std_msgs.Double m) {
+	public static void setUser(org.ros.message.std_msgs.Float64 m) {
 		userInput = m.data;
 	}
 
