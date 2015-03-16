@@ -33,17 +33,9 @@ public class ArmControl implements Runnable {
 	// Gripper control
 	//
 	private double alphaGripper = 0;
-	public enum Gripper {
-		OPEN,CLOSED,MIDDLE
-	}
 
-	public void setGripperStatus(Gripper status) {
-		switch(status) {
-		case OPEN: alphaGripper = 0.05; break;
-		case CLOSED: alphaGripper = 0.95; break;
-		case MIDDLE: alphaGripper = 0.5; break;
-		default: g.assertTrue("INVALID GRIPPER STATUS", false);
-		}
+	public void setGripperStatus(double alpha) {
+		alphaGripper = alpha;
 	}
 
 	public ArmControl() {

@@ -28,14 +28,13 @@ public class Grasping implements NodeMain, Runnable {
 	}
 
 	public void armGymnastics() {
-		
 	}
 
 	public void inputHeights() {
-		g.ac.setGripperStatus(Gripper.CLOSED);
+		g.ac.setGripperStatus(g.CLOSED);
 		while(true) {
 			double height = g.getUser();
-			synchronized(g.armController) {
+			synchronized(g.ac) {
 				g.ac.setParams(height);
 				new Thread(g.ac).start();
 				g.ac.wait();

@@ -24,6 +24,13 @@ public class g {
 	public static final int WRIST    = 1;
 
 	/**
+	 * Gripper states
+	 */
+	public static final double CLOSED = 0.95;
+	public static final double OPEN   = 0.05;
+	public static final double MIDDLE = 0.5;
+
+	/**
 	 * Publishers to send commands to the robot.
 	 * Control:
 	 * - Motor velocities
