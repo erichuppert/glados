@@ -53,7 +53,7 @@ public class g {
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
 	private static long[] arm    = {0,0,0};
-	private static double userInput = 0.5;
+	private static double userInput = 0.2;
 
 	// Controlling arm servos
 	//
@@ -139,6 +139,7 @@ public class g {
 	}
 
 	public static void setUser(org.ros.message.std_msgs.Float64 m) {
+		System.out.printf("Got data: %.2f\n", m.data);
 		userInput = m.data;
 	}
 
