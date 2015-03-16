@@ -17,8 +17,8 @@ public class ArmControl {
 	private static double shoulder = 0.244; // Linkage distance [m] between Shoulder Pivot and Wrist Pivot
 	private static double shoulderHeight = 0.26; // Height [m] of the shoulder pivot
 	private static double wrist = 0.065; // Linkage distance [m] between Wrist Pivot and Gripper Pivot
-	private static final double min_height = shoulderHeight-shoulder;
-	private static final double max_height = shoulderHeight+shoulder-0.05; // Wrist limits cause the -0.05
+	private static final double minHeight = shoulderHeight-shoulder;
+	private static final double maxHeight = shoulderHeight+shoulder-0.05; // Wrist limits cause the -0.05
 
 	public static double getThetaShoulder(){
 		return thetaShoulder;
@@ -40,6 +40,7 @@ public class ArmControl {
 								  ((deltaX*deltaX+deltaZ*deltaZ-shoulder*shoulder-wrist*wrist)/(2*shoulder*wrist)));
 		thetaShoulder = atan2(deltaZ, deltaZ) - atan2(wrist*sin(thetaWrist), shoulder + wrist*cos(thetaWrist));
 		*/
+		deltaZ = max(minHeight,min(maxHeight,deltaZ));
 		double delta = deltaZ-shoulderHeight;
 		if(Math.abs(delta) > shoulder) {
 			delta = g.sign(delta)*shoulder;
