@@ -42,5 +42,6 @@ public class ArmControl {
 		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
 		thetaWrist = -thetaShoulder;
 		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
+		System.out.println(thetaShoulder);
 	}
 }
