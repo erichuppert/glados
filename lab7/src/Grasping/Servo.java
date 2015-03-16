@@ -22,7 +22,7 @@ public class Servo implements Runnable {
 		alpha = ((double)(PWM2-PWM1))/(angle2-angle1);
 		beta = (double)PWM1-alpha*angle1;
 		maxSpeed = _maxSpeed;
-		maxPWMDelta = (int)Math.abs(angleToPWM(maxSpeed)*0.1); // Can move for 2 seconds continuously.
+		maxPWMDelta = (int)Math.abs(angleToPWM(maxSpeed)*2.0 - angleToPWM(0)); // Can move for 2 seconds continuously.
 		outIndex = _outIndex;
 	}
 
@@ -60,7 +60,7 @@ public class Servo implements Runnable {
 			long nextPWM = Math.abs(targetPWM-currentPWM) > maxPWMDelta?
 				(currentPWM+sign*maxPWMDelta):targetPWM;
 
-			double deltaAngle = PWMToAngle(nextPWM-currentPWM);
+			double deltaAngle = Math.abs(PWMToAngle(nextPWM) - PWMToAngle(currentPWM));
 			double T = Math.abs(deltaAngle/maxSpeed);
 			g.pubs.setArm(outIndex,nextPWM);
 
