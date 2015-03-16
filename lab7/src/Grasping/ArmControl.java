@@ -42,9 +42,6 @@ public class ArmControl {
 		*/
 		deltaZ = max(minHeight,min(maxHeight,deltaZ));
 		double delta = deltaZ-shoulderHeight;
-		if(Math.abs(delta) > shoulder) {
-			delta = g.sign(delta)*shoulder;
-		}
 		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
 		thetaWrist = -thetaShoulder;
 		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
