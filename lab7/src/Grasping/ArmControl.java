@@ -13,8 +13,9 @@ public class ArmControl {
 
 	// Arm lengths
 	//
-	private static final double shoulderOffset = 0.1;	// Distance [m] between Robot Origin and Shoulder Pivot
-	private static final double shoulder = 0.244; 		// Linkage distance [m] between Shoulder Pivot and Wrist Pivot
+	private static final double shoulderOffset = 0.09;	// Distance [m] between Robot Origin and Shoulder Pivot
+	private static final double shoulderHeight = 0.125; // Height [m] of the shoulder.
+	private static final double shoulder = 0.1; 		// Linkage distance [m] between Shoulder Pivot and Wrist Pivot
 	private static final double wrist = 0.065; 		// Linkage distance [m] between Wrist Pivot and Gripper Pivot
 
 	public static double getThetaShoulder(){
@@ -37,7 +38,10 @@ public class ArmControl {
 		thetaShoulder = atan2(deltaZ, deltaZ) - atan2(wrist*sin(thetaWrist), shoulder + wrist*cos(thetaWrist));
 		*/
 
-		thetaShoulder = atan2(deltaZ, sqrt(deltaZ*deltaZ - shoulder*shoulder));
+		// Move it to the shoulder's origin
+		//
+		double delta = deltaZ-shoulderHeight;
+		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
 		thetaWrist = -thetaShoulder;
 		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
 	}
