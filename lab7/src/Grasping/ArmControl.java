@@ -38,7 +38,7 @@ public class ArmControl {
 								  ((deltaX*deltaX+deltaZ*deltaZ-shoulder*shoulder-wrist*wrist)/(2*shoulder*wrist)));
 		thetaShoulder = atan2(deltaZ, deltaZ) - atan2(wrist*sin(thetaWrist), shoulder + wrist*cos(thetaWrist));
 		*/
-		System.err.println("AM I HERE????? ASLDNALKSNDKLASNDLKASNDLKANSKLDNSALDKNASLKDN")
+		System.err.println("AM I HERE????? ASLDNALKSNDKLASNDLKASNDLKANSKLDNSALDKNASLKDN");
 		double delta = deltaZ-shoulderHeight;
 		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
 		thetaWrist = -thetaShoulder;
