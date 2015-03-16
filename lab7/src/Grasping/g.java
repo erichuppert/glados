@@ -53,7 +53,7 @@ public class g {
 	private static double[] sonars = {-1,-1,-1};
 	private static boolean[] bumps = {false,false,false};
 	private static long[] arm    = {0,0,0};
-	private static double userInput = 0.2;
+	private static double userInput = 0.4;
 
 	// Controlling arm servos
 	//
