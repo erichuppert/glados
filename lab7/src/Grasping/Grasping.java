@@ -32,6 +32,7 @@ public class Grasping implements NodeMain, Runnable {
 		while(true) {
 			double height = g.getUser();
 			ArmControl.setParams(height);
+			System.out.println(ArmControl.getThetaShoulder());
 			g.wrist.setTargetAngle(ArmControl.getThetaWrist());
 			g.shoulder.setTargetAngle(ArmControl.getThetaShoulder());
 			new Thread(g.wrist).start();
