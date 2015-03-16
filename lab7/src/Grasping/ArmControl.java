@@ -25,7 +25,7 @@ public class ArmControl {
 		return thetaWrist;
 	}
 
-	public statinc double getDeltaX(){
+	public static double getDeltaX(){
 		return deltaX;
 	}
 
