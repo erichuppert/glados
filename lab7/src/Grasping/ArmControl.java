@@ -74,7 +74,12 @@ public class ArmControl implements Runnable {
 			new Thread(wrist).start();
 			new Thread(gripper).start();
 			new Thread(shoulder).start();
-			shoulder.wait();
+			try {
+				shoulder.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return;
+			}
 		}
 		synchronized(wrist){}
 		synchronized(gripper){}

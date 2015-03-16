@@ -24,13 +24,17 @@ public class Grasping implements NodeMain, Runnable {
 			return;
 		}
 
-		inputHeights();
+		try {
+			inputHeights();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void armGymnastics() {
 	}
 
-	public void inputHeights() {
+	public void inputHeights() throws InterruptedException {
 		g.ac.setGripperStatus(g.CLOSED);
 		while(true) {
 			double height = g.getUser();
@@ -40,16 +44,11 @@ public class Grasping implements NodeMain, Runnable {
 				g.ac.wait();
 			}
 
-			try {
-				Thread.sleep(100);
-			} catch(InterruptedException e) {
-				e.printStackTrace();
-				return;
-			}
+			Thread.sleep(100);
 		}
 	}
 
-	public void fullRangeMotion() {
+	public void fullRangeMotion() throws InterruptedException {
 		double shoulder = -Math.PI/4;
 		double wrist = 0;
 		double gripper = 1;
