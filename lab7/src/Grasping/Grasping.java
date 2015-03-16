@@ -22,7 +22,7 @@ public class Grasping implements NodeMain, Runnable {
 			return;
 		}
 
-		fullRangeMotion();
+		inputHeights();
 	}
 
 	public void inputHeights() {
