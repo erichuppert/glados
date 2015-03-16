@@ -39,6 +39,9 @@ public class ArmControl {
 		thetaShoulder = atan2(deltaZ, deltaZ) - atan2(wrist*sin(thetaWrist), shoulder + wrist*cos(thetaWrist));
 		*/
 		double delta = deltaZ-shoulderHeight;
+		if(Math.abs(delta) > shoulder) {
+			delta = g.sign(delta)*shoulder;
+		}
 		thetaShoulder = atan2(delta, sqrt(shoulder * shoulder - delta * delta));
 		thetaWrist = -thetaShoulder;
 		deltaX = shoulderOffset + shoulder*cos(thetaShoulder) + wrist;
