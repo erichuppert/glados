@@ -27,7 +27,7 @@ public class VisualServo implements Runnable {
     public synchronized void run() {
         // this will be null if there is not a detected centroid in the image
         //
-        double[] centroid = getCentroid(image);
+        double[] centroid = getCentroid();
         if (centroid != null) {
             // use a proportional controller to rotate to the object
             //
@@ -75,7 +75,8 @@ public class VisualServo implements Runnable {
     private static final double saturationThresh = 0.5;
     private static final double brightnessThresh = 0.15;
     private static final int pixelThresh = 50;
-    private static double[] getCentroid(Image image) {
+    
+    private static double[] getCentroid() {
         int pixelCount = 0;
         double[] centroid = {0,0};
         for (int x=0; x < image.getWidth(); x++) {
