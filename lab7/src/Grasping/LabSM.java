@@ -30,7 +30,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 			VisualServo vs = new VisualServo();
 			vs.run();
 		}
-	}
+	};
 
 	private final StateAction<Object> objectWaiting = new StateAction<Object>() {
 			@Override
