@@ -54,7 +54,7 @@ public class WaypointNav implements Runnable {
 					double[] robot = g.getPose();
 					double angleToWP = getAngleError(robot,wp);
 					double dAngle = wp[g.THETA] - robot[g.THETA];
-					dAngle = atan2(sin(dAngle), cost(dAngle));
+					dAngle = atan2(sin(dAngle), cos(dAngle));
 					double distance = getDistanceError(robot,wp);
 
 					if (distance > distanceThreshold) {
