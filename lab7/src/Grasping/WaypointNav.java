@@ -7,6 +7,7 @@ import static java.lang.Math.*;
 public class WaypointNav implements Runnable {
 	private BlockingQueue<double[]> wpQueue = new LinkedBlockingQueue<double[]>();
 	private boolean stop = false;
+	private boolean done = false;
 
 	public WaypointNav() {
 		g.wp = this;
@@ -20,6 +21,10 @@ public class WaypointNav implements Runnable {
 	public void stopRunning() {
 		wpQueue.clear();
 		stop = true;
+	}
+
+	public boolean isDone() {
+		return done;
 	}
 
 	private final int updateFreq = 10; // Hz
@@ -37,6 +42,7 @@ public class WaypointNav implements Runnable {
 			try {
 				synchronized(this) {
 					if (wpQueue.peek() == null) {
+						done = true;
 						this.notifyAll();
 					}
 				}
@@ -46,6 +52,7 @@ public class WaypointNav implements Runnable {
 				e.printStackTrace();
 				return;
 			}
+			done = false;
 
 			synchronized (this) {
 				while (!stop) {
@@ -62,6 +69,10 @@ public class WaypointNav implements Runnable {
 						//
 						int sign = g.sign(cos(angleToWP));
 						tv = Kd*distance*abs(pow(cos(angleToWP), straightness))*sign;
+						if (sign == -1) {
+							angleToWP = angleToWP-PI;
+							angleToWP = atan2(sin(angleToWP),cos(angleToWP));
+						}
 						rv = Ka*angleToWP;
 					} else if (abs(dAngle) > angleThreshold) {
 						// We're at the right location, but don't have the right angle.

@@ -56,10 +56,10 @@ public class g {
 
 	// Safe-ish first values
 	//
-	private static double[] pose   = {0,0,0};
-	private static double[] sonars = {-1,-1,-1};
-	private static boolean[] bumps = {false,false,false};
-	private static long[] arm    = {0,0,0};
+	private static double[] pose    = {0,0,0};
+	private static double[] sonars  = {-1,-1,-1};
+	private static boolean[] bumps  = {false,false,false};
+	private static long[] arm       = {0,0,0};
 	private static double userInput = 0.3;
 
 	// Arm control

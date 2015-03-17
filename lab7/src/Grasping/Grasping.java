@@ -12,6 +12,7 @@ public class Grasping implements NodeMain, Runnable {
 		new Subscribers(node);
 		new Publishers(node);
 		new ArmControl();
+		new WaypointNav();
 		new Thread(this).start();
 	}
 
@@ -26,8 +27,8 @@ public class Grasping implements NodeMain, Runnable {
 
 		try {
 			//fullRangeMotion();
-			inputHeights();
-			//armGymnastics();
+			//inputHeights();
+			armGymnastics();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -39,11 +40,11 @@ public class Grasping implements NodeMain, Runnable {
 			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
 			g.ac.setGripperStatus(g.CLOSED);
 			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-			g.ac.setParams(0.5);
+			g.ac.setHeight(0.5);
 			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
 			g.ac.wrist.setTargetAngle(-0.5);
 			synchronized(g.ac.wrist) { new Thread(g.ac.wrist).start(); g.ac.wrist.wait(); }
-			g.ac.setParams(0);
+			g.ac.setHeight(0);
 			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
 		}
 	}
@@ -57,7 +58,7 @@ public class Grasping implements NodeMain, Runnable {
 		while(true) {
 			double height = g.getUser();
 			synchronized(g.ac) {
-				g.ac.setParams(height);
+				g.ac.setHeight(height);
 				new Thread(g.ac).start();
 				g.ac.wait();
 			}

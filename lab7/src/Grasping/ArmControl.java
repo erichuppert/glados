@@ -53,7 +53,7 @@ public class ArmControl implements Runnable {
 	 *
 	 * @param height height we want the ref point to be from the ground
 	 */
-	public void setParams(double height) {
+	public void setHeight(double height) {
 		height = max(minHeight,min(maxHeight,height));
 		double delta = height-shoulderHeight;
 		thetaShoulder = atan2(delta, sqrt(shoulderLength * shoulderLength - delta * delta));
