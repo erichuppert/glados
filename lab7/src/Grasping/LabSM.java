@@ -26,7 +26,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> objectWaiting = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				if (g.getBumps[g.GRIPPER]) {
+				if (g.getBumps()[g.GRIPPER]) {
 					g.pubs.setState(OBJECT_DETECTED);
 					return OBJECT_DETECTED;
 				}
@@ -50,7 +50,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> movingTarget = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				if (!g.getBumps[g.GRIPPER]) {
+				if (!g.getBumps()[g.GRIPPER]) {
 					g.wp.stopRunning();
 					double[] next = g.getPose();
 					next[g.X] += cos(next[g.THETA]+PI)*backDistance;
