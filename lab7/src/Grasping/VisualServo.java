@@ -1,5 +1,3 @@
-package VisualServo;
-
 import java.awt.Color;
 import java.util.HashMap;
 
@@ -69,7 +67,7 @@ public class VisualServo implements Runnable {
     private static final double saturationThresh;
     private static final double brightnessThresh;
     private static final int pixThresh;
-    private static voide getCentroid(Image image) {
+    private static double[] getCentroid(Image image) {
         int pixelCount = 0;
         float[] centroid = {0,0};
         for (int x=0; x < im.getWidth(); x++) {
