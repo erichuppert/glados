@@ -20,7 +20,7 @@ public class VisualServo implements Runnable {
         image = _image;
     }
 
-    private static final double ROTO_VELO_GAIN = 4.0;
+    private static final double ROTO_VELO_GAIN = 1.0;
     private static final double EPSILON = 0.002;
 
     @Override
@@ -34,7 +34,7 @@ public class VisualServo implements Runnable {
             double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
             System.err.println("Alignment error is " + alignmentError);
             if (Math.abs(alignmentError) > EPSILON) {
-                double rv = ROTO_VELO_GAIN * alignmentError;
+                double rv = -1 * ROTO_VELO_GAIN * alignmentError;
                 System.err.println("Setting rv to " + rv);
                 g.pubs.setMotorVelocities(0, rv);
             } else {
