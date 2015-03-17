@@ -43,6 +43,7 @@ public class VisualServo implements Runnable {
                 this.notifyAll();
             }
         } else {
+            g.pubs.setMotorVelocities(0, 0);
             System.err.println("No blob in view");
         }
     }
