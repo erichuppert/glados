@@ -132,6 +132,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 		while (true) {
 			long initial_time = System.currentTimeMillis();
 			step(null);
+                        System.err.printf("HERE!");
 			long duration = System.currentTimeMillis() - initial_time;
 			try {
 				Thread.sleep(max(0,((long)(1000.0/FREQ)) - duration));
