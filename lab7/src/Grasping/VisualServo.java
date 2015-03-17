@@ -14,18 +14,24 @@ import java.lang.Math;
 
 public class VisualServo implements Runnable {
 
+    private Image image;
+    
+    public VisualServo(Image _image) {
+        image = _image;
+    }
+
     private static final double ROTO_VELO_GAIN = 0.4;
     private static final double EPSILON = 0.02;
 
     @Override
-    public synchronized void run(Image image) {
+    public synchronized void run() {
         // this will be null if there is not a detected centroid in the image
         //
         double[] centroid = getCentroid(image);
         if (centroid != null) {
             // use a proportional controller to rotate to the object
             //
-            double alignmentError = (image.getWidth() - centroid[g.x]) / im.width();
+            double alignmentError = (image.getWidth() - centroid[g.X]) / im.width();
             if (Math.abs(alignmentError) > EPSILON) {
                 double rv = ROTO_VELO_GAIN * alignmentError;
                 g.pubs.setMotorVelocity(0, rv);
@@ -72,9 +78,9 @@ public class VisualServo implements Runnable {
     private static double[] getCentroid(Image image) {
         int pixelCount = 0;
         float[] centroid = {0,0};
-        for (int x=0; x < im.getWidth(); x++) {
+        for (int x=0; x < image.getWidth(); x++) {
             for (int y=0; y < im.getHeight(); y++) {
-                int pix = im.getPixel(x,y);
+                int pix = image.getPixel(x,y);
                 int r = (int)Image.pixelRed(pix) & 0xFF;
                 int g = (int)Image.pixelGreen(pix) & 0xFF;
                 int b = (int)Image.pixelBlue(pix) & 0xFF;

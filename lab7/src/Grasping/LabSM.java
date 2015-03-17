@@ -27,7 +27,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> seekingObject = new StateAction<Object>() {
 		@Override
 		public String action(Object _) {
-			VisualServo vs = new VisualServo();
+			VisualServo vs = new VisualServo(g.getCamera());
 			vs.run();
 		}
 	};
