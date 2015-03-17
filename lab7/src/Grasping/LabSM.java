@@ -73,11 +73,9 @@ public class LabSM extends FSM<Object> implements Runnable {
 					double[] next = g.getPose();
 					next[g.X] += cos(next[g.THETA])*(backDistance+0.1);
 					next[g.Y] += sin(next[g.THETA])*(backDistance+0.1);
-					try {
-						g.ac.setHeight(0);
-						g.ac.setGripperStatus(g.OPEN);
-						g.ac.run();
-					}
+					g.ac.setHeight(0);
+					g.ac.setGripperStatus(g.OPEN);
+					g.ac.run();
 					g.pubs.setState(OBJECT_WAITING);
 					return OBJECT_WAITING;
 				}
