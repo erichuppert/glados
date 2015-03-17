@@ -31,10 +31,10 @@ public class VisualServo implements Runnable {
         if (centroid != null) {
             // use a proportional controller to rotate to the object
             //
-            double alignmentError = (image.getWidth() - centroid[g.X]) / im.width();
+            double alignmentError = (image.getWidth() - centroid[g.X]) / image.width();
             if (Math.abs(alignmentError) > EPSILON) {
                 double rv = ROTO_VELO_GAIN * alignmentError;
-                g.pubs.setMotorVelocity(0, rv);
+                g.pubs.setMotorVelocities(0, rv);
             } else {
                 // if we are aligned, then consider ourselves done with aligning
                 //
@@ -72,14 +72,14 @@ public class VisualServo implements Runnable {
         }
     }
 
-    private static final double saturationThresh;
-    private static final double brightnessThresh;
-    private static final int pixThresh;
+    private static final double saturationThresh 0.5;
+    private static final double brightnessThresh = 0.15;
+    private static final int pixThresh = 50;
     private static double[] getCentroid(Image image) {
         int pixelCount = 0;
-        float[] centroid = {0,0};
+        double[] centroid = {0,0};
         for (int x=0; x < image.getWidth(); x++) {
-            for (int y=0; y < im.getHeight(); y++) {
+            for (int y=0; y < image.getHeight(); y++) {
                 int pix = image.getPixel(x,y);
                 int r = (int)Image.pixelRed(pix) & 0xFF;
                 int g = (int)Image.pixelGreen(pix) & 0xFF;
