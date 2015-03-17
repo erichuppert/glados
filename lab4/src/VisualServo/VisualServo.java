@@ -28,7 +28,7 @@ public class VisualServo implements NodeMain, Runnable {
 	private BlobTracking blobTrack = null;
 
 
-        //private VisionGUI gui;
+        private VisionGUI gui;
 	private ArrayBlockingQueue<byte[]> visionImage = new ArrayBlockingQueue<byte[]>(
 			1);
 
@@ -98,7 +98,7 @@ public class VisualServo implements NodeMain, Runnable {
 	@Override
 	public void onStart(Node node) {
 	    blobTrack = new BlobTracking(width, height, node);
-	    //gui.onStart(node);
+	    gui.onStart(node);
 
 		// Begin Student Code
 
