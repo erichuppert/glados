@@ -16,7 +16,8 @@ public class VisualServo implements Runnable {
 
     private static final double ROTO_VELO_GAIN = 0.4;
     private static final double EPSILON = 0.02;
-    
+
+    @Override
     public synchronized void run(Image image) {
         // this will be null if there is not a detected centroid in the image
         //
