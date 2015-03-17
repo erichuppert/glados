@@ -187,7 +187,7 @@ public class BlobTracking {
 	double rv = 0;
 	centroid[0] /= pixelCount;
 	centroid[1] /= pixelCount;
-        System.err.printf("%d blob pixels found\n");
+        System.err.printf("%d blob pixels found\n", pixelCount);
 	if (pixelCount > pixThresh) {
 	    float area = pixelCount;
 	    // int diameter = (int)((double) 2.0*Math.sqrt(area/Math.PI));
