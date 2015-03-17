@@ -2,7 +2,7 @@ package Grasping;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.lang.Math.*
+import java.lang.Math.*;
 
 public class WaypointNav implements Runnable {
 	private BlockingQueue<double[]> wpQueue = new LinkedBlockingQueue<double[]>();
