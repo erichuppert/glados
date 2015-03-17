@@ -21,7 +21,7 @@ public class VisualServo implements Runnable {
     }
 
     private static final double ROTO_VELO_GAIN = 4.0;
-    private static final double EPSILON = 0.02;
+    private static final double EPSILON = 0.002;
 
     @Override
     public synchronized void run() {
