@@ -96,47 +96,12 @@ public class BlobTracking {
 	int r = (int) Image.pixelRed(middle) & 0xFF;
 	int g = (int) Image.pixelGreen(middle) & 0xFF;
 	int b = (int) Image.pixelBlue(middle) & 0xFF;
-	float[] hsb = Color.RGBtoHSB(r,g,b, null);
-	//System.out.printf("Red: %d\tGre: %d\tBlu: %d\tHue: %.2f\tSat: %.2f\n", r,g,b, hsb[0],hsb[1],hsb[2]);
-	//		int tempSatThresh = 0;
-	//		double thresh = 0;
-	//		int tempBrightThresh = 0;
-	//		double brightThresh = 0;
-	//		int pixThresh = 0;
-	//		int ch;
-	//		System.out.println("========");
-	//		try {
-	//			while ((ch = System.in.read ()) != '\n')
-	//				if (ch >= '0' && ch <= '9')
-	//				{
-	//					tempSatThresh *= 10;
-	//					tempSatThresh += ch - '0';
-	//				}
-	//				else
-	//					break;
-	//			thresh = (double) tempSatThresh / 100.0;
-	//			System.out.println("Saturation threshold is now " + thresh);
-	//			while ((ch = System.in.read ()) != '\n')
-	//				if (ch >= '0' && ch <= '9')
-	//				{
-	//					tempBrightThresh *= 10;
-	//					tempBrightThresh += ch - '0';
-	//				}
-	//				else
-	//					break;
-	//			brightThresh = (double) tempBrightThresh/100.0;
-	//			System.out.println("Bright threshold is now " + brightThresh);
-	//			System.out.println("Blob presence: " + blobPresent(src, thresh, brightThresh, pixThresh));
-	//			saturateBallPixels(src, dest, thresh, brightThresh);
-	//		} catch (Exception e) {
-	//			
-	//		}
-	//		int pixelThreshold = 900; 
+        double[] hsb_vals = {0,0,0};
 	double saturationThreshold = 0.5;
 	double brightnessThreshold = 0.15;
 	System.out.printf("HELLO\n");
-	//saturateBallPixels(src, dest, saturationThreshold, brightnessThreshold);
-	blobPresent(tempIm, dest, saturationThreshold, brightnessThreshold, 50);
+	saturateBallPixels(src, dest, saturationThreshold, brightnessThreshold);
+	// blobPresent(tempIm, dest, saturationThreshold, brightnessThreshold, 50);
 	// End Student Code
     }
 	
@@ -223,7 +188,6 @@ public class BlobTracking {
 	double rv = 0;
 	centroid[0] /= pixelCount;
 	centroid[1] /= pixelCount;
-        System.err.printf("%d blob pixels found\n");
 	if (pixelCount > pixThresh) {
 	    float area = pixelCount;
 	    // int diameter = (int)((double) 2.0*Math.sqrt(area/Math.PI));
