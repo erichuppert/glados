@@ -13,15 +13,15 @@ public class LabSM extends FSM<Object> implements Runnable {
 
 	// States for the grasping/pick up/move/drop state machine
 	//
-	private final String OBJECT_WAITING = "Waiting for object to touch the gripper";
-	private final String OBJECT_DETECTED = "Detected an object, closing the grip, and lifting it.";
-	private final String MOVING_TARGET = "Moving to target destination.";
-	private final String OBJECT_DROPPED = "Object dropped, moving back " + backDistance + " [m], and then moving forward.";
-	private final String TARGET_REACHED = "Target reached, putting object on the ground.";
-	private final String MOVING_BACK = "Object on the ground, moving back to original position.";
-	private final String DONE = "Back to original position, done.";
+	private static final String OBJECT_WAITING = "Waiting for object to touch the gripper";
+	private static final String OBJECT_DETECTED = "Detected an object, closing the grip, and lifting it.";
+	private static final String MOVING_TARGET = "Moving to target destination.";
+	private static final String OBJECT_DROPPED = "Object dropped, moving back " + backDistance + " [m], and then moving forward.";
+	private static final String TARGET_REACHED = "Target reached, putting object on the ground.";
+	private static final String MOVING_BACK = "Object on the ground, moving back to original position.";
+	private static final String DONE = "Back to original position, done.";
 
-	private final String INITIAL = OBJECT_WAITING;
+	private static final String INITIAL = OBJECT_WAITING;
 
 	private final StateAction<Object> objectWaiting = new StateAction<Object>() {
 			@Override
