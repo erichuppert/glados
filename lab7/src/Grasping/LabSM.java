@@ -29,7 +29,6 @@ public class LabSM extends FSM<Object> implements Runnable {
 		public String action(Object _) {
 			VisualServo vs = new VisualServo(g.getCamera());
 			vs.run();
-			System.err.printf("\n\n\nABOUT TO RETURN!!!! \n\n");
 			return null;
 		}
 	};
