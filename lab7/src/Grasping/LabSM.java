@@ -2,7 +2,7 @@ package Grasping;
 
 import static java.lang.Math.*;
 
-public class LabSM extends FSM<Object> {
+public class LabSM extends FSM<Object> implements Runnable {
 
 	// State machine variables.
 	//
@@ -125,7 +125,7 @@ public class LabSM extends FSM<Object> {
 		super(INITIAL);
 	}
 
-	public run() {
+	public void run() {
 		int T;
 		while (true) {
 			long initial_time = System.currentTimeMillis();
