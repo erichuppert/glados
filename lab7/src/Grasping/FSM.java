@@ -55,7 +55,7 @@ public class FSM<InputType> {
 	 * @param newState: new state string
 	 */
 	public void changeCurrentState(String newState) {
-step		g.assertTrue(stateToAction.containsKey(newState));
+		g.assertTrue(stateToAction.containsKey(newState));
 		state = newState;
 	}
 
