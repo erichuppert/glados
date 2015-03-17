@@ -78,7 +78,6 @@ public class FSM<InputType> {
 		// Execute the method for the current state
 		//
 		g.assertTrue(stateToAction.containsKey(state));
-                System.err.printf("Current state is %s\n", state);
 		String newState = stateToAction.get(state).action(input);
 		state = (newState==null)?state:newState;
 	}
