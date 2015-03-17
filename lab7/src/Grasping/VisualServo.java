@@ -75,7 +75,7 @@ public class VisualServo implements Runnable {
 
     private static final double saturationThresh = 0.5;
     private static final double brightnessThresh = 0.15;
-    private static final int pixelThresh = 50;
+    private static final int pixelThresh = 100;
     
     private double[] getCentroid() {
         if (image == null) {
@@ -84,13 +84,6 @@ public class VisualServo implements Runnable {
         }
         int pixelCount = 0;
         double[] centroid = {0,0};
-        // int middle = image.getPixel(image.getWidth()/2, image.getHeight()/2);
-	// int rA = (int) Image.pixelRed(middle) & 0xFF;
-	// int gB = (int) Image.pixelGreen(middle) & 0xFF;
-	// int bB = (int) Image.pixelBlue(middle) & 0xFF;
-        // System.err.println("Red: " + rA);
-        // System.err.println("Gree: " + gB);
-        // System.err.println("Blue: " + bB);
         for (int x=0; x < image.getWidth(); x++) {
             for (int y=0; y < image.getHeight(); y++) {
                 int pix = image.getPixel(x,y);
