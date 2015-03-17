@@ -2,7 +2,7 @@ package Grasping;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.lang.Math.*;
+import static java.lang.Math.*;
 
 public class WaypointNav implements Runnable {
 	private BlockingQueue<double[]> wpQueue = new LinkedBlockingQueue<double[]>();
@@ -42,7 +42,7 @@ public class WaypointNav implements Runnable {
 				}
 				wp = wpQueue.take();
 			} catch(InterruptedException e) {
-				g.setMotorVelocities(0,0);
+				g.pubs.setMotorVelocities(0,0);
 				e.printStackTrace();
 				return;
 			}
@@ -53,7 +53,8 @@ public class WaypointNav implements Runnable {
 					double rv = 0;
 					double[] robot = g.getPose();
 					double angleToWP = getAngleError(robot,wp);
-					double dAngle = atan2(wp[g.THETA] - robot[g.THETA]);
+					double dAngle = wp[g.THETA] - robot[g.THETA];
+					dAngle = atan2(sin(dAngle), cost(dAngle));
 					double distance = getDistanceError(robot,wp);
 
 					if (distance > distanceThreshold) {
