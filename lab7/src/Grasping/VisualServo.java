@@ -20,7 +20,7 @@ public class VisualServo implements Runnable {
         image = _image;
     }
 
-    private static final double ROTO_VELO_GAIN = 1.0;
+    private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
 
     @Override
