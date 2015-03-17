@@ -18,7 +18,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private static final String MOVING_TARGET = "Moving to target destination.";
 	private static final String OBJECT_DROPPED = "Object dropped, moving back " + backDistance + " [m], and then moving forward.";
 	private static final String TARGET_REACHED = "Target reached, putting object on the ground.";
-	private static final String MOVING_BACK = "Object on the ground, moving back to original position.";
+	private static final String MOVING_BACK = "Object on target, moving back to original position.";
 	private static final String DONE = "Back to original position, done.";
 
 	private static final String INITIAL = OBJECT_WAITING;
@@ -37,18 +37,12 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> objectDetected = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				try {
-					g.ac.setGripperStatus(g.MIDDLE);
-					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-					g.ac.setHeight(0.5);
-					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-					g.wp.addWP(targetPose);
-					g.pubs.setState(MOVING_TARGET);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					g.pubs.setMotorVelocities(0,0);
-					return DONE;
-				}
+				g.ac.setGripperStatus(g.MIDDLE);
+				g.ac.run();
+				g.ac.setHeight(0.5);
+				g.ac.run();
+				g.wp.addWP(targetPose);
+				g.pubs.setState(MOVING_TARGET);
 				return MOVING_TARGET;
 			}
 		};
@@ -79,6 +73,11 @@ public class LabSM extends FSM<Object> implements Runnable {
 					double[] next = g.getPose();
 					next[g.X] += cos(next[g.THETA])*(backDistance+0.1);
 					next[g.Y] += sin(next[g.THETA])*(backDistance+0.1);
+					try {
+						g.ac.setHeight(0);
+						g.ac.setGripperStatus(g.OPEN);
+						g.ac.run();
+					}
 					g.pubs.setState(OBJECT_WAITING);
 					return OBJECT_WAITING;
 				}
@@ -89,18 +88,12 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> targetReached = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				try {
-					g.ac.setHeight(0);
-					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-					g.ac.setGripperStatus(g.OPEN);
-					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-					g.ac.setHeight(0.5);
-					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					g.pubs.setMotorVelocities(0,0);
-					return DONE;
-				}
+				g.ac.setHeight(0);
+				g.ac.run();
+				g.ac.setGripperStatus(g.OPEN);
+				g.ac.run();
+				g.ac.setHeight(0.5);
+				g.ac.run();
 				g.wp.addWP(originalPose);
 				g.pubs.setState(MOVING_BACK);
 				return MOVING_BACK;

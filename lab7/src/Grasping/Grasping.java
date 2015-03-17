@@ -35,35 +35,24 @@ public class Grasping implements NodeMain, Runnable {
 		new LabSM().run();
 	}
 
-	public void armGymnastics() throws InterruptedException {
+	public void armGymnastics() {
 		while (true) {
-			g.ac.setGripperStatus(g.OPEN);
-			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-			g.ac.setGripperStatus(g.CLOSED);
-			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-			g.ac.setHeight(0.5);
-			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-			g.ac.wrist.setTargetAngle(-0.5);
-			synchronized(g.ac.wrist) { new Thread(g.ac.wrist).start(); g.ac.wrist.wait(); }
-			g.ac.setHeight(0);
-			synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+			g.ac.setGripperStatus(g.OPEN); g.ac.run();
+			g.ac.setGripperStatus(g.CLOSED); g.ac.run();
+			g.ac.setHeight(0.5); g.ac.run();
+			g.ac.wrist.setTargetAngle(-0.5); g.ac.wrist.run();
+			g.ac.setHeight(0); g.ac.run();
 		}
 	}
 
 	public void inputHeights() throws InterruptedException {
-		g.ac.setGripperStatus(g.OPEN);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+		g.ac.setGripperStatus(g.OPEN); g.ac.run();
 		Thread.sleep(2000);
-		g.ac.setGripperStatus(g.CLOSED);
-		synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+		g.ac.setGripperStatus(g.CLOSED); g.ac.run();
+
 		while(true) {
 			double height = g.getUser();
-			synchronized(g.ac) {
-				g.ac.setHeight(height);
-				new Thread(g.ac).start();
-				g.ac.wait();
-			}
-
+			g.ac.setHeight(height); g.ac.run();
 		}
 	}
 
@@ -80,12 +69,7 @@ public class Grasping implements NodeMain, Runnable {
 			g.ac.wrist.setTargetAngle(wrist);
 			g.ac.gripper.setTargetAngle(gripper);
 
-			synchronized(g.ac.shoulder) {
-				new Thread(g.ac.shoulder).start();
-				new Thread(g.ac.wrist).start();
-				new Thread(g.ac.gripper).start();
-				g.ac.shoulder.wait();
-			}
+			g.ac.shoulder.run();
 			synchronized(g.ac.wrist) {}
 			synchronized(g.ac.gripper) {}
 

@@ -70,17 +70,9 @@ public class ArmControl implements Runnable {
 		shoulder.setTargetAngle(thetaShoulder);
 		wrist.setTargetAngle(thetaWrist);
 		gripper.setTargetAngle(alphaGripper);
-		synchronized(shoulder) {
-			new Thread(wrist).start();
-			new Thread(gripper).start();
-			new Thread(shoulder).start();
-			try {
-				shoulder.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return;
-			}
-		}
+		new Thread(wrist).start();
+		new Thread(gripper).start();
+		shoulder.run();
 		synchronized(wrist){}
 		synchronized(gripper){}
 		this.notifyAll();
