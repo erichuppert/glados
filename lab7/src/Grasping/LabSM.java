@@ -37,12 +37,18 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> objectDetected = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				g.ac.setGripperStatus(g.MIDDLE);
-				synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-				g.ac.setHeight(0.5);
-				synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-				g.wp.addWP(targetPose);
-				g.pubs.setState(MOVING_TARGET);
+				try {
+					g.ac.setGripperStatus(g.MIDDLE);
+					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+					g.ac.setHeight(0.5);
+					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+					g.wp.addWP(targetPose);
+					g.pubs.setState(MOVING_TARGET);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					g.pubs.setMotorVelocities(0,0);
+					return DONE;
+				}
 				return MOVING_TARGET;
 			}
 		};
@@ -83,12 +89,18 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> targetReached = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				g.ac.setHeight(0);
-				synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-				g.ac.setGripperStatus(g.OPEN);
-				synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
-				g.ac.setHeight(0.5);
-				synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+				try {
+					g.ac.setHeight(0);
+					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+					g.ac.setGripperStatus(g.OPEN);
+					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+					g.ac.setHeight(0.5);
+					synchronized(g.ac) { new Thread(g.ac).start(); g.ac.wait(); }
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					g.pubs.setMotorVelocities(0,0);
+					return DONE;
+				}
 				g.wp.addWP(originalPose);
 				g.pubs.setState(MOVING_BACK);
 				return MOVING_BACK;
