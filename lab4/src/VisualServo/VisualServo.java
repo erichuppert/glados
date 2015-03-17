@@ -78,7 +78,7 @@ public class VisualServo implements NodeMain, Runnable {
 			blobTrack.apply(src, dest);
 
 			// update newly formed vision message
-			//gui.setVisionImage(dest.toArray(), width, height);
+			gui.setVisionImage(dest.toArray(), width, height);
 
 			// Begin Student Code
 
