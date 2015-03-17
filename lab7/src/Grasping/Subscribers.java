@@ -47,7 +47,7 @@ public class Subscribers {
 		sonarBackSub = node.newSubscriber("/rss/Sonars/Back", "rss_msgs/SonarMsg");   // back sonar
 		bumpSub = node.newSubscriber("/rss/BumpSensors", "rss_msgs/BumpMsg");         // bumps
 		odoSub = node.newSubscriber("/rss/odometry", "rss_msgs/OdometryMsg");         // odometry
-		//cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
+		cameraSub = node.newSubscriber("/rss/video", "sensor_msgs/Image"); // Video
 		armSub = node.newSubscriber("/rss/ArmStatus", "rss_msgs/ArmMsg"); // Arm
 		userSub = node.newSubscriber("/rss/User", "std_msgs/Float64"); // User
 
