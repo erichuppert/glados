@@ -13,6 +13,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 
 	// States for the grasping/pick up/move/drop state machine
 	//
+	private static final String SEEKING_OBJECT = "Finding and rotating to block";
 	private static final String OBJECT_WAITING = "Waiting for object to touch the gripper";
 	private static final String OBJECT_DETECTED = "Detected an object, closing the grip, and lifting it.";
 	private static final String MOVING_TARGET = "Moving to target destination.";
@@ -21,7 +22,15 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private static final String MOVING_BACK = "Object on target, moving back to original position.";
 	private static final String DONE = "Back to original position, done.";
 
-	private static final String INITIAL = OBJECT_WAITING;
+	private static final String INITIAL = SEEKING_OBJECT;
+
+	private final StateAction<Object> seekingObject = new StateAction<Object>() {
+		@Override
+		public String action(Object _) {
+			VisualServo vs = new VisualServo();
+			vs.run();
+		}
+	}
 
 	private final StateAction<Object> objectWaiting = new StateAction<Object>() {
 			@Override
@@ -119,13 +128,13 @@ public class LabSM extends FSM<Object> implements Runnable {
 
 	public LabSM() {
 		super(INITIAL);
-		addState(OBJECT_WAITING, objectWaiting);
-		addState(OBJECT_DETECTED, objectDetected);
-		addState(MOVING_TARGET, movingTarget);
-		addState(OBJECT_DROPPED, objectDropped);
-		addState(TARGET_REACHED, targetReached);
-		addState(MOVING_BACK, movingBack);
-		addState(DONE, done);
+		// addState(OBJECT_WAITING, objectWaiting);
+		// addState(OBJECT_DETECTED, objectDetected);
+		// addState(MOVING_TARGET, movingTarget);
+		// addState(OBJECT_DROPPED, objectDropped);
+		// addState(TARGET_REACHED, targetReached);
+		// addState(MOVING_BACK, movingBack);
+		// addState(DONE, done);
 	}
 
 	public void run() {
