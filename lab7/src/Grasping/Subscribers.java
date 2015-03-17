@@ -57,7 +57,7 @@ public class Subscribers {
 		sonarBackSub.addMessageListener(new Listener<SonarMsg>(ListenerType.SONAR));
 		bumpSub.addMessageListener(new Listener<BumpMsg>(ListenerType.BUMP));
 		odoSub.addMessageListener(new Listener<OdometryMsg>(ListenerType.ODO));
-		//cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
+		cameraSub.addMessageListener(new Listener<org.ros.message.sensor_msgs.Image>(ListenerType.CAMERA));
 		armSub.addMessageListener(new Listener<ArmMsg>(ListenerType.ARM));
 		userSub.addMessageListener(new Listener<org.ros.message.std_msgs.Float64>(ListenerType.USER));
 	}
