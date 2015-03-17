@@ -8,8 +8,8 @@ public class LabSM extends FSM<Object> implements Runnable {
 	//
 	private double[] originalPose = new double[3];
 	private double[] targetPose = new double[3];
-	private final double forwardDistance = 1.0;
-	private final double backDistance = 0.2;
+	private static final double forwardDistance = 1.0;
+	private static final double backDistance = 0.2;
 
 	// States for the grasping/pick up/move/drop state machine
 	//
