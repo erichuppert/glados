@@ -72,7 +72,7 @@ public class VisualServo implements Runnable {
         }
     }
 
-    private static final double saturationThresh 0.5;
+    private static final double saturationThresh = 0.5;
     private static final double brightnessThresh = 0.15;
     private static final int pixThresh = 50;
     private static double[] getCentroid(Image image) {
