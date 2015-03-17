@@ -17,7 +17,7 @@ public class WaypointNav implements Runnable {
 		wpQueue.offer(wp);
 	}
 
-	public boolean stopRunning() {
+	public void stopRunning() {
 		wpQueue.clear();
 		stop = true;
 	}
