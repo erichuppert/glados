@@ -32,10 +32,10 @@ public class VisualServo implements Runnable {
             // use a proportional controller to rotate to the object
             //
             double alignmentError = (image.getWidth() - centroid[g.X]) / image.getWidth();
-            System.err.printf("Alignment error is %d\n", alignmentError);
+            System.err.println("Alignment error is " + alignmentError);
             if (Math.abs(alignmentError) > EPSILON) {
                 double rv = ROTO_VELO_GAIN * alignmentError;
-                System.err.printf("Setting rv to %d\n", rv);
+                System.err.println("Setting rv to " + rv);
                 g.pubs.setMotorVelocities(0, rv);
             } else {
                 // if we are aligned, then consider ourselves done with aligning
