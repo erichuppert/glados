@@ -41,7 +41,7 @@ public class VisualServo implements Runnable {
                 this.notifyAll();
             }
         } else {
-            System.err.print("No blob in view");
+            System.err.println("No blob in view");
         }
     }
 	
