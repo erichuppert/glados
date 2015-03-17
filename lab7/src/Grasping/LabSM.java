@@ -138,7 +138,6 @@ public class LabSM extends FSM<Object> implements Runnable {
 	}
 
 	public void run() {
-		int T;
 		while (true) {
 			long initial_time = System.currentTimeMillis();
 			step(null);
