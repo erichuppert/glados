@@ -76,7 +76,7 @@ public class VisualServo implements Runnable {
     private static final double brightnessThresh = 0.15;
     private static final int pixelThresh = 50;
     
-    private static double[] getCentroid() {
+    private double[] getCentroid() {
         int pixelCount = 0;
         double[] centroid = {0,0};
         for (int x=0; x < image.getWidth(); x++) {
