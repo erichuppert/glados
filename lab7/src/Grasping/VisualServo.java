@@ -51,7 +51,7 @@ public class VisualServo implements Runnable {
         float hue = hsbvals[0];
         float saturation = hsbvals[1];
         float brightness = hsbvals[2];
-        return saturation > saturationThresh && brightness > brightnessThresh && hue < 0.1;
+        return saturation > saturationThresh && brightness > brightnessThresh && hue < 0.3;
     }
 
 
@@ -83,6 +83,11 @@ public class VisualServo implements Runnable {
         }
         int pixelCount = 0;
         double[] centroid = {0,0};
+        // int middleX = image.getWidth()/2;
+        // int middley = image.getHeight()/2;
+        // float[] hsbvals = {0, 0, 0};
+        // Color.RGBtoHSB(r, g, b, hsbvals);
+        // System.err.printf("H")
         for (int x=0; x < image.getWidth(); x++) {
             for (int y=0; y < image.getHeight(); y++) {
                 int pix = image.getPixel(x,y);
