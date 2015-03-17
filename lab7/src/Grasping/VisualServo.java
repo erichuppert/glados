@@ -88,6 +88,7 @@ public class VisualServo implements Runnable {
 	int r = (int) Image.pixelRed(middle) & 0xFF;
 	int g = (int) Image.pixelGreen(middle) & 0xFF;
 	int b = (int) Image.pixelBlue(middle) & 0xFF;
+        System.err.printf("FOO\n");
         System.err.printf("r: %d   g: %d   b: %d\n",r,g,b);
         for (int x=0; x < image.getWidth(); x++) {
             for (int y=0; y < image.getHeight(); y++) {
