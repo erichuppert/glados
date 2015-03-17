@@ -26,7 +26,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> objectWaiting = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				if (g.bumps[g.GRIPPER]) {
+				if (g.getBumps[g.GRIPPER]) {
 					g.pubs.setState(OBJECT_DETECTED);
 					return OBJECT_DETECTED;
 				}
@@ -50,7 +50,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> movingTarget = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				if (!g.bumps[g.GRIPPER]) {
+				if (!g.getBumps[g.GRIPPER]) {
 					g.wp.stopRunning();
 					double[] next = g.getPose();
 					next[g.X] += cos(next[g.THETA]+PI)*backDistance;
@@ -115,6 +115,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 		};
 
 	public LabSM() {
+		super(INITIAL);
 		addState(OBJECT_WAITING, objectWaiting);
 		addState(OBJECT_DETECTED, objectDetected);
 		addState(MOVING_TARGET, movingTarget);
@@ -122,7 +123,6 @@ public class LabSM extends FSM<Object> implements Runnable {
 		addState(TARGET_REACHED, targetReached);
 		addState(MOVING_BACK, movingBack);
 		addState(DONE, done);
-		super(INITIAL);
 	}
 
 	public void run() {
@@ -135,7 +135,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 				Thread.sleep(max(0,((long)(1000.0/FREQ)) - duration));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				wp.stopRunning();
+				g.wp.stopRunning();
 				g.pubs.setMotorVelocities(0,0);
 			}
 		}
