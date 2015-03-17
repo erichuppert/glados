@@ -64,7 +64,11 @@ public class g {
 
 	// Arm control
 	//
-	public static ArmControl ac = null; // Arm Controller
+	public static ArmControl ac = null;
+
+	// Waypoint Navigator
+	//
+	public static WaypointNav wp = null;
 
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
