@@ -78,6 +78,7 @@ public class VisualServo implements Runnable {
     
     private double[] getCentroid() {
         if (image == null) {
+            System.err.println("The image is null");
             return null;
         }
         int pixelCount = 0;
