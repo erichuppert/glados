@@ -44,7 +44,7 @@ public class VisualServo implements NodeMain, Runnable {
 
 		setInitialParams();
 
-		//gui = new VisionGUI();
+		gui = new VisionGUI();
 	}
 
 	protected void setInitialParams() {
