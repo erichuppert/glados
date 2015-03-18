@@ -95,9 +95,9 @@ public class WaypointNav implements Runnable {
 					return;
 				}
 			}
+			g.pubs.setMotorVelocities(0,0);
+			stop = false;
 		}
-		g.pubs.setMotorVelocities(0,0);
-		stop = false;
 	}
 
 	private double getAngleError(double[] from, double[] to) {
