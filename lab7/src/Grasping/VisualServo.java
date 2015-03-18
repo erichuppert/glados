@@ -16,11 +16,6 @@ public class VisualServo implements Runnable {
 
     private Image image;
     private Image debugImage;
-    
-    public VisualServo(Image _image) {
-        image = _image;
-	debugImage = new Image(image.getWidth(), image.getHeight());
-    }
 
     private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
@@ -28,27 +23,31 @@ public class VisualServo implements Runnable {
 
     @Override
     public synchronized void run() {
-        // this will be null if there is not a detected centroid in the image
-        //
-        double[] centroid = getCentroid();
-	g.pubs.setDebugImage(debugImage);
-        if (centroid != null) {
-            // use a proportional controller to rotate to the object
-            //
-            double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
-            if (Math.abs(alignmentError) > EPSILON) {
-                double rv = -1 * ROTO_VELO_GAIN * alignmentError;
-                g.pubs.setMotorVelocities(0, rv);
-            } else {
-                // if we are aligned, then consider ourselves done with aligning
-                //
-		System.err.printf("Distance to blob is %.2f\n", getDistanceToBlob());
-                this.notifyAll();
-            }
-        } else {
-            g.pubs.setMotorVelocities(0, 0);
-            System.err.println("No blob in view");
-        }
+	while (true) {
+	    image = g.pub.getCamera();
+	    debugImage = new Image(image.getwidth(), image.getHeight());
+	    // this will be null if there is not a detected centroid in the image
+	    //
+	    double[] centroid = getCentroid();
+	    g.pubs.setDebugImage(debugImage);
+	    if (centroid != null) {
+		// use a proportional controller to rotate to the object
+		//
+		double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
+		if (Math.abs(alignmentError) > EPSILON) {
+		    double rv = -1 * ROTO_VELO_GAIN * alignmentError;
+		    g.pubs.setMotorVelocities(0, rv);
+		} else {
+		    // if we are aligned, then consider ourselves done with aligning
+		    //
+		    this.notifyAll();
+		    return;
+		}
+	    } else {
+		g.pubs.setMotorVelocities(0, 0);
+	    }
+	}
+        
     }
 	
     private static boolean blobPixel(int r, int g, int b, double saturationThresh, double brightnessThresh) {
