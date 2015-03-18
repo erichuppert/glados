@@ -74,7 +74,7 @@ class Publishers {
 		}
 	}
 
-	public void setDebugImage(Grasping.Image image) {
+	public void setDebugImage(Image image) {
 		org.ros.message.sensor_msgs.Image pubImage =
 			new org.ros.message.sensor_msgs.Image();
 		pubImage.width = image.getWidth();
