@@ -22,6 +22,7 @@ public class VisualServo implements Runnable {
 
     private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
+    private int pixelCount;
 
     @Override
     public synchronized void run() {
@@ -32,14 +33,13 @@ public class VisualServo implements Runnable {
             // use a proportional controller to rotate to the object
             //
             double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
-            System.err.println("Alignment error is " + alignmentError);
             if (Math.abs(alignmentError) > EPSILON) {
                 double rv = -1 * ROTO_VELO_GAIN * alignmentError;
-                System.err.println("Setting rv to " + rv);
                 g.pubs.setMotorVelocities(0, rv);
             } else {
                 // if we are aligned, then consider ourselves done with aligning
                 //
+		System.err.printf("Distance to blob is %d\n", getDistanceToBlob());
                 this.notifyAll();
             }
         } else {
@@ -56,6 +56,12 @@ public class VisualServo implements Runnable {
         float brightness = hsbvals[2];
         return saturation > saturationThresh && brightness > brightnessThresh;
             //&& hue < 0.3;
+    }
+
+    private double getDistanceToBlob() {
+	double m = 202.602532;
+	double b = -0.202548;
+	return  Math.sqrt(Math.max(0.0,m*1.0/area + b));
     }
 
 
@@ -85,7 +91,7 @@ public class VisualServo implements Runnable {
             System.err.println("The image is null");
             return null;
         }
-        int pixelCount = 0;
+        pixelCount = 0;
         double[] centroid = {0,0};
         for (int x=0; x < image.getWidth(); x++) {
             for (int y=0; y < image.getHeight(); y++) {
