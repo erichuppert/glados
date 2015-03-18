@@ -15,9 +15,11 @@ import java.lang.Math;
 public class VisualServo implements Runnable {
 
     private Image image;
+    private Image debugImage;
     
     public VisualServo(Image _image) {
         image = _image;
+	debugImage = new Image(image.getWidth(), image.getHeight());
     }
 
     private static final double ROTO_VELO_GAIN = 0.3;
@@ -29,6 +31,7 @@ public class VisualServo implements Runnable {
         // this will be null if there is not a detected centroid in the image
         //
         double[] centroid = getCentroid();
+	g.pubs.setDebugImage(debugImage);
         if (centroid != null) {
             // use a proportional controller to rotate to the object
             //
@@ -65,6 +68,7 @@ public class VisualServo implements Runnable {
     }
 
 
+
     private static String getBallColor(int r, int g, int b) {
         float[] hsb = {0, 0, 0};
         Color.RGBtoHSB(r, g, b, hsb);
@@ -80,6 +84,18 @@ public class VisualServo implements Runnable {
         } else {
             return "blue";
         }
+    }
+
+    private static byte[] getSaturatedColor(int r, int g, int b, double threshold) {
+	float[] out;
+	String ballColor = getBallColor(r, g, b);
+	if (ballColor.equals("red")) return new byte[] {(byte) 255,0,0};
+	if (ballColor.equals("orange")) return new byte[]{(byte) 255, (byte) 155, 0};
+	if (ballColor.equals("green")) return new byte[]{0, (byte) 255, 0};
+	if (ballColor.equals("blue")) return new byte[]{0, 0, (byte) 255};
+	if (ballColor.equals("yellow")) return new byte[] {(byte) 255,(byte) 255,0};
+	return new byte[] {(byte) 255, (byte) 255, (byte) 255};
+
     }
 
     private static final double saturationThresh = 0.5;
@@ -100,6 +116,8 @@ public class VisualServo implements Runnable {
                 int g = (int)Image.pixelGreen(pix) & 0xFF;
                 int b = (int)Image.pixelBlue(pix) & 0xFF;
                 if (blobPixel(r,g,b,saturationThresh, brightnessThresh)) {
+		    byte[] sat =  getSaturatedColor(r, g, b);
+		    debugImage.setPixel(x, y, sat[0], sat[1], sat[2]);
                     pixelCount++;
                     centroid[0] += x;
                     centroid[1] += y;

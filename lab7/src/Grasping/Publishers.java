@@ -5,18 +5,21 @@ import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
 import org.ros.message.rss_msgs.OdometryMsg;
 import org.ros.message.rss_msgs.ArmMsg;
+import org.ros.message.sensor_msgs.Image;
 
 class Publishers {
 	private Publisher<org.ros.message.std_msgs.String> statePub;
 	private Publisher<MotionMsg> motionPub;
 	private Publisher<OdometryMsg> odometryPub;
 	private Publisher<ArmMsg> armPub;
+    private Publisher<org.ros.message.sensor_msgs.Image> debugImagePub;
 
 	public Publishers(Node node) {
 		statePub = node.newPublisher("/rss/state","std_msgs/String");
 		motionPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		odometryPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		armPub = node.newPublisher("/command/Arm", "rss_msgs/ArmMsg");
+		debugImagePub = node.newPublisher("/rss/blobVideo", "sensor_msgs/Image");
 		g.pubs = this;
 	}
 
@@ -69,5 +72,17 @@ class Publishers {
 		if (armPub != null) {
 			armPub.publish(msg);
 		}
+	}
+
+	public void setDebugImage(Image image) {
+		org.ros.message.sensor_msgs.Image pubImage =
+			new org.ros.message.sensor_msgs.Image();
+		pubImage.width = image.getWidth();
+		pubImage.height = image.getHeight();
+		pubImage.encoding = "rgb8";
+		pubImage.is_bigendian = 0;
+		pubImage.step = image.getWidth()*3;
+		pubImage.data = image.toArray();
+		debugImagePub.publish(pubImage);
 	}
 }
