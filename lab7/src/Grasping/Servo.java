@@ -51,7 +51,7 @@ public class Servo implements Runnable {
 	 * It is implemented in the run() method so that it is easily Threadable.
 	 * If methods want to block while waiting for this to finish, it synchronizes on this object.
 	 */
-	private final double angleOvershoot = Math.PI/6;
+	private final double angleOvershoot = Math.PI/4;
 	public synchronized void run() {
 		// Overshoot first
 		//
