@@ -54,6 +54,7 @@ public class Grasping implements NodeMain, Runnable {
 			double height = g.getUser();
 			System.out.println(height);
 			g.ac.setHeight(height); g.ac.run();
+			height = 0;
 			g.ac.setHeight(height); g.ac.run();
 		}
 	}
