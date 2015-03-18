@@ -24,7 +24,7 @@ class Publishers {
 
 	// Useful for abstracting setting the motor velocities
 	//
-	public void setMotorVelocities(double tv, double rv) {
+	public synchronized void setMotorVelocities(double tv, double rv) {
 		MotionMsg msg = new MotionMsg();
 		// Motor commands do not handle NaN well. We should never get these.
 		//
@@ -37,7 +37,7 @@ class Publishers {
 		}
 	}
 
-	public void setRobotPose(double x, double y, double theta) {
+	public synchronized void setRobotPose(double x, double y, double theta) {
 		OdometryMsg msg = new OdometryMsg();
 		msg.x = x;
 		msg.y = y;
@@ -47,12 +47,12 @@ class Publishers {
 		}
 	}
 
-	public void resetRobot() {
+	public synchronized void resetRobot() {
 		setMotorVelocities(0,0);
 		setRobotPose(0,0,0);
 	}
 
-	public void setState(java.lang.String state) {
+	public synchronized void setState(java.lang.String state) {
 		org.ros.message.std_msgs.String msg = new org.ros.message.std_msgs.String();
 		msg.data = state;
 		if(statePub != null) {
@@ -60,11 +60,12 @@ class Publishers {
 		}
 	}
 
-	public void setArm(int index, long value) {
-		long[] previousArm = g.getArm();
-		long shoulder = index!=g.SHOULDER?previousArm[g.SHOULDER]:value;
-		long wrist = index!=g.WRIST?previousArm[g.WRIST]:value;
-		long gripper = index!=g.GRIPPER?previousArm[g.GRIPPER]:value;
+	private int pwms = [0,0,0];
+	public synchronized setArm(int index, long value) {
+		long shoulder = index!=g.SHOULDER?pwms[g.SHOULDER]:value;
+		long wrist = index!=g.WRIST?pwms[g.WRIST]:value;
+		long gripper = index!=g.GRIPPER?pwms[g.GRIPPER]:value;
+		pwms = new long[]{shoulder,wrist,gripper};
 
 		ArmMsg msg = new ArmMsg();
 		msg.pwms = new long[]{shoulder,wrist,gripper,0,0,0,0,0};
@@ -73,7 +74,7 @@ class Publishers {
 		}
 	}
 
-	public void setDebugImage(Image image) {
+	public synchronized void setDebugImage(Image image) {
 		org.ros.message.sensor_msgs.Image pubImage =
 			new org.ros.message.sensor_msgs.Image();
 		pubImage.width = image.getWidth();
