@@ -86,7 +86,7 @@ public class VisualServo implements Runnable {
         }
     }
 
-    private static byte[] getSaturatedColor(int r, int g, int b, double threshold) {
+    private static byte[] getSaturatedColor(int r, int g, int b) {
 	float[] out;
 	String ballColor = getBallColor(r, g, b);
 	if (ballColor.equals("red")) return new byte[] {(byte) 255,0,0};
