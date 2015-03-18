@@ -39,7 +39,7 @@ public class VisualServo implements Runnable {
             } else {
                 // if we are aligned, then consider ourselves done with aligning
                 //
-		System.err.printf("Distance to blob is %d\n", getDistanceToBlob());
+		System.err.printf("Distance to blob is %0.2f\n", getDistanceToBlob());
                 this.notifyAll();
             }
         } else {
