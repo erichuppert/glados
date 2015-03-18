@@ -34,6 +34,7 @@ public class VisualServo implements Runnable {
 				// use a proportional controller to rotate to the object
 				//
 				double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
+				System.err.printf("Found object, error to center is %.2f\nf", alignmentError);
 				if (Math.abs(alignmentError) > EPSILON) {
 					double rv = -1 * ROTO_VELO_GAIN * alignmentError;
 					g.pubs.setMotorVelocities(0, rv);
