@@ -60,12 +60,14 @@ class Publishers {
 		}
 	}
 
-	private int pwms = [0,0,0];
+	private long[] pwms = {0,0,0};
 	public synchronized void setArm(int index, long value) {
 		long shoulder = index!=g.SHOULDER?pwms[g.SHOULDER]:value;
 		long wrist = index!=g.WRIST?pwms[g.WRIST]:value;
 		long gripper = index!=g.GRIPPER?pwms[g.GRIPPER]:value;
-		pwms = new long[]{shoulder,wrist,gripper};
+		pwms[g.SHOULDER] = shoulder;
+		pwms[g.WRIST] = wrist;
+		pwms[g.GRIPPER] = gripper;
 
 		ArmMsg msg = new ArmMsg();
 		msg.pwms = new long[]{shoulder,wrist,gripper,0,0,0,0,0};
