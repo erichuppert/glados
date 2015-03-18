@@ -6,7 +6,7 @@ public class ArmControl implements Runnable {
 	// Servos
 	// 950
 	public static Servo shoulder = new Servo(300,2450,0.4,1400,2075,0,Math.PI/2.0,0);
-	public static Servo wrist = new Servo(500,2450,1.0,1750,1100,0,Math.PI/2.0,1);
+	public static Servo wrist = new Servo(500,2450,1.0,1750,950,0,Math.PI/2.0,1);
 	public static Servo gripper = new Servo(1440,2180,2.0,2130,1490,0,1,2);
 
 	// End effector coordinates
@@ -27,7 +27,7 @@ public class ArmControl implements Runnable {
 	private static final double wristLength = 0.065;
 
 	// Minimum, and maximum Z positions that we can set
-	private static final double minHeight = shoulderHeight-shoulderLength;
+	private static final double minHeight = 0.07;//shoulderHeight-shoulderLength;
 	private static final double maxHeight = shoulderHeight+shoulderLength-0.005;
 
 	// Gripper control
