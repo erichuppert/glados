@@ -55,8 +55,7 @@ public class VisualServo implements Runnable {
         float hue = hsbvals[0];
         float saturation = hsbvals[1];
         float brightness = hsbvals[2];
-        return saturation > saturationThresh && brightness > brightnessThresh;
-		//&& hue < 0.3;
+        return saturation > saturationThresh && brightness > brightnessThresh && hue > 0.2 && hue < 0.7;
     }
 
     public double getDistanceToBlob() {
