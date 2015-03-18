@@ -144,12 +144,12 @@ public class LabSM extends FSM<Object> implements Runnable {
 	}
 
 	public void run() {
+		originalPose = g.getPose();
+		targetPose = originalPose.clone();
+		targetPose[g.Y] += sin(originalPose[g.THETA])*forwardDistance;
+		targetPose[g.X] += cos(originalPose[g.THETA])*forwardDistance;
 		while (true) {
 			long initial_time = System.currentTimeMillis();
-			originalPose = g.getPose();
-			targetPose = originalPose.clone();
-			targetPose[g.Y] += sin(originalPose[g.THETA])*forwardDistance;
-			targetPose[g.X] += cos(originalPose[g.THETA])*forwardDistance;
 			System.err.printf("OX: %.2f\tOY: %.2f\tOT: %.2f\n", originalPose[g.X], originalPose[g.Y], originalPose[g.THETA]);
 			System.err.printf("TX: %.2f\tTY: %.2f\tTT: %.2f\n", targetPose[g.X], targetPose[g.Y], targetPose[g.THETA]);
 			step(null);
