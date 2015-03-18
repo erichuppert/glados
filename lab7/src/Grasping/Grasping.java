@@ -27,12 +27,12 @@ public class Grasping implements NodeMain, Runnable {
 
 		// try {
 		// 	//fullRangeMotion();
-		// 	//inputHeights();
+		inputHeights();
 		// 	armGymnastics();
 		// } catch(InterruptedException e) {
 		// 	e.printStackTrace();
 		// }
-		new LabSM().run();
+		//new LabSM().run();
 	}
 
 	public void armGymnastics() {
