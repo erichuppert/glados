@@ -15,7 +15,7 @@ public class OdometryListener implements MessageListener<OdometryMsg> {
 	@Override
 	public void onNewMessage(OdometryMsg arg0) {
 		// TODO Auto-generated method stub
-		nav.handle(arg0);
+		//nav.handle(arg0);
 	}
 
 }

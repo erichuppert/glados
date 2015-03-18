@@ -16,17 +16,17 @@ public class VisualServo implements Runnable {
     private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
 	private int pixelCount;
-	//private Image debugImage;
+	private Image debugImage;
 
     @Override
     public synchronized void run() {
 		while (true) {
 			Image image = g.getCamera();
-			//debugImage = new Image(image.getWidth(), image.getHeight());
+			debugImage = new Image(image.getWidth(), image.getHeight());
 			// this will be null if there is not a detected centroid in the image
 			//
 			double[] centroid = getCentroid(image);
-			//g.pubs.setDebugImage(debugImage);
+			g.pubs.setDebugImage(debugImage);
 			if (centroid != null) {
 				// use a proportional controller to rotate to the object
 				//
@@ -82,14 +82,14 @@ public class VisualServo implements Runnable {
     }
 
     private static byte[] getSaturatedColor(int r, int g, int b) {
-	float[] out;
-	String ballColor = getBallColor(r, g, b);
-	if (ballColor.equals("red")) return new byte[] {(byte) 255,0,0};
-	if (ballColor.equals("orange")) return new byte[]{(byte) 255, (byte) 155, 0};
-	if (ballColor.equals("green")) return new byte[]{0, (byte) 255, 0};
-	if (ballColor.equals("blue")) return new byte[]{0, 0, (byte) 255};
-	if (ballColor.equals("yellow")) return new byte[] {(byte) 255,(byte) 255,0};
-	return new byte[] {(byte) 255, (byte) 255, (byte) 255};
+		float[] out;
+		String ballColor = getBallColor(r, g, b);
+		if (ballColor.equals("red")) return new byte[] {(byte) 255,0,0};
+		if (ballColor.equals("orange")) return new byte[]{(byte) 255, (byte) 155, 0};
+		if (ballColor.equals("green")) return new byte[]{0, (byte) 255, 0};
+		if (ballColor.equals("blue")) return new byte[]{0, 0, (byte) 255};
+		if (ballColor.equals("yellow")) return new byte[] {(byte) 255,(byte) 255,0};
+		return new byte[] {(byte) 255, (byte) 255, (byte) 255};
 
     }
 
@@ -115,15 +115,15 @@ public class VisualServo implements Runnable {
                 int g = (int)Image.pixelGreen(pix) & 0xFF;
                 int b = (int)Image.pixelBlue(pix) & 0xFF;
                 if (blobPixel(r,g,b,saturationThresh, brightnessThresh)) {
-		    byte[] saturatedColor =  getSaturatedColor(r, g, b);
-		    // debugImage.setPixel(x, y, saturatedColor[0], saturatedColor[1],
-			// 					saturatedColor[2]);
-			pixelCount++;
-			centroid[0] += x;
-			centroid[1] += y;
+					byte[] saturatedColor =  getSaturatedColor(r, g, b);
+					debugImage.setPixel(x, y, saturatedColor[0], saturatedColor[1],
+										saturatedColor[2]);
+					pixelCount++;
+					centroid[0] += x;
+					centroid[1] += y;
                 } else {
-					//debugImage.setPixel(x,y, (byte) r, (byte) g, (byte) b);
-		}
+					debugImage.setPixel(x,y, (byte) r, (byte) g, (byte) b);
+				}
             }
         }
         //System.err.printf("Pixel count is %d\n", pixelCount);
