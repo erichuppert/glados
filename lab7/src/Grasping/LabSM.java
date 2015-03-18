@@ -133,13 +133,13 @@ public class LabSM extends FSM<Object> implements Runnable {
 	public LabSM() {
 		super(INITIAL);
 		addState(SEEKING_OBJECT, seekingObject);
-		// addState(OBJECT_WAITING, objectWaiting);
-		// addState(OBJECT_DETECTED, objectDetected);
-		// addState(MOVING_TARGET, movingTarget);
-		// addState(OBJECT_DROPPED, objectDropped);
-		// addState(TARGET_REACHED, targetReached);
-		// addState(MOVING_BACK, movingBack);
-		// addState(DONE, done);
+		addState(OBJECT_WAITING, objectWaiting);
+		addState(OBJECT_DETECTED, objectDetected);
+		addState(MOVING_TARGET, movingTarget);
+		addState(OBJECT_DROPPED, objectDropped);
+		addState(TARGET_REACHED, targetReached);
+		addState(MOVING_BACK, movingBack);
+		addState(DONE, done);
 	}
 
 	public void run() {
