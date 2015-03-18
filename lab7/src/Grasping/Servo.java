@@ -60,7 +60,7 @@ public class Servo implements Runnable {
 
 		// Are we going against gravity?
 		//
-		boolean overshoot = targetAngle > PWMToAngle(currentPWM) && this != g.ac.gripper; // gripper hack
+		boolean overshoot = false; //targetAngle > PWMToAngle(currentPWM) && this != g.ac.gripper; // gripper hack
 		long originalTarget = targetPWM;
 		if (overshoot) {
 			targetPWM = Math.min(Math.max(angleToPWM(targetAngle+angleOvershoot),minPWM), maxPWM);

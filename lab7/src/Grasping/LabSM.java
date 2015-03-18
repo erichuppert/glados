@@ -17,7 +17,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private static final String OBJECT_WAITING = "Waiting for object to touch the gripper";
 	private static final String OBJECT_DETECTED = "Detected an object, closing the grip, and lifting it.";
 	private static final String MOVING_TARGET = "Moving to target destination.";
-	private static final String OBJECT_DROPPED = "Object dropped, moving back " + backDistance + " [m], and then moving forward.";
+	private static final String OBJECT_DROPPED = "Object dropped, moving back " + backDistance + " [m]";
 	private static final String TARGET_REACHED = "Target reached, putting object on the ground.";
 	private static final String MOVING_BACK = "Object on target, moving back to original position.";
 	private static final String DONE = "Back to original position, done.";
