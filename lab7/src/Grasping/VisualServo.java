@@ -13,43 +13,38 @@ import org.ros.node.topic.Subscriber;
 import java.lang.Math;
 
 public class VisualServo implements Runnable {
-
-    private Image image;
-    private Image debugImage;
-
     private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
-    private int pixelCount;
+	private int pixelCount;
 
     @Override
     public synchronized void run() {
-	while (true) {
-	    image = g.pub.getCamera();
-	    debugImage = new Image(image.getwidth(), image.getHeight());
-	    // this will be null if there is not a detected centroid in the image
-	    //
-	    double[] centroid = getCentroid();
-	    g.pubs.setDebugImage(debugImage);
-	    if (centroid != null) {
-		// use a proportional controller to rotate to the object
-		//
-		double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
-		if (Math.abs(alignmentError) > EPSILON) {
-		    double rv = -1 * ROTO_VELO_GAIN * alignmentError;
-		    g.pubs.setMotorVelocities(0, rv);
-		} else {
-		    // if we are aligned, then consider ourselves done with aligning
-		    //
-		    this.notifyAll();
-		    return;
+		while (true) {
+			Image image = g.pub.getCamera();
+			Image debugImage = new Image(image.getwidth(), image.getHeight());
+			// this will be null if there is not a detected centroid in the image
+			//
+			double[] centroid = getCentroid(image);
+			g.pubs.setDebugImage(debugImage);
+			if (centroid != null) {
+				// use a proportional controller to rotate to the object
+				//
+				double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
+				if (Math.abs(alignmentError) > EPSILON) {
+					double rv = -1 * ROTO_VELO_GAIN * alignmentError;
+					g.pubs.setMotorVelocities(0, rv);
+				} else {
+					// if we are aligned, then consider ourselves done with aligning
+					//
+					this.notifyAll();
+					return;
+				}
+			} else {
+				g.pubs.setMotorVelocities(0, 0);
+			}
 		}
-	    } else {
-		g.pubs.setMotorVelocities(0, 0);
-	    }
-	}
-        
     }
-	
+
     private static boolean blobPixel(int r, int g, int b, double saturationThresh, double brightnessThresh) {
         float[] hsbvals = {0, 0, 0};
         Color.RGBtoHSB(r, g, b, hsbvals);
@@ -57,13 +52,13 @@ public class VisualServo implements Runnable {
         float saturation = hsbvals[1];
         float brightness = hsbvals[2];
         return saturation > saturationThresh && brightness > brightnessThresh;
-            //&& hue < 0.3;
+		//&& hue < 0.3;
     }
 
-    private double getDistanceToBlob() {
-	double m = 134.998991;
-	double b = -0.239328;
-	return  Math.sqrt(Math.max(0.0,m*1.0/pixelCount + b));
+    public double getDistanceToBlob() {
+		double m = 134.998991;
+		double b = -0.239328;
+		return  Math.sqrt(Math.max(0.0,m*1.0/pixelCount + b));
     }
 
 
@@ -100,8 +95,8 @@ public class VisualServo implements Runnable {
     private static final double saturationThresh = 0.5;
     private static final double brightnessThresh = 0.15;
     private static final int pixelThresh = 100;
-    
-    private double[] getCentroid() {
+
+    private static double[] getCentroid(Image image) {
         if (image == null) {
             System.err.println("The image is null");
             return null;

@@ -29,7 +29,16 @@ public class LabSM extends FSM<Object> implements Runnable {
 		public String action(Object _) {
 			VisualServo vs = new VisualServo(g.getCamera());
 			vs.run();
-			return null;
+
+			double[] next = g.getPose();
+			next[g.X] += cos(next[g.THETA])*(vs.getDistanceToBlob()+0.1);
+			next[g.Y] += sin(next[g.THETA])*(vs.getDistanceToBlob()+0.1);
+			g.ac.setHeight(0);
+			g.ac.setGripperStatus(g.OPEN);
+			g.ac.run();
+			g.wp.addWP(next);
+			g.pubs.setState(OBJECT_WAITING);
+			return OBJECT_WAITING;
 		}
 	};
 
@@ -80,14 +89,8 @@ public class LabSM extends FSM<Object> implements Runnable {
 			@Override
 			public String action(Object _) {
 				if(g.wp.isDone()) {
-					double[] next = g.getPose();
-					next[g.X] += cos(next[g.THETA])*(backDistance+0.1);
-					next[g.Y] += sin(next[g.THETA])*(backDistance+0.1);
-					g.ac.setHeight(0);
-					g.ac.setGripperStatus(g.OPEN);
-					g.ac.run();
-					g.pubs.setState(OBJECT_WAITING);
-					return OBJECT_WAITING;
+					g.pubs.setState(SEEKING_OBJECT);
+					return SEEKING_OBJECT;
 				}
 				return null;
 			}
