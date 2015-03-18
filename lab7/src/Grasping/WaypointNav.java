@@ -15,7 +15,7 @@ public class WaypointNav implements Runnable {
 	}
 
 	public synchronized void addWP(double[] wp) {
-		wpQueue.offer(wp);
+		wpQueue.offer(wp.clone());
 		done = false;
 		stop = false;
 	}
