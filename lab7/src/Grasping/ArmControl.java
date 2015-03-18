@@ -20,9 +20,9 @@ public class ArmControl implements Runnable {
 	// X Distance [m] between Robot Origin, and Shoulder Pivot
 	private static final double shoulderOffset = 0.1;
 	// Distance [m] between Shoulder Pivot, and Wrist Pivot
-	private static final double shoulderLength = 0.244;
+	private static final double shoulderLength = 0.245;
 	// Z Distance (height) [m] between Robot Origin, and Shoulder Pivot
-	private static final double shoulderHeight = 0.26;
+	private static final double shoulderHeight = 0.2625;
 	// Distance [m] between Wrist Pivot, and Gripper Pivot
 	private static final double wristLength = 0.065;
 
