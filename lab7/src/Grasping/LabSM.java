@@ -36,6 +36,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 			g.ac.setGripperStatus(g.OPEN);
 			g.ac.run();
 			g.ac.wrist.setTargetAngle(PI/4-0.3);
+			g.ac.wrist.run();
 			g.wp.addWP(next);
 			g.pubs.setState(OBJECT_WAITING);
 			return OBJECT_WAITING;

@@ -18,6 +18,10 @@ public class VisualServo implements Runnable {
 	private int pixelCount;
 	private Image debugImage;
 
+	public VisualServo() {
+		g.vs = this;
+	}
+
     @Override
     public synchronized void run() {
 		while (true) {

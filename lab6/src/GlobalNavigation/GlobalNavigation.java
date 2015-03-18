@@ -294,7 +294,7 @@ public class GlobalNavigation implements NodeMain{
 		segMesg.color = GUIHelpers.colorMessage(color);
 		guiSegPub.publish(segMesg);
 	}
-	
+
 	public static void fillPolyMsg(GUIPolyMsg polyMsg, PolygonObstacle obstacle, Color color, boolean filled, boolean closed) {
 		/*
 		PolygonMsg attributes
