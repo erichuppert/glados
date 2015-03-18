@@ -51,8 +51,20 @@ public class Servo implements Runnable {
 	 * It is implemented in the run() method so that it is easily Threadable.
 	 * If methods want to block while waiting for this to finish, it synchronizes on this object.
 	 */
+	private final double angleOvershoot = Math.PI/6;
 	public synchronized void run() {
-		long currentPWM;
+		// Overshoot first
+		//
+		long currentPWM = g.getArm()[outIndex];
+		double targetAngle = PWMToAngle(targetPWM);
+
+		// Are we going against gravity?
+		//
+		boolean overshoot = targetAngle > PWMToAngle(currentPWM) && this != g.ac.gripper; // gripper hack
+		long originalTarget = targetPWM;
+		if (overshoot) {
+			targetPWM = Math.min(Math.max(angleToPWM(targetAngle+angleOvershoot),minPWM), maxPWM);
+		}
 		do {
 			currentPWM = g.getArm()[outIndex];
 			currentPWM = currentPWM == 0?minPWM:currentPWM;
@@ -69,6 +81,10 @@ public class Servo implements Runnable {
 			} catch(InterruptedException e) {
 				g.pubs.setArm(outIndex,0);
 				break;
+			}
+			if (currentPWM == targetPWM && overshoot) {
+				overshoot = false;
+				targetPWM = originalTarget;
 			}
 		} while(currentPWM != targetPWM);
 		this.notifyAll();
