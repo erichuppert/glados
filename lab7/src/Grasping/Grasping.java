@@ -13,6 +13,7 @@ public class Grasping implements NodeMain, Runnable {
 		new Publishers(node);
 		new ArmControl();
 		new WaypointNav();
+		new VisualServo();
 		new Thread(this).start();
 	}
 

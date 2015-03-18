@@ -27,8 +27,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> seekingObject = new StateAction<Object>() {
 		@Override
 		public String action(Object _) {
-			VisualServo vs = new VisualServo();
-			vs.run();
+			g.vs.run();
 
 			double[] next = g.getPose();
 			next[g.X] += cos(next[g.THETA])*(vs.getDistanceToBlob()+0.1);

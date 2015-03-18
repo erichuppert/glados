@@ -70,6 +70,8 @@ public class g {
 	//
 	public static WaypointNav wp = null;
 
+	public static VisualServo vs = null;
+
 	public static void setCamera(org.ros.message.sensor_msgs.Image m) {
 		byte[] rgbData;
 		if (reverseRGB) {

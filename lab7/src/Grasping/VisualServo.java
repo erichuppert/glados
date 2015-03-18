@@ -122,7 +122,7 @@ public class VisualServo implements Runnable {
 		}
             }
         }
-        System.err.printf("Pixel count is %d\n", pixelCount);
+        //System.err.printf("Pixel count is %d\n", pixelCount);
         if (pixelCount > pixelThresh) {
             centroid[0] /= pixelCount;
             centroid[1] /= pixelCount;
