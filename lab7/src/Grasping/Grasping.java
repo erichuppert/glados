@@ -49,7 +49,7 @@ public class Grasping implements NodeMain, Runnable {
 		while(true) {
 			double height = 0.3;
 			System.out.println(height);
-			g.ac.setGripperStatus(CLOSED);
+			g.ac.setGripperStatus(g.CLOSED);
 			g.ac.setHeight(height); g.ac.run();
 			Thread.sleep(2000);
 			height = 0;
