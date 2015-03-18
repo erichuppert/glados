@@ -22,6 +22,9 @@ public class VisualServo implements Runnable {
     public synchronized void run() {
 		while (true) {
 			Image image = g.getCamera();
+			if (image == null) {
+				continue;
+			}
 			debugImage = new Image(image.getWidth(), image.getHeight());
 			// this will be null if there is not a detected centroid in the image
 			//
