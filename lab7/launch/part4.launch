@@ -6,8 +6,10 @@
   <node name="blobview" pkg="image_view" type="image_view" args="image:=/rss/blobVideo" machine="workstation" />
   <node name="pub" pkg="rosjava_bootstrap" type="run.py" args="uorc_publisher Publisher" machine="netbook" />
   <node name="odo" pkg="rosjava_bootstrap" type="run.py" args="odometry odometry.Odometry" machine="netbook" /> 
-  <node name="vid" pkg="gscam" type="gscam" machine="netbook" /> 
+  <!-- <node name="vid" pkg="gscam" type="gscam" machine="netbook" /> -->
   <node name="lis" pkg="rosjava_bootstrap" type="run.py" args="uorc_listener Listener" machine="netbook" /> 
   <node name="grp" pkg="rosjava_bootstrap" type="run.py" args="lab7 Grasping.Grasping" machine="workstation" />
-
+  <node name="vid" pkg="gscam" type="gscam" machine="netbook">
+    <env name="GSCAM_CONFIG" value="v4l2src device=/dev/video0 ! video/x-raw-rgb, width=160, height=120 ! ffmpegcolorspace" />
+  </node>
 </launch>
