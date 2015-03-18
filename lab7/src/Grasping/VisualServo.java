@@ -97,6 +97,10 @@ public class VisualServo implements Runnable {
     private static final double brightnessThresh = 0.15;
     private static final int pixelThresh = 100;
 
+	public VisualServo() {
+		g.vs = this;
+	}
+
     private double[] getCentroid(Image image) {
         if (image == null) {
             System.err.println("The image is null");
