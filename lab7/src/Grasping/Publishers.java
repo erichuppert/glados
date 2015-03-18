@@ -61,7 +61,7 @@ class Publishers {
 	}
 
 	private int pwms = [0,0,0];
-	public synchronized setArm(int index, long value) {
+	public synchronized void setArm(int index, long value) {
 		long shoulder = index!=g.SHOULDER?pwms[g.SHOULDER]:value;
 		long wrist = index!=g.WRIST?pwms[g.WRIST]:value;
 		long gripper = index!=g.GRIPPER?pwms[g.GRIPPER]:value;
