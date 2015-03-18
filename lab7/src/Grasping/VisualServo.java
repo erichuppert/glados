@@ -62,8 +62,8 @@ public class VisualServo implements Runnable {
     }
 
     private double getDistanceToBlob() {
-	double m = 202.602532;
-	double b = -0.202548;
+	double m = 134.998991;
+	double b = -0.239328;
 	return  Math.sqrt(Math.max(0.0,m*1.0/pixelCount + b));
     }
 
@@ -116,8 +116,9 @@ public class VisualServo implements Runnable {
                 int g = (int)Image.pixelGreen(pix) & 0xFF;
                 int b = (int)Image.pixelBlue(pix) & 0xFF;
                 if (blobPixel(r,g,b,saturationThresh, brightnessThresh)) {
-		    byte[] sat =  getSaturatedColor(r, g, b);
-		    debugImage.setPixel(x, y, sat[0], sat[1], sat[2]);
+		    byte[] saturatedColor =  getSaturatedColor(r, g, b);
+		    debugImage.setPixel(x, y, saturatedColor[0], saturatedColor[1],
+					saturatedColor[2]);
                     pixelCount++;
                     centroid[0] += x;
                     centroid[1] += y;
