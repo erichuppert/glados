@@ -5,9 +5,9 @@ import static java.lang.Math.*;
 public class ArmControl implements Runnable {
 	// Servos
 	//
-	public static Servo shoulder = new Servo(400,2350,1.0,1400,2075,0,Math.PI/2.0,0);
-	public static Servo wrist = new Servo(500,2450,1.0,1750,950,0,Math.PI/2.0,1);
-	public static Servo gripper = new Servo(1490,2130,2.0,2130,1490,0,1,2);
+	public static Servo shoulder = new Servo(350,2400,1.0,1400,2075,0,Math.PI/2.0,0);
+	public static Servo wrist = new Servo(450,2500,1.0,1750,950,0,Math.PI/2.0,1);
+	public static Servo gripper = new Servo(1440,2180,2.0,2130,1490,0,1,2);
 
 	// End effector coordinates
 	//
