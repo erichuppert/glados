@@ -57,6 +57,7 @@ public class Grasping implements NodeMain, Runnable {
 			Thread.sleep(2000);
 			height = 0;
 			g.ac.setHeight(height); g.ac.run();
+			Thread.sleep(2000);
 		}
 	}
 
