@@ -18,7 +18,7 @@ class Publishers {
 		motionPub = node.newPublisher("/command/Motors","rss_msgs/MotionMsg");
 		odometryPub = node.newPublisher("/rss/odometry_update", "rss_msgs/OdometryMsg");
 		armPub = node.newPublisher("/command/Arm", "rss_msgs/ArmMsg");
-		debugImagePub = node.newPublisher("/rss/blobVideo", "sensor_msgs/Image");
+		//debugImagePub = node.newPublisher("/rss/blobVideo", "sensor_msgs/Image");
 		g.pubs = this;
 	}
 

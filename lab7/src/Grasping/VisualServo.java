@@ -16,17 +16,17 @@ public class VisualServo implements Runnable {
     private static final double ROTO_VELO_GAIN = 0.3;
     private static final double EPSILON = 0.002;
 	private int pixelCount;
-	private Image debugImage;
+	//private Image debugImage;
 
     @Override
     public synchronized void run() {
 		while (true) {
 			Image image = g.getCamera();
-			debugImage = new Image(image.getWidth(), image.getHeight());
+			//debugImage = new Image(image.getWidth(), image.getHeight());
 			// this will be null if there is not a detected centroid in the image
 			//
 			double[] centroid = getCentroid(image);
-			g.pubs.setDebugImage(debugImage);
+			//g.pubs.setDebugImage(debugImage);
 			if (centroid != null) {
 				// use a proportional controller to rotate to the object
 				//
@@ -116,13 +116,13 @@ public class VisualServo implements Runnable {
                 int b = (int)Image.pixelBlue(pix) & 0xFF;
                 if (blobPixel(r,g,b,saturationThresh, brightnessThresh)) {
 		    byte[] saturatedColor =  getSaturatedColor(r, g, b);
-		    debugImage.setPixel(x, y, saturatedColor[0], saturatedColor[1],
-					saturatedColor[2]);
-                    pixelCount++;
-                    centroid[0] += x;
-                    centroid[1] += y;
+		    // debugImage.setPixel(x, y, saturatedColor[0], saturatedColor[1],
+			// 					saturatedColor[2]);
+			pixelCount++;
+			centroid[0] += x;
+			centroid[1] += y;
                 } else {
-		    debugImage.setPixel(x,y, (byte) r, (byte) g, (byte) b);
+					//debugImage.setPixel(x,y, (byte) r, (byte) g, (byte) b);
 		}
             }
         }
