@@ -14,17 +14,18 @@ public class WaypointNav implements Runnable {
 		new Thread(this).start();
 	}
 
-	public void addWP(double[] wp) {
+	public synchronized void addWP(double[] wp) {
 		wpQueue.offer(wp);
 		done = false;
+		stop = false;
 	}
 
-	public void stopRunning() {
+	public synchronized void stopRunning() {
 		wpQueue.clear();
 		stop = true;
 	}
 
-	public boolean isDone() {
+	public synchronized boolean isDone() {
 		return done;
 	}
 
@@ -41,8 +42,8 @@ public class WaypointNav implements Runnable {
 
 		while(true) {
 			try {
-				synchronized(this) {
-					if (wpQueue.peek() == null) {
+				if (wpQueue.peek() == null) {
+					synchronized(this) {
 						done = true;
 						this.notifyAll();
 					}
