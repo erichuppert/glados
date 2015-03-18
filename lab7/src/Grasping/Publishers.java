@@ -5,7 +5,6 @@ import org.ros.message.std_msgs.String;
 import org.ros.message.rss_msgs.MotionMsg;
 import org.ros.message.rss_msgs.OdometryMsg;
 import org.ros.message.rss_msgs.ArmMsg;
-import org.ros.message.sensor_msgs.Image;
 
 class Publishers {
 	private Publisher<org.ros.message.std_msgs.String> statePub;
