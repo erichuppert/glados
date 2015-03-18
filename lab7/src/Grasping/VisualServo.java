@@ -61,7 +61,7 @@ public class VisualServo implements Runnable {
     private double getDistanceToBlob() {
 	double m = 202.602532;
 	double b = -0.202548;
-	return  Math.sqrt(Math.max(0.0,m*1.0/area + b));
+	return  Math.sqrt(Math.max(0.0,m*1.0/pixelCount + b));
     }
 
 
