@@ -122,7 +122,7 @@ public class VisualServo implements Runnable {
                     centroid[0] += x;
                     centroid[1] += y;
                 } else {
-		    debugImage.setPixel(x,y, r, g, b);
+		    debugImage.setPixel(x,y, (byte) r, (byte) g, (byte) b);
 		}
             }
         }
