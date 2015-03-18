@@ -320,9 +320,5 @@ public class GlobalNavigation implements NodeMain{
 		polyMsg.x = xPoints;
 		polyMsg.y = yPoints;
 	}
-
-	public void handle(Object obj) {
-		return;
-	}
 }
 
