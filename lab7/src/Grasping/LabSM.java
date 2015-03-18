@@ -33,7 +33,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 			next[g.X] += cos(next[g.THETA])*(g.vs.getDistanceToBlob()+0.1);
 			next[g.Y] += sin(next[g.THETA])*(g.vs.getDistanceToBlob()+0.1);
 			g.ac.setHeight(0);
-			g.ac.setGripperStatus(g.OPEN);
+			g.ac.setGripperStatus(g.MIDDLE);
 			g.ac.run();
 			g.ac.wrist.setTargetAngle(PI/4-0.3);
 			g.ac.wrist.run();
@@ -57,7 +57,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> objectDetected = new StateAction<Object>() {
 			@Override
 			public String action(Object _) {
-				g.ac.setGripperStatus(g.MIDDLE);
+				g.ac.setGripperStatus(g.CLOSED);
 				g.ac.run();
 				g.ac.setHeight(0.5);
 				g.ac.run();
