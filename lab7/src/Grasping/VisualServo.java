@@ -121,7 +121,9 @@ public class VisualServo implements Runnable {
                     pixelCount++;
                     centroid[0] += x;
                     centroid[1] += y;
-                }
+                } else {
+		    debugImage.setPixel(x,y, r, g, b);
+		}
             }
         }
         System.err.printf("Pixel count is %d\n", pixelCount);
