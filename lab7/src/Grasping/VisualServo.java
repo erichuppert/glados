@@ -41,6 +41,7 @@ public class VisualServo implements Runnable {
 				} else {
 					// if we are aligned, then consider ourselves done with aligning
 					//
+					g.pubs.setMotorVelocities(0, 0);
 					this.notifyAll();
 					return;
 				}
