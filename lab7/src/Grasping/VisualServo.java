@@ -20,8 +20,8 @@ public class VisualServo implements Runnable {
     @Override
     public synchronized void run() {
 		while (true) {
-			Image image = g.pub.getCamera();
-			Image debugImage = new Image(image.getwidth(), image.getHeight());
+			Image image = g.getCamera();
+			Image debugImage = new Image(image.getWidth(), image.getHeight());
 			// this will be null if there is not a detected centroid in the image
 			//
 			double[] centroid = getCentroid(image);
@@ -96,7 +96,7 @@ public class VisualServo implements Runnable {
     private static final double brightnessThresh = 0.15;
     private static final int pixelThresh = 100;
 
-    private static double[] getCentroid(Image image) {
+    private double[] getCentroid(Image image) {
         if (image == null) {
             System.err.println("The image is null");
             return null;
