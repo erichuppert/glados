@@ -13,7 +13,7 @@ import org.ros.node.topic.Subscriber;
 import java.lang.Math;
 
 public class VisualServo implements Runnable {
-    private static final double ROTO_VELO_GAIN = 0.5;
+    private static final double ROTO_VELO_GAIN = 0.25;
     private static final double EPSILON = 0.01;
 	private static final double FREQ = 20;
 	private static int objectiveCount = 40;
