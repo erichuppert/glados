@@ -13,7 +13,7 @@ import org.ros.node.topic.Subscriber;
 import java.lang.Math;
 
 public class VisualServo implements Runnable {
-    private static final double ROTO_VELO_GAIN = 1.0;
+    private static final double ROTO_VELO_GAIN = 2.5;
     private static final double EPSILON = 0.005;
 	private int pixelCount;
 	private Image debugImage;
@@ -99,7 +99,7 @@ public class VisualServo implements Runnable {
 
     private static final double saturationThresh = 0.5;
     private static final double brightnessThresh = 0.15;
-    private static final int pixelThresh = 100;
+    private static final int pixelThresh = 70;
 
 	public VisualServo() {
 		g.vs = this;
