@@ -33,7 +33,7 @@ public class WaypointNav implements Runnable {
 
 	private final double Ka = 0.25;
 	private final double Kd = 0.2;
-	private final double straightness = 1000;
+	private final double straightness = 100;
 	private final double distanceThreshold = 0.01;
 	private final double angleThreshold = 0.05;
 
@@ -69,11 +69,13 @@ public class WaypointNav implements Runnable {
 					// We are not at the right location
 					//
 					int sign = g.sign(cos(angleToWP));
-					tv = Kd*distance*abs(pow(cos(angleToWP), straightness))*sign;
-					if (sign == -1) {
-						angleToWP = angleToWP-PI;
-						angleToWP = atan2(sin(angleToWP),cos(angleToWP));
+					if (sign != -1) {
+						tv = Kd*distance*abs(pow(cos(angleToWP), straightness))*sign;
 					}
+					//if (sign == -1) {
+					//  angleToWP = angleToWP-PI;
+					//	angleToWP = atan2(sin(angleToWP),cos(angleToWP));
+					//}
 					rv = Ka*angleToWP;
 				} else if (abs(dAngle) > angleThreshold) {
 					// We're at the right location, but don't have the right angle.
