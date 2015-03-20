@@ -15,6 +15,8 @@ import java.lang.Math;
 public class VisualServo implements Runnable {
     private static final double ROTO_VELO_GAIN = 2.0;
     private static final double EPSILON = 0.01;
+	private static int objectiveCount = 10;
+	private int alignedCount = 0;
 	private int pixelCount;
 	private Image debugImage;
 	private double[] robotPose;
@@ -38,14 +40,18 @@ public class VisualServo implements Runnable {
 				double alignmentError = (centroid[g.X] - image.getWidth()/2) / image.getWidth();
 				System.err.printf("Found object, error to center is %.2f\n", alignmentError);
 				if (Math.abs(alignmentError) > EPSILON) {
+					alignedCount = 0;
 					double rv = -1 * ROTO_VELO_GAIN * alignmentError;
 					g.pubs.setMotorVelocities(0, rv);
 				} else {
 					// if we are aligned, then consider ourselves done with aligning
 					//
-					g.pubs.setMotorVelocities(0, 0);
-					this.notifyAll();
-					return;
+					++alignedCount;
+					if (alignedCount >= objectiveCount) {
+						g.pubs.setMotorVelocities(0, 0);
+						this.notifyAll();
+						return;
+					}
 				}
 			} else {
 				g.pubs.setMotorVelocities(0, 0);
