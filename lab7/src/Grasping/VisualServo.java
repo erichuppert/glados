@@ -55,7 +55,7 @@ public class VisualServo implements Runnable {
 					}
 				}
 				try {
-					Thread.sleep(FREQ);
+					Thread.sleep((int)(1000/FREQ));
 				} catch(InterruptedException e) {
 					e.printStackTrace();
 					g.pubs.setMotorVelocities(0,0);
