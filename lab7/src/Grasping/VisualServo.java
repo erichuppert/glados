@@ -13,15 +13,17 @@ import org.ros.node.topic.Subscriber;
 import java.lang.Math;
 
 public class VisualServo implements Runnable {
-    private static final double ROTO_VELO_GAIN = 2.5;
+    private static final double ROTO_VELO_GAIN = 1.0;
     private static final double EPSILON = 0.05;
 	private int pixelCount;
 	private Image debugImage;
+	private double[] robotPose;
 
     @Override
     public synchronized void run() {
 		while (true) {
 			Image image = g.getCamera();
+			robotPose = g.getPose();
 			if (image == null) {
 				continue;
 			}
@@ -50,6 +52,13 @@ public class VisualServo implements Runnable {
 			}
 		}
     }
+
+	public double[] getBlobPose() {
+		double[] pose = robotPose.clone();
+		pose[g.X] += Math.cos(pose[g.THETA])*(getDistanceToBlob());
+		pose[g.Y] += Math.sin(pose[g.THETA])*(getDistanceToBlob());
+		return pose;
+	}
 
     private static boolean blobPixel(int r, int g, int b, double saturationThresh, double brightnessThresh) {
         float[] hsbvals = {0, 0, 0};

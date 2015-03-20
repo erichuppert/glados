@@ -29,8 +29,8 @@ class Publishers {
 		// Motor commands do not handle NaN well. We should never get these.
 		//
 		g.assertTrue("NaN command sent!", tv != Double.NaN && rv != Double.NaN);
-		tv = Math.min(Math.max(-0.4,tv),0.4);
-		rv = Math.min(Math.max(-0.4,rv),0.4);
+		//tv = Math.min(Math.max(-0.2,tv),0.2);
+		//rv = Math.min(Math.max(-0.2,rv),0.2);
 
 		msg.translationalVelocity = 5* tv;
 		msg.rotationalVelocity = rv;
