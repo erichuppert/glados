@@ -27,14 +27,16 @@ public class LabSM extends FSM<Object> implements Runnable {
 	private final StateAction<Object> seekingObject = new StateAction<Object>() {
 		@Override
 		public String action(Object _) {
+			// Maximize visibility
+			//
+			g.ac.setHeight(0);
+			g.ac.setGripperStatus(g.MIDDLE);
+			g.ac.run();
 			g.vs.run();
 
 			double[] next = g.getPose();
 			next[g.X] += cos(next[g.THETA])*(g.vs.getDistanceToBlob()+0.1);
 			next[g.Y] += sin(next[g.THETA])*(g.vs.getDistanceToBlob()+0.1);
-			g.ac.setHeight(0);
-			g.ac.setGripperStatus(g.MIDDLE);
-			g.ac.run();
 			g.ac.wrist.setTargetAngle(PI/4-0.3);
 			g.ac.wrist.run();
 			g.wp.addWP(next);
@@ -47,6 +49,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 			@Override
 			public String action(Object _) {
 				if (g.getBumps()[g.GRIPPER]) {
+					g.wp.stopRunning();
 					g.pubs.setState(OBJECT_DETECTED);
 					return OBJECT_DETECTED;
 				}
