@@ -30,7 +30,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 			// Maximize visibility
 			//
 			g.ac.setHeight(0);
-			g.ac.setGripperStatus(g.OPEN);
+			g.ac.setGripperStatus(g.MIDDLE);
 			g.ac.run();
 			g.vs.run();
 

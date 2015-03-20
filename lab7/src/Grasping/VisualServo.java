@@ -13,8 +13,8 @@ import org.ros.node.topic.Subscriber;
 import java.lang.Math;
 
 public class VisualServo implements Runnable {
-    private static final double ROTO_VELO_GAIN = 1.0;
-    private static final double EPSILON = 0.05;
+    private static final double ROTO_VELO_GAIN = 2.0;
+    private static final double EPSILON = 0.01;
 	private int pixelCount;
 	private Image debugImage;
 	private double[] robotPose;
