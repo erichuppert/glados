@@ -136,6 +136,7 @@ public class LabSM extends FSM<Object> implements Runnable {
 
 	public LabSM() {
 		super(INITIAL);
+		g.pubs.setState(INITIAL);
 		addState(SEEKING_OBJECT, seekingObject);
 		addState(OBJECT_WAITING, objectWaiting);
 		addState(OBJECT_DETECTED, objectDetected);
