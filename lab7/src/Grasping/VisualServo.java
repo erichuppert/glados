@@ -14,7 +14,7 @@ import java.lang.Math;
 
 public class VisualServo implements Runnable {
     private static final double ROTO_VELO_GAIN = 2.5;
-    private static final double EPSILON = 0.005;
+    private static final double EPSILON = 0.05;
 	private int pixelCount;
 	private Image debugImage;
 
