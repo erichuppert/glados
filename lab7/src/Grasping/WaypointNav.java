@@ -32,9 +32,9 @@ public class WaypointNav implements Runnable {
 	private final int updateFreq = 10; // Hz
 
 	private final double Ka = 0.25;
-	private final double Kd = 0.1;
-	private final double straightness = 100;
-	private final double distanceThreshold = 0.01;
+	private final double Kd = 0.2;
+	private final double straightness = 1000;
+	private final double distanceThreshold = 0.005;
 	private final double angleThreshold = 0.05;
 
 	public void run() {
