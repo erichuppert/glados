@@ -15,6 +15,7 @@ import java.lang.Math;
 public class VisualServo implements Runnable {
     private static final double ROTO_VELO_GAIN = 2.0;
     private static final double EPSILON = 0.01;
+	private static final double FREQ = 20;
 	private static int objectiveCount = 10;
 	private int alignedCount = 0;
 	private int pixelCount;
@@ -52,6 +53,13 @@ public class VisualServo implements Runnable {
 						this.notifyAll();
 						return;
 					}
+				}
+				try {
+					Thread.sleep(FREQ);
+				} catch(InterruptedException e) {
+					e.printStackTrace();
+					g.pubs.setMotorVelocities(0,0);
+					return;
 				}
 			} else {
 				g.pubs.setMotorVelocities(0, 0);
