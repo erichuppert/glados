@@ -26,6 +26,7 @@ private:
     uorc_t* _uorc;
     std::mutex mtx;
 public:
+    bool status_received;
     OrcStatus(uorc_t* uorc);
 
     void set();

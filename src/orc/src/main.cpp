@@ -6,13 +6,18 @@
 int main(int argc, char *argv[])
 {
     uorc_t *uorc = uorc_create();
-    ros::init(argc,argv,"GLaDOS uORC Talker");
+    ros::init(argc,argv,"glados_uorc");
+    ros::NodeHandle first;
 
     // Start registering statuses from the orcboard
     //
     OrcStatus ost(uorc);
     std::thread statusT(updateStatus,&ost);
-    ros::Duration(1.0).sleep(); // Make sure we get some status
+    ROS_INFO("Waiting on first status update");
+    while (!ost.status_received) {
+        ros::Duration(1.0).sleep(); // Make sure we get some status
+    }
+    ROS_INFO("First status update received");
 
     MotorStatus mot(ost);
     std::thread odoT(odometry,&mot);
@@ -22,6 +27,7 @@ int main(int argc, char *argv[])
     // there's most likely a problem with the orcboard, so we're just shutting down.
     //
     if (ros::ok()) {
+        ROS_FATAL("Unknown orcBoard error, shutting down.");
         ros::shutdown();
     }
 

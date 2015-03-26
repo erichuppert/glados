@@ -7,17 +7,20 @@
 
 #define ENCODER_RESOLUTION    2000                                           // TICKS/(MOTOR REV)
 #define WHEEL_RADIUS          0.0625                                         // M/(REV*2*pi)
-#define TICKS_PER_REVOLUTION  ENCODER_RESOLUTION*GEAR_RATIO                  // TICKS/REV
 #define GEAR_RATIO            65.5                                           // (MOTOR REV)/REV
+#define TICKS_PER_REVOLUTION  ENCODER_RESOLUTION*GEAR_RATIO                  // TICKS/REV
 #define WHEEL_METERS_PER_TICK (WHEEL_RADIUS)*(2*M_PI)/(TICKS_PER_REVOLUTION) // M/TICK
 #define WHEEL_BASE            0.43                                           // M
 
 #define ODO_FREQ              30                                             // UPDATES/SEC
 
+#define SPEED(T0,T1,TICK0,TICK1) (((double)TICK1-TICK0)*WHEEL_METERS_PER_TICK*1000000.0/((double)T1-T0)) // Takes time in microseconds
+
 class MotorStatus {
 private:
-    uint32_t previous_left;
-    uint32_t previous_right;
+    int32_t previous_left;
+    int32_t previous_right;
+    int64_t last_time;
 
     OrcStatus& ost;
 

@@ -32,6 +32,13 @@
         <color rgba="0 0 .8 1"/>
       </material>
     </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.02" radius="0.0625"/>
+      </geometry>
+      <origin rpy="1.57075 0 0"/>
+    </collision>
   </link>
 
   <link name="right_wheel">
@@ -42,6 +49,13 @@
       <origin rpy="1.57075 0 0"/>
       <material name="blue"/>
     </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.02" radius="0.0625"/>
+      </geometry>
+      <origin rpy="1.57075 0 0"/>
+    </collision>
   </link>
 
   <joint name="base_to_lwheel" type="continuous">
@@ -69,6 +83,13 @@
         <color rgba="0 0 0 1"/>
       </material>
     </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.244"/>
+      </geometry>
+      <origin xyz="0.122 0 0" rpy="0 1.570796327 0"/>
+    </collision>
   </link>
 
   <joint name="base_to_shoulder" type="revolute">
@@ -87,6 +108,13 @@
       <origin xyz="0.0325 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.065 0.02 0.02"/>
+      </geometry>
+      <origin xyz="0.0325 0 0" rpy="0 0 0"/>
+    </collision>
   </link>
 
   <joint name="shoulder_to_wrist" type="revolute">
@@ -105,6 +133,13 @@
       <origin xyz="0.06 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.12 0.02 0.02"/>
+      </geometry>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+    </collision>
   </link>
 
   <joint name="wrist_to_gripper" type="revolute">

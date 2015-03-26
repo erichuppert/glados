@@ -2,11 +2,13 @@
 #include "ros/ros.h"
 
 OrcStatus::OrcStatus(uorc_t* uorc):
-    _uorc(uorc)
+    _uorc(uorc),
+    status_received(false)
 {}
 
 void OrcStatus::set() {
     uorc_get_status(_uorc, &status);
+    status_received = true;
     mtx.lock();
     status_copy = status;
     mtx.unlock();

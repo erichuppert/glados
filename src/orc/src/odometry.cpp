@@ -21,6 +21,7 @@ MotorStatus::MotorStatus(OrcStatus& ost): ost(ost) {
     // Find the initial positions
     //
     status = ost.get();
+    last_time = status.utime_host;
     previous_left = uorc_encoder_get_position(&left_encoder, &status);
     previous_right = uorc_encoder_get_position(&right_encoder, &status);
 
@@ -41,27 +42,41 @@ void MotorStatus::update() {
     // Find the new positions
     //
     status = ost.get();
-    uint32_t left = uorc_encoder_get_position(&left_encoder, &status);
-    uint32_t right = uorc_encoder_get_position(&right_encoder, &status);
+    // Avoid using repeated status
+    // Mostly for the velocity, not really important for location
+    //
+    if (status.utime_host == last_time) {
+        return;
+    }
 
-    uint32_t delta_left = left-previous_left;
-    uint32_t delta_right = right-previous_right;
+    int32_t left = uorc_encoder_get_position(&left_encoder, &status);
+    int32_t right = uorc_encoder_get_position(&right_encoder, &status);
 
-    double delta_distance = WHEEL_METERS_PER_TICK*(delta_left + delta_right)/2.0;
+    double delta_left = (left-previous_left)*WHEEL_METERS_PER_TICK;
+    double delta_right = (right-previous_right)*WHEEL_METERS_PER_TICK;
+
+    double delta_distance = (delta_left + delta_right)/2.0;
     theta += (delta_left - delta_right)/WHEEL_BASE;
     theta = atan2(sin(theta), cos(theta)); // TO -PI,PI
     x += delta_distance*cos(theta);
     y += delta_distance*sin(theta);
 
+    double actual_v_right = (double)(right - previous_right)*1000000.0/((double) status.utime_host-last_time);
+
+    // Now for the velocity part of the odometry
+    // The orcboard has information about the velocity in its status, but it seems inaccurate,
+    //   so we'll use the information we have from the pose.
+    //
+    double v_left = SPEED(last_time,status.utime_host,previous_left,left);
+    double v_right = SPEED(last_time,status.utime_host,previous_right,right);
+    v = (v_left+v_right)/2.0;
+    omega = (v_left-v_right)/WHEEL_BASE;
+
+    last_time = status.utime_host;
     previous_left = left;
     previous_right = right;
 
-    // Now for the velocity part of the odometry
-    //
-    uint32_t v_left = uorc_encoder_get_velocity(&left_encoder, &status);
-    uint32_t v_right = uorc_encoder_get_velocity(&right_encoder, &status);
-    double v = WHEEL_METERS_PER_TICK*(v_left+v_right)/2.0;
-    double omega = (v_left-v_right)/WHEEL_BASE;
+    ROS_INFO("%d\t%.6f\t%.6f",right,theta,v_right);
 }
 
 void odometry(MotorStatus* mot) {
@@ -79,7 +94,7 @@ void odometry(MotorStatus* mot) {
 
         // Because ROS is more general than 2D rotation, it uses Quaternions
         //
-        geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(mot->omega);
+        geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(mot->theta);
 
         // Need to publish an odometry transform relative to the base link
         //
