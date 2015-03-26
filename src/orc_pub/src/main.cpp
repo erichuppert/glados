@@ -1,47 +1,71 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/time.h>
+#include <thread>
+#include <mutex>
 #include "orc_utils/uorc.h"
+#include "orc_pub/odometry.h"
 
-static int64_t timestamp_now()
-{
-    struct timeval tv;
-    gettimeofday (&tv, NULL);
-    return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
-}
+#define STATUS_RATE 40
 
-void benchmark(uorc_t *uorc)
-{
-    // benchmark
-    int64_t time0 = timestamp_now();
+class OrcStatus {
+private:
+    uorc_status_t status;
+    uorc_status_t status_copy;
+    uorc_t* uorc;
+    std::mutex mtx;
+public:
+    OrcStatus(uorc_t* uorc):
+        uorc(uorc)
+        {}
 
-    for (int i = 0; i < 1000; i++) {
-        char *version = uorc_get_version(uorc);
-        free(version);
+    void set() {
+        uorc_get_status(uorc, &status);
+        mtx.lock();
+        status_copy = status;
+        mtx.unlock();
     }
 
-    int64_t time1 = timestamp_now();
+    uorc_status_t& get() {
+        mtx.lock();
+        uorc_status_t ret = status_copy;
+        mtx.unlock();
+        return ret;
+    }
 
-    double dt = (time1 - time0) / 1000000.0;
-    printf("%.3f\n", 1000 / dt);
+    uorc_t* uorc() {
+        return uorc;
+    }
+}
+
+void updateStatus(OrcStatus& ost) {
+    ros::Rate status_update(STATUS_RATE);
+    while(ros::ok()) {
+        ost.set();
+        status_update.sleep();
+    }
 }
 
 int main(int argc, char *argv[])
 {
     uorc_t *uorc = uorc_create();
+    uorc_status status;
+    ros::init(argc,argv,"GLaDOS uORC Talker");
 
-    uorc_status_t status;
+    // Start registering statuses from the orcboard
+    //
+    std::thread statusT(updateStatus,uorc,&status);
+    ros::sleep(1); // Make sure we get some status
 
-    struct uorc_motor leftMotor = { .uorc = uorc, .port = 0, .invert = 0 },
-        rightMotor = { .uorc = uorc, .port = 1, .invert = 1 };
+    MotorStatus mot(ost);
+    std::thread odoT(odometry,ost,mot);
 
-    uorc_motor_set_pwm(&leftMotor, .75);
-
-    while (1) {
-        uorc_get_status(uorc, &status);
-        printf("%15d %15f\n", status.utime_orc, uorc_motor_get_current(&leftMotor, &status));
+    statusT.join();
+    // If we are no longer getting statuses, but haven't shutdown,
+    // there's most likely a problem with the orcboard, so we're just shutting down.
+    //
+    if (ros::ok()) {
+        ros::shutdown();
     }
+
+    odoT.join();
 
     uorc_destroy(uorc);
 }

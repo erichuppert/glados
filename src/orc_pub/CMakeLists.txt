@@ -18,13 +18,13 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
 )
 
-# add_library(orc_pub
-#   src/${PROJECT_NAME}/orc_pub.cpp
-# )
+add_library(orc_pub
+  src/odometry.cpp
+)
 
-add_executable(orc_run src/main.cpp)
+add_executable(orc_pub src/main.cpp)
 
-add_dependencies(orc_run ${catkin_EXPORTED_TARGETS} orc_utils)
+add_dependencies(orc_run ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(orc_run
   ${catkin_LIBRARIES}
