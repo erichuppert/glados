@@ -2,37 +2,30 @@
 #include <mutex>
 #include "orc_utils/uorc.h"
 #include "orc_pub/odometry.h"
+#include "orc_pub/status.h"
 
 #define STATUS_RATE 40
 
-class OrcStatus {
-private:
-    uorc_status_t status;
-    uorc_status_t status_copy;
-    uorc_t* uorc;
-    std::mutex mtx;
-public:
-    OrcStatus(uorc_t* uorc):
-        uorc(uorc)
-        {}
+OrcStatus::OrcStatus(uorc_t* uorc):
+    uorc(uorc)
+{}
 
-    void set() {
-        uorc_get_status(uorc, &status);
-        mtx.lock();
-        status_copy = status;
-        mtx.unlock();
-    }
+void OrcStatus::set() {
+    uorc_get_status(uorc, &status);
+    mtx.lock();
+    status_copy = status;
+    mtx.unlock();
+}
 
-    uorc_status_t& get() {
-        mtx.lock();
-        uorc_status_t ret = status_copy;
-        mtx.unlock();
-        return ret;
-    }
+uorc_status_t& OrcStatus::get() {
+    mtx.lock();
+    uorc_status_t ret = status_copy;
+    mtx.unlock();
+    return ret;
+}
 
-    uorc_t* uorc() {
-        return uorc;
-    }
+uorc_t* OrcStatus::uorc() {
+    return uorc;
 }
 
 void updateStatus(OrcStatus& ost) {
