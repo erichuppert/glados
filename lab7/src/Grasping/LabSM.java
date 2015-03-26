@@ -107,8 +107,6 @@ public class LabSM extends FSM<Object> implements Runnable {
 				g.ac.run();
 				g.ac.setGripperStatus(g.OPEN);
 				g.ac.run();
-				// g.ac.setHeight(0.5);
-				// g.ac.run();
 				g.wp.addWP(originalPose);
 				g.pubs.setState(MOVING_BACK);
 				return MOVING_BACK;
