@@ -31,6 +31,8 @@ private:
 
     uorc_status_t status;
 public:
+    double v_left;
+    double v_right;
     double v;
     double omega;
 

@@ -4,6 +4,7 @@
 #include "ros/ros.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
+#include "std_msgs/Float64.h"
 
 
 MotorStatus::MotorStatus(OrcStatus& ost): ost(ost) {
@@ -69,8 +70,8 @@ void MotorStatus::update() {
     // The orcboard has information about the velocity in its status, but it seems inaccurate,
     //   so we'll use the information we have from the pose.
     //
-    double v_left = SPEED(last_time,status.utime_host,previous_left,left);
-    double v_right = SPEED(last_time,status.utime_host,previous_right,right);
+    v_left = SPEED(last_time,status.utime_host,previous_left,left);
+    v_right = SPEED(last_time,status.utime_host,previous_right,right);
     v = (v_left+v_right)/2.0;
     omega = (v_left-v_right)/WHEEL_BASE;
 
@@ -86,6 +87,8 @@ void odometry(MotorStatus* mot) {
     ros::Time current_time;
     ros::Rate loop(ODO_FREQ);
     ROS_INFO("Starting to publish odometry");
+
+    ros::Publisher wheel_pub = n.advertise<std_msgs::Float64>("wheel",50);
 
     while (n.ok()) {
         // Update odometry
@@ -127,6 +130,10 @@ void odometry(MotorStatus* mot) {
         msg.twist.twist.angular.z = mot->omega;
 
         odom_pub.publish(msg);
+
+        std_msgs::Float64 wheel_msg;
+        wheel_msg.data = mot->v_left;
+        wheel_pub.publish(wheel_msg);
 
         loop.sleep();
     }

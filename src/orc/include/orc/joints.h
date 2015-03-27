@@ -39,7 +39,7 @@
 #define GRIPPER_ALPHA 911.52
 #define GRIPPER_BETA 1004.55
 
-#define GRIPPER_SPEED 
+#define GRIPPER_SPEED 1.0
 
 #include "orc/uorc.h"
 #include <thread>
