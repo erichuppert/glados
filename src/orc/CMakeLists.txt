@@ -6,12 +6,14 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   tf
+  std_msgs
+  message_generation
 )
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES orc_utils orc_odometry orc_status
-  CATKIN_DEPENDS roscpp rospy
+  CATKIN_DEPENDS roscpp rospy message_runtime
 )
 
 include_directories(include
@@ -29,6 +31,16 @@ add_library(orc_utils
 )
 
 add_executable(orc src/main.cpp)
+
+add_message_files(
+  FILES
+  JointSet.msg
+)
+
+generate_messages {
+  DEPENDENCIES
+  std_msgs
+}
 
 add_dependencies(orc ${catkin_EXPORTED_TARGETS})
 

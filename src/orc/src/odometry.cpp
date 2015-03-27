@@ -51,6 +51,8 @@ void MotorStatus::update() {
 
     int32_t left = uorc_encoder_get_position(&left_encoder, &status);
     int32_t right = uorc_encoder_get_position(&right_encoder, &status);
+    left_angle = ANGLE(left);
+    right_angle = ANGLE(right);
 
     double delta_left = (left-previous_left)*WHEEL_METERS_PER_TICK;
     double delta_right = (right-previous_right)*WHEEL_METERS_PER_TICK;

@@ -16,6 +16,8 @@
 
 #define SPEED(T0,T1,TICK0,TICK1) (((double)TICK1-TICK0)*WHEEL_METERS_PER_TICK*1000000.0/((double)T1-T0)) // Takes time in microseconds
 
+#define ANGLE(TICKS) (((double)TICKS)/(TICKS_PER_REVOLUTION) * 2 * M_PI)
+
 class MotorStatus {
 private:
     int32_t previous_left;
@@ -35,6 +37,9 @@ public:
     double x;
     double y;
     double theta;
+
+    double left_angle;
+    double right_angle;
 
     MotorStatus(OrcStatus&);
 
