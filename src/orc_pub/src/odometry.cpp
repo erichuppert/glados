@@ -1,5 +1,6 @@
 #include <cmath>
 #include "orc_pub/odometry.h"
+#include "orc_pub/status.h"
 #include "ros/ros.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
@@ -20,8 +21,8 @@ MotorStatus::MotorStatus(OrcStatus& ost): ost(ost) {
     // Find the initial positions
     //
     status = ost.get();
-    previous_left = uorc_encoder_get_position(&left_encoder, *status);
-    previous_right = uorc_encoder_get_position(&right_encoder, *status);
+    previous_left = uorc_encoder_get_position(&left_encoder, &status);
+    previous_right = uorc_encoder_get_position(&right_encoder, &status);
 
     // Start at the origin
     //
@@ -36,7 +37,7 @@ void MotorStatus::resetOdom() {
     theta = 0.0;
 }
 
-void MotorStatus::udpate() {
+void MotorStatus::update() {
     // Find the new positions
     //
     status = ost.get();
@@ -63,7 +64,7 @@ void MotorStatus::udpate() {
     double omega = (v_left-v_right)/WHEEL_BASE;
 }
 
-void odometry(OrcStatus& ost, MotorStatus &mot) {
+void odometry(MotorStatus* mot) {
     ros::NodeHandle n;
     ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
     tf::TransformBroadcaster odom_broadcaster;
@@ -74,11 +75,11 @@ void odometry(OrcStatus& ost, MotorStatus &mot) {
     while (n.ok()) {
         // Update odometry
         //
-        mot.update();
+        mot->update();
 
         // Because ROS is more general than 2D rotation, it uses Quaternions
         //
-        geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(mot.omega);
+        geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(mot->omega);
 
         // Need to publish an odometry transform relative to the base link
         //
@@ -88,10 +89,10 @@ void odometry(OrcStatus& ost, MotorStatus &mot) {
         odom_trans.header.frame_id = "odom";
         odom_trans.child_frame_id = "base_link";
 
-        odom_trans.transform.translation.x = mot.x;
-        odom_trans.transform.translation.x = mot.y;
+        odom_trans.transform.translation.x = mot->x;
+        odom_trans.transform.translation.x = mot->y;
         odom_trans.transform.translation.z = 0;
-        odom_trans.transform.translation.x = odom_quat;
+        odom_trans.transform.rotation = odom_quat;
         odom_broadcaster.sendTransform(odom_trans);
 
         // Now let's publish the odometry message
@@ -99,16 +100,16 @@ void odometry(OrcStatus& ost, MotorStatus &mot) {
         nav_msgs::Odometry msg;
         msg.header.stamp = current_time;
         msg.header.frame_id = "odom";
-        msg.child_frame_id = "base_link"
+        msg.child_frame_id = "base_link";
 
-        msg.pose.pose.position.x = mot.x;
-        msg.pose.pose.position.y = mot.y;
+        msg.pose.pose.position.x = mot->x;
+        msg.pose.pose.position.y = mot->y;
         msg.pose.pose.position.z = 0;
         msg.pose.pose.orientation = odom_quat;
 
-        msg.twist.linear.x = mot.v*cos(mot.theta);
-        msg.twist.linear.y = mot.v*sin(mot.theta);
-        msg.twist.angular.z = mot.omega;
+        msg.twist.twist.linear.x = mot->v*cos(mot->theta);
+        msg.twist.twist.linear.y = mot->v*sin(mot->theta);
+        msg.twist.twist.angular.z = mot->omega;
 
         odom_pub.publish(msg);
 
