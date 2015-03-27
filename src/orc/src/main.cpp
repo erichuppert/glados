@@ -3,6 +3,7 @@
 #include "orc/status.h"
 #include "orc/joints.h"
 #include "ros/ros.h"
+#include "orc/pid.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     MotorStatus mot(ost);
     std::thread odoT(odometry,&mot);
     std::thread jointsT(joints,&ost,&mot);
+    std::thread pidT(controller,&ost,&mot);
 
     statusT.join();
     // If we are no longer getting statuses, but haven't shutdown,

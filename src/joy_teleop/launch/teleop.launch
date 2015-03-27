@@ -1,0 +1,14 @@
+<launch>
+  <node respawn="true" pkg="joy" type="joy_node" name="joystick_monitor">
+    <param name="joy_node/dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12"/>
+  </node>
+
+  <param name="axis_linear" value="1" type="int"/>
+  <param name="axis_angular" value="0" type="int"/>
+  <param name="scale_linear" value="0.5" type="double"/>
+  <param name="scale_angular" value="-1.0" type="double"/>
+
+  <node pkg="joy_teleop" type="joy_teleop_node" name="teleop"/>
+
+</launch>

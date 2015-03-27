@@ -88,7 +88,8 @@ void odometry(MotorStatus* mot) {
     ros::Rate loop(ODO_FREQ);
     ROS_INFO("Starting to publish odometry");
 
-    ros::Publisher wheel_pub = n.advertise<std_msgs::Float64>("wheel",50);
+    ros::Publisher lwheel_pub = n.advertise<std_msgs::Float64>("l_wheel",50);
+    ros::Publisher rwheel_pub = n.advertise<std_msgs::Float64>("r_wheel",50);
 
     while (n.ok()) {
         // Update odometry
@@ -133,7 +134,9 @@ void odometry(MotorStatus* mot) {
 
         std_msgs::Float64 wheel_msg;
         wheel_msg.data = mot->v_left;
-        wheel_pub.publish(wheel_msg);
+        lwheel_pub.publish(wheel_msg);
+        wheel_msg.data = mot->v_right;
+        rwheel_pub.publish(wheel_msg);
 
         loop.sleep();
     }
