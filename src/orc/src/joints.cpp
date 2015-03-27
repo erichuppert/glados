@@ -70,8 +70,8 @@ void Servo::operator () (uorc_t* uorc) {
         if(resp != nullptr) uorc_response_destroy(resp);
         resp = uorc_command(uorc, 0x7000, buf, sizeof(buf), -1);
     } while(!resp->valid);
-    ros::Duration(delta_pwm/speed).sleep();
     uorc_response_destroy(resp);
+    ros::Duration(delta_pwm/speed).sleep();
     mtx.lock();
     current_pwm = target_pwm;
     done = true;
