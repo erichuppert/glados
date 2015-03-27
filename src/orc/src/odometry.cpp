@@ -58,7 +58,7 @@ void MotorStatus::update() {
     double delta_right = (right-previous_right)*WHEEL_METERS_PER_TICK;
 
     double delta_distance = (delta_left + delta_right)/2.0;
-    theta += (delta_left - delta_right)/WHEEL_BASE;
+    theta += (delta_right - delta_left)/WHEEL_BASE;
     theta = atan2(sin(theta), cos(theta)); // TO -PI,PI
     x += delta_distance*cos(theta);
     y += delta_distance*sin(theta);
@@ -77,8 +77,6 @@ void MotorStatus::update() {
     last_time = status.utime_host;
     previous_left = left;
     previous_right = right;
-
-    ROS_INFO("%d\t%.6f\t%.6f",right,theta,v_right);
 }
 
 void odometry(MotorStatus* mot) {
@@ -107,7 +105,7 @@ void odometry(MotorStatus* mot) {
         odom_trans.child_frame_id = "base_link";
 
         odom_trans.transform.translation.x = mot->x;
-        odom_trans.transform.translation.x = mot->y;
+        odom_trans.transform.translation.y = mot->y;
         odom_trans.transform.translation.z = 0;
         odom_trans.transform.rotation = odom_quat;
         odom_broadcaster.sendTransform(odom_trans);

@@ -1,2 +1,2 @@
-uint8 joint_id
+string joint_name
 float64 angle

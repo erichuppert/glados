@@ -10,6 +10,16 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+add_message_files(
+  FILES
+  JointSet.msg
+)
+
+generate_messages (
+  DEPENDENCIES
+  std_msgs
+)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES orc_utils orc_odometry orc_status
@@ -24,6 +34,8 @@ add_library(orc_odometry src/odometry.cpp)
 
 add_library(orc_status src/status.cpp)
 
+add_library(orc_joints src/joints.cpp)
+
 add_library(orc_utils
   src/udp_util.c
   src/varray.c
@@ -32,22 +44,13 @@ add_library(orc_utils
 
 add_executable(orc src/main.cpp)
 
-add_message_files(
-  FILES
-  JointSet.msg
-)
-
-generate_messages {
-  DEPENDENCIES
-  std_msgs
-}
-
-add_dependencies(orc ${catkin_EXPORTED_TARGETS})
+add_dependencies(orc orc_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(orc
   orc_utils
   orc_odometry
   orc_status
+  orc_joints
   pthread
   ${catkin_LIBRARIES}
 )

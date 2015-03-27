@@ -2,5 +2,4 @@
   <node pkg="orc" name="glados_orc" type="orc"/>
   <param name="robot_description" command="cat $(find orc)/robot.urdf" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 </launch>

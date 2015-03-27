@@ -1,6 +1,7 @@
 #include <thread>
 #include "orc/odometry.h"
 #include "orc/status.h"
+#include "orc/joints.h"
 #include "ros/ros.h"
 
 int main(int argc, char *argv[])
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 
     MotorStatus mot(ost);
     std::thread odoT(odometry,&mot);
+    std::thread jointsT(joints,&ost,&mot);
 
     statusT.join();
     // If we are no longer getting statuses, but haven't shutdown,
@@ -32,6 +34,7 @@ int main(int argc, char *argv[])
     }
 
     odoT.join();
+    jointsT.join();
 
     uorc_destroy(uorc);
 }
