@@ -5,13 +5,14 @@
 #include "orc_pub/status.h"
 #include <cmath>
 
-#define TICKS_PER_REVOLUTION 4 // TICKS/REV
-#define GEAR_RATIO
-#define WHEEL_RADIUS 0.0625 // M/(REV*2*pi)
-#define WHEEL_BASE 0.43 // M
+#define ENCODER_RESOLUTION    2000                                           // TICKS/(MOTOR REV)
+#define WHEEL_RADIUS          0.0625                                         // M/(REV*2*pi)
+#define TICKS_PER_REVOLUTION  ENCODER_RESOLUTION*GEAR_RATIO                  // TICKS/REV
+#define GEAR_RATIO            65.5                                           // (MOTOR REV)/REV
 #define WHEEL_METERS_PER_TICK (WHEEL_RADIUS)*(2*M_PI)/(TICKS_PER_REVOLUTION) // M/TICK
+#define WHEEL_BASE            0.43                                           // M
 
-#define ODO_FREQ 30 //HZ
+#define ODO_FREQ              30                                             // UPDATES/SEC
 
 class MotorStatus {
 private:
