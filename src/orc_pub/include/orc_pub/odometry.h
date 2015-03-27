@@ -1,3 +1,6 @@
+#ifndef ORC_PUB_ODOMETRY_H
+#define ORC_PUB_ODOMETRY_H
+
 #include "orc_utils/uorc.h"
 
 #define TICKS_PER_REVOLUTION *4 // TICKS/REV
@@ -37,3 +40,4 @@ public:
 };
 
 void odometry(OrcStatus&, MotorStatus&)
+#endif
