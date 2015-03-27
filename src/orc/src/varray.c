@@ -7,7 +7,7 @@
  *
  */
 
-#include "orc_utils/varray.h"
+#include "orc/varray.h"
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>

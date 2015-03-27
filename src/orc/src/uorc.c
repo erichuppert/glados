@@ -13,9 +13,9 @@
 #include <sys/ioctl.h>
 #include <assert.h>
 
-#include "orc_utils/uorc.h"
-#include "orc_utils/udp_util.h"
-#include "orc_utils/varray.h"
+#include "orc/uorc.h"
+#include "orc/udp_util.h"
+#include "orc/varray.h"
 
 #define MAX_PACKET_SIZE 1600
 

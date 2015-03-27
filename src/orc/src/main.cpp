@@ -1,6 +1,6 @@
 #include <thread>
-#include "orc_pub/odometry.h"
-#include "orc_pub/status.h"
+#include "orc/odometry.h"
+#include "orc/status.h"
 #include "ros/ros.h"
 
 int main(int argc, char *argv[])

@@ -1,8 +1,8 @@
 #ifndef ORC_PUB_ODOMETRY_H
 #define ORC_PUB_ODOMETRY_H
 
-#include "orc_utils/uorc.h"
-#include "orc_pub/status.h"
+#include "orc/uorc.h"
+#include "orc/status.h"
 #include <cmath>
 
 #define ENCODER_RESOLUTION    2000                                           // TICKS/(MOTOR REV)

@@ -1,7 +1,7 @@
 #ifndef ORC_PUB_STATUS_H
 #define ORC_PUB_STATUS_H
 
-#include "orc_utils/uorc.h"
+#include "orc/uorc.h"
 #include <mutex>
 
 class AutoLock {
