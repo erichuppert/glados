@@ -28,7 +28,7 @@ double PID::control(double actual, double timestamp) {
     double error = objective-actual;
     mtx.unlock();
     double deriv = 0;
-    if (ABS(objective) <= EPSILON && ABS(error) <= 0.1) {
+    if (ABS(objective) <= EPSILON && ABS(error) <= 0.05) {
         i = 0;
     }
     if (previous_timestamp != -1) {

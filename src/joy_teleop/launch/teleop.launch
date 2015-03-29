@@ -1,7 +1,7 @@
 <launch>
   <node respawn="true" pkg="joy" type="joy_node" name="joystick_monitor">
     <param name="joy_node/dev" type="string" value="/dev/input/js0" />
-    <param name="deadzone" value="0.12"/>
+    <param name="deadzone" value="0.2"/>
   </node>
 
   <param name="axis_linear" value="1" type="int"/>
