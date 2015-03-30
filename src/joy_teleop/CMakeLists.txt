@@ -3,6 +3,7 @@ project(joy_teleop)
 
 find_package(catkin REQUIRED COMPONENTS
   joy
+  orc
   roscpp
 )
 

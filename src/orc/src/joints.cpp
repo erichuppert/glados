@@ -89,7 +89,7 @@ void joints(OrcStatus* ost, MotorStatus* mot) {
     g_status = ost;
     ros::NodeHandle n;
     ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("joint_states",50);
-    ros::Subscriber joint_sub = n.subscribe("joint_set", 10, joint_set);
+    ros::Subscriber joint_sub = n.subscribe("joint_set", 100, joint_set);
     ros::Time current_time;
     ros::Rate loop(JOINT_FREQ);
 

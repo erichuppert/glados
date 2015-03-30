@@ -23,7 +23,7 @@ generate_messages (
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES orc_utils orc_odometry orc_status
-  CATKIN_DEPENDS roscpp rospy message_runtime
+  CATKIN_DEPENDS roscpp rospy message_runtime tf
 )
 
 include_directories(include
