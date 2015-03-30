@@ -10,12 +10,12 @@
 MotorStatus::MotorStatus(OrcStatus& ost): ost(ost) {
     left_encoder = {
         .uorc = ost.uorc(),
-        .port = 0,
+        .port = 1,
         .invert = 0
     };
     right_encoder = {
         .uorc = ost.uorc(),
-        .port = 1,
+        .port = 0,
         .invert = 1
     };
 

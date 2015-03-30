@@ -47,12 +47,12 @@ double PID::control(double actual, double timestamp) {
 void controller(OrcStatus* ost, MotorStatus* mot) {
     uorc_motor_t left_motor = {
         .uorc = ost->uorc(),
-        .port = 0,
+        .port = 1,
         .invert = 0
     };
     uorc_motor_t right_motor = {
         .uorc = ost->uorc(),
-        .port = 1,
+        .port = 0,
         .invert = 1
     };
     ros::Time current_time;
