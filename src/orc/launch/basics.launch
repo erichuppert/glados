@@ -1,5 +1,5 @@
 <launch>
-  <machine name="glados" address="glados" user="glados" default="false" env-loader="/home/glados/ros_env.sh"/>
+  <machine name="glados" address="r.glados.robot" user="glados" default="false" env-loader="/home/glados/ros_env.sh"/>
   <node pkg="orc" name="glados_orc" type="orc" machine="glados" />
   <param name="robot_description" command="cat $(find orc)/robot.urdf" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" machine="glados" />
