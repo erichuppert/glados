@@ -55,8 +55,27 @@ bool Servo::isDone() {
     return done;
 }
 
+#define STEP_DURATION 0.5
+#define SIGN(A) ((A)<0?-1:1)
 void Servo::operator () (uorc_t* uorc) {
-    int delta_pwm = abs(current_pwm - target_pwm);
+    int delta_pwm;
+    int new_pwm;
+    while(current_pwm != target_pwm) {
+        delta_pwm = target_pwm - current_pwm;
+        if (abs(delta_pwm/speed) > STEP_DURATION) {
+            new_pwm = current_pwm + SIGN(delta_pwm)*STEP_DURATION*speed;
+        } else {
+            new_pwm = target_pwm;
+        }
+        goToPosition(uorc, new_pwm);
+    }
+    mtx.lock();
+    done = true;
+    mtx.unlock();
+}
+
+void Servo::goToPosition(uorc_t* uorc, int target_pwm) {
+    int delta_pwm = abs(target_pwm - current_pwm);
     uint8_t buf[] = {(uint8_t)index,
                      (uint8_t)(target_pwm==0?
                                FAST_DIGIO_MODE_OUT:FAST_DIGIO_MODE_SERVO),
@@ -74,7 +93,6 @@ void Servo::operator () (uorc_t* uorc) {
     ros::Duration(delta_pwm/speed).sleep();
     mtx.lock();
     current_pwm = target_pwm;
-    done = true;
     mtx.unlock();
 }
 

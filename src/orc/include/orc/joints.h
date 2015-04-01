@@ -64,6 +64,8 @@ private:
     std::mutex mtx;
     bool done;
     int current_pwm;
+
+    void goToPosition(uorc_t* uorc, int target_pwm);
 public:
     const int index;
     std::thread* current_thread;
