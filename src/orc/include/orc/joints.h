@@ -4,6 +4,7 @@
 #define JOINT_FREQ 30
 
 #include <cmath>
+#include "orc/odometry.h"
 
 // PWM = alpha*theta + beta
 // theta = (PWM-beta)/alpha

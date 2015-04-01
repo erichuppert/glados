@@ -6,13 +6,14 @@
 #define PORT_GRIPPER 2
 
 // Class copied straight from DigitalInput.java from the uorc library.
-// class DigitalInput {
+//
+class DigitalInput {
 private:
     int port;
-    boolean inver;
+    bool invert;
     OrcStatus* ost;
 public:
-    DigitalInput(OrcStatus* ost, int port, boolean pullup, boolean invert)
+    DigitalInput(OrcStatus* ost, int port, bool pullup, bool invert)
         :ost(ost),
          port(port),
          invert(invert) {
@@ -35,18 +36,18 @@ public:
         uorc_response* resp = nullptr;
         do {
             if(resp != nullptr) uorc_response_destroy(resp);
-            resp = uorc_command(ost.uorc(), 0x7000, buf, size, -1);
+            resp = uorc_command(ost->uorc(), 0x7000, buf, size, -1);
         } while(!resp->valid);
         uorc_response_destroy(resp);
     }
 
-    boolean getValue() {
+    bool getValue() {
         uorc_status_t status = ost->get();
-        boolean v;
+        bool v;
         if (port < 8) {
-            v = ((os.simpleDigitalValues&(1<<port))!=0);
+            v = ((status.simple_digital_values&(1<<port))!=0);
         } else {
-            v = (os.fastDigitalConfig[port-8]!=0);
+            v = (status.fast_digital_config[port-8]!=0);
         }
 
         return v!=invert;
@@ -56,8 +57,8 @@ public:
 void monitor_touch(OrcStatus* ost) {
     DigitalInput gripper(ost, PORT_GRIPPER, true, true);
 
-    ros::NodeHandle n;
-    ros::Publisher touch_pub = n.advertise<orc::TouchState>("touch", 50);
+    ros::NodeHandle nh;
+    ros::Publisher touch_pub = nh.advertise<orc::TouchState>("touch", 50);
     ros::Rate loop(JOINT_FREQ);
 
     while (nh.ok()) {
