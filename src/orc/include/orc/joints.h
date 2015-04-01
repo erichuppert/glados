@@ -18,7 +18,7 @@
 #define SHOULDER_ALPHA 445.63
 #define SHOULDER_BETA 1400
 
-#define SHOULDER_SPEED M_PI/2
+#define SHOULDER_SPEED M_PI/4
 
 // Wrist
 //
@@ -29,7 +29,7 @@
 #define WRIST_ALPHA -477.46
 #define WRIST_BETA 1800
 
-#define WRIST_SPEED M_PI/2/.6
+#define WRIST_SPEED M_PI/4
 
 // Gripper
 //
