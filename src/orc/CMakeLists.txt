@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   JointSet.msg
+  TouchState.msg
 )
 
 generate_messages (
@@ -36,6 +37,8 @@ add_library(orc_status src/status.cpp)
 
 add_library(orc_joints src/joints.cpp)
 
+add_library(orc_touch src/touch.cpp)
+
 add_library(orc_pid src/pid.cpp)
 
 add_library(orc_utils
@@ -53,6 +56,7 @@ target_link_libraries(orc
   orc_odometry
   orc_status
   orc_joints
+  orc_touch
   orc_pid
   pthread
   ${catkin_LIBRARIES}
