@@ -4,6 +4,7 @@
 #include "orc/joints.h"
 #include "ros/ros.h"
 #include "orc/pid.h"
+#include "orc/touch.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +25,7 @@ int main(int argc, char *argv[])
     MotorStatus mot(ost);
     std::thread odoT(odometry,&mot);
     std::thread jointsT(joints,&ost,&mot);
+    std::thread touchT(monitor_touch,&ost);
     std::thread pidT(controller,&ost,&mot);
 
     statusT.join();
@@ -37,6 +39,8 @@ int main(int argc, char *argv[])
 
     odoT.join();
     jointsT.join();
+    touchT.join();
+    pidT.join();
 
     uorc_destroy(uorc);
 }
