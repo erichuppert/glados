@@ -7,6 +7,11 @@
 #include "geometry_msgs/Twist.h"
 #include <mutex>
 
+#define MAX(A,B) ((A)>(B)?(A):(B))
+#define MIN(A,B) ((A)<(B)?(A):(B))
+#define MAX_SPEED 0.4
+#define MIN_SPEED -0.4
+
 class PID {
 private:
     const double p_gain;
