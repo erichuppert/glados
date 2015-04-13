@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   std_msgs
   message_generation
+  pcl_ros
 )
 
 add_message_files(
@@ -59,6 +60,14 @@ target_link_libraries(orc
   orc_touch
   orc_pid
   pthread
+  ${catkin_LIBRARIES}
+)
+
+add_executable(orc_pcl src/pcl_to_laserscan.cpp)
+
+add_dependencies(orc_pcl ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(orc_pcl
   ${catkin_LIBRARIES}
 )
 

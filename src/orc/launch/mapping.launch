@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+  <include file="$(find orc)/launch/config.launch" />
+  <node pkg="orc" name="glados_orc_pcl" type="orc_pcl" machine="glados" />
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <param name="map_update_interval" value="0.5"/>
+    <param name="throttle_scans" value="5"/>
+  </node>
+</launch>

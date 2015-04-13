@@ -150,4 +150,27 @@
     <limit effort="1000.0" lower="0" upper="-1.6" velocity="1.0"/>
   </joint>
 
+  <link name="camera_base">
+    <visual>
+      <geometry>
+        <box size="0.1 0.3 0.03"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <link name="camera_link"/>
+
+  <joint name="base_to_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_base"/>
+    <origin xyz="-0.1143 -0.1524 0.4" rpy="0 0.698131701 0"/>
+  </joint>
+
+  <joint name="camera_base_to_camera_link" type="fixed">
+    <parent link="camera_base"/>
+    <child link="camera_link"/>
+    <origin xyz="-0.018 0 0"/>
+  </joint>
+
 </robot>
