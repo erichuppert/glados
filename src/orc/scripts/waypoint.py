@@ -9,11 +9,11 @@ from threading import Lock
 from math import atan2,sin,cos,sqrt,pi
 
 l = Lock()
-straightness = 1000
+straightness = 100
 d_threshold = 0.01
-a_threshold = 0.005
-ka = -1.0
-kd = 1.0
+a_threshold = 0.05
+ka = -0.5
+kd = 0.5
 
 distance_error = lambda p1,p2: sqrt(sum((x1-x2)**2 for x1,x2 in zip(p1[:2],p2[:2])))
 angle_error = lambda p1,p2: atan2(sin(p2[2]-p1[2]), cos(p2[2]-p1[2]))
@@ -56,7 +56,8 @@ def odom_update(odometry):
             angle_to_wp -= pi
             angle_to_wp = atan2(sin(angle_to_wp),cos(angle_to_wp))
         omega = ka*angle_to_wp
-    elif abs(d_angle) > a_threshold:
+        rospy.loginfo("Distance: %f" % distance)
+    elif abs(d_angle) > a_threshold and q.empty():
         v = 0
         rospy.loginfo(d_angle)
         omega = ka*d_angle
@@ -69,7 +70,7 @@ def odom_update(odometry):
     vel_pub.publish(msg)
 
 def new_path(path):
-    global q
+    global q,current_wp
     rospy.loginfo("New path received!")
     with q.mutex,l:
         q.queue.clear()
