@@ -1,4 +1,4 @@
 <launch>
-  <machine name="glados" address="r.glados.robot"
+  <machine name="glados" address="localhost"
            user="glados" default="false" env-loader="/home/glados/ros_env.sh"/>
 </launch>
