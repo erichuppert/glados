@@ -40,7 +40,7 @@ void cloud_cb(const sensor_msgs::PointCloud2::ConstPtr& input) {
     output.header.stamp = (*input).header.stamp;
     output.header.frame_id = BASE_LINK;
 
-    unsigned int num_readings = 100;
+    unsigned int num_readings = 300;
     double laser_frequency = 10000;
 
     output.angle_min = -M_PI;
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
     // Create ROS subscriber for input point cloud
     //
     ros::Subscriber sub = nh.subscribe("camera/depth/points", 1, cloud_cb);
-    scan_pub = nh.advertise<sensor_msgs::LaserScan>("scan", 50);
+    scan_pub = nh.advertise<sensor_msgs::LaserScan>("pcl_scan", 1);
     tf_listener = new tf::TransformListener();
     point_pub = nh.advertise<pcl::PointCloud<pcl::PointXYZ>>("cloud_out", 50);
 
