@@ -53,7 +53,7 @@ void cloud_cb(const sensor_msgs::PointCloud2::ConstPtr& input) {
     output.angle_increment = M_PI*2/num_readings;
     output.time_increment = (1./laser_frequency) / (num_readings);
     output.range_min = 0.1;
-    output.range_max = 4.5;
+    output.range_max = 3.0;
     output.ranges.resize(num_readings);
     double z_min = -0.05;
     double z_max = 0.1;
@@ -66,7 +66,7 @@ void cloud_cb(const sensor_msgs::PointCloud2::ConstPtr& input) {
             int bucket = (angle-output.angle_min)*num_readings/(output.angle_max-output.angle_min);
             double range = sqrt(it->x*it->x + it->y*it->y);
             if (range_num[bucket] == 0) {
-                output.ranges[bucket] = 0;
+                output.ranges[bucket] = 3.001;
             }
             output.ranges[bucket] += range;
             range_num[bucket]++;

@@ -63,6 +63,14 @@ target_link_libraries(orc
   ${catkin_LIBRARIES}
 )
 
+add_executable(orc_mapper src/simple_mapper.cpp)
+
+add_dependencies(orc_mapper ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(orc_mapper
+  ${catkin_LIBRARIES}
+)
+
 add_executable(orc_pcl src/pcl_to_laserscan.cpp)
 
 add_dependencies(orc_pcl ${catkin_EXPORTED_TARGETS})
