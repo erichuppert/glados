@@ -38,11 +38,12 @@ def handle_msg(image, pcl_data):
             if not block_already_seen(location):
                 save_block_location(location)
         closest_block = max(keypoints, key=lambda x: x.size)
-        nearest_block_msg = NearestBlock()
-        nearest_block_msg.size = closest_block.size
-        nearest_block_msg.x_location = round(closest_block.pt.x)
-        nearest_block_msg.y_location = round(closest_block.pt.y)
-        nearest_block_pix_size_pub.publish(nearest_block_msg)
+        print closest_block
+        # nearest_block_msg = NearestBlock()
+        # nearest_block_msg.size = closest_block.size
+        # nearest_block_msg.x_location = round(closest_block.pt.x)
+        # nearest_block_msg.y_location = round(closest_block.pt.y)
+        # nearest_block_pix_size_pub.publish(nearest_block_msg)
         
 
 def draw_keypoints(image, keypoints, color = (255, 0, 0)):
