@@ -47,8 +47,7 @@ def handle_msg(image, pcl_data):
         
 
 def draw_keypoints(image, keypoints, color = (255, 0, 0)):
-    for kp in keypoints:
-        x, y = kp
+    for x,y,size in keypoints:
         cv2.circle(image, (int(x), int(y)), 30, color)
 
 def keypoints_to_block_locations(keypoints, pcl_data):
