@@ -36,6 +36,13 @@ def handle_msg(image, pcl_data):
         for location in potential_block_locations:
             if not block_already_seen(location):
                 save_block_location(location)
+        closest_block = max(keypoints, key=lambda x: x.size)
+        nearest_block_msg = NearestBlock()
+        nearest_block_msg.size = closest_block.size
+        nearest_block_msg.x_location = round(closest_block.pt.x)
+        nearest_block_msg.y_location = round(closest_block.pt.y)
+        nearest_block_pix_size_pub.publish(nearest_block_msg)
+        
 
 def draw_keypoints(image, keypoints, color = (255, 0, 0)):
     for kp in keypoints:
@@ -104,7 +111,7 @@ def main():
     pcl_sub = message_filters.Subscriber("/camera/depth/points", PointCloud2)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub], 1, 0.1)
     ts.registerCallback(handle_msg)
-
+    nearest_block_pix_size_pub = rospy.Publisher("")
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
     block_location_pub = rospy.Publisher("block_location", Point)
     listener = tf.TransformListener();
