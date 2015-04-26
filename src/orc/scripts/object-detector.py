@@ -40,7 +40,7 @@ def handle_msg(image, pcl_data):
                 save_block_location(location)
         if base_block_locations:
             closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
-        print closest_block_point
+            print closest_block_point
         # nearest_block_msg = NearestBlock()
         # nearest_block_msg.size = closest_block.size
         # nearest_block_msg.x_location = round(closest_block.pt.x)
