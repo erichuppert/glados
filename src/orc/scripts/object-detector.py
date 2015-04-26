@@ -18,7 +18,6 @@ bridge = CvBridge()
 block_locations = []
 
 def handle_msg(image, pcl_data):
-    print "Image width: %d pixels" % image.width
     global blob_image_pub
     # get the image and find the blobs
     cv_image = bridge.imgmsg_to_cv2(image, "bgr8")
@@ -29,11 +28,12 @@ def handle_msg(image, pcl_data):
     draw_keypoints(cv_image,keypoints)
     ros_keypoints_im = bridge.cv2_to_imgmsg(cv_image)
     blob_image_pub.publish(ros_keypoints_im)
+    print "keypoints: %d" % len(keypoints)
     if keypoints:
         try:
             odom_block_locations, base_block_locations = keypoints_to_block_locations(keypoints, pcl_data)
         except:
-            print("Failed to convert to block locations")
+            # print("Failed to convert to block locations")
             return
         for location in odom_block_locations:
             if not block_already_seen(location):
