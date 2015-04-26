@@ -18,6 +18,7 @@ bridge = CvBridge()
 block_locations = []
 
 def handle_msg(image, pcl_data):
+    print "Image width: %d pixels" % image.width
     global blob_image_pub
     # get the image and find the blobs
     cv_image = bridge.imgmsg_to_cv2(image, "bgr8")
