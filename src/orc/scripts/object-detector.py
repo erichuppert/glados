@@ -12,6 +12,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, PointCloud2
 from geometry_msgs.msg import Point, PointStamped
 from roslib import message
+from orc.msg import NearestBlock
 
 bridge = CvBridge()
 block_locations = []
