@@ -37,7 +37,7 @@ def handle_msg(image, pcl_data):
         for location in potential_block_locations:
             if not block_already_seen(location):
                 save_block_location(location)
-        closest_block = max(keypoints, key=lambda x: x.size)
+        closest_block = max(keypoints, key=lambda x: x[2])
         print closest_block
         # nearest_block_msg = NearestBlock()
         # nearest_block_msg.size = closest_block.size
@@ -54,7 +54,7 @@ def draw_keypoints(image, keypoints, color = (255, 0, 0)):
 def keypoints_to_block_locations(keypoints, pcl_data):
     global listener
     locations = []
-    for keypoint_x, keypoint_y in keypoints:
+    for keypoint_x, keypoint_y, size in keypoints:
         keypoint = read_point(keypoint_x, keypoint_y, pcl_data)
         if any(math.isnan(k) for k in keypoint):
             continue
@@ -80,18 +80,20 @@ def find_keypoints(hsv_image):
     keypoints = []
     for min, max in color_boundaries:
         color_limited = cv2.inRange(hsv_image, min, max)
-        keypoints += find_contour_centers(color_limited)
+        keypoints += find_contours(color_limited)
 
     return keypoints
 
-def find_contour_centers(img):
+# returns tuple that is (center_x, center_y, size)
+def find_contours(img):
     contours, _ = cv2.findContours(img.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_TC89_L1)
     centers = []
     for contour in contours:
         moments = cv2.moments(contour)
         moment_area = cv2.contourArea(contour)
         if moments['m00'] != 0 and moment_area > 150:
-            centers.append((int(moments['m10']/moments['m00']), int(moments['m01']/moments['m00'])))
+            centers.append((int(moments['m10']/moments['m00']),
+                            int(moments['m01']/moments['m00'])), moment_area)
     return centers
 
 BLOCK_DISTANCE_THRESHOLD = 0.3
