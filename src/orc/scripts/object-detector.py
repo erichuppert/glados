@@ -93,7 +93,7 @@ def find_contours(img):
         moment_area = cv2.contourArea(contour)
         if moments['m00'] != 0 and moment_area > 150:
             centers.append((int(moments['m10']/moments['m00']),
-                            int(moments['m01']/moments['m00'])), moment_area)
+                            int(moments['m01']/moments['m00']), moment_area))
     return centers
 
 BLOCK_DISTANCE_THRESHOLD = 0.3
