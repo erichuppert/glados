@@ -32,14 +32,14 @@ def handle_msg(image, pcl_data):
     if keypoints:
         try:
             odom_block_locations, base_block_locations = keypoints_to_block_locations(keypoints, pcl_data)
-            
         except:
             print("Failed to convert to block locations")
             return
         for location in odom_block_locations:
             if not block_already_seen(location):
                 save_block_location(location)
-        closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
+        if base_block_locations:
+            closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
         print closest_block
         # nearest_block_msg = NearestBlock()
         # nearest_block_msg.size = closest_block.size
