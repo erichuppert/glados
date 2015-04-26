@@ -31,14 +31,15 @@ def handle_msg(image, pcl_data):
     blob_image_pub.publish(ros_keypoints_im)
     if keypoints:
         try:
-            potential_block_locations = keypoints_to_block_locations(keypoints, pcl_data)
+            odom_block_locations, base_block_locations = keypoints_to_block_locations(keypoints, pcl_data)
+            
         except:
             print("Failed to convert to block locations")
             return
-        for location in potential_block_locations:
+        for location in odom_block_locations:
             if not block_already_seen(location):
                 save_block_location(location)
-        closest_block = max(keypoints, key=lambda x: x[2])
+        closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
         print closest_block
         # nearest_block_msg = NearestBlock()
         # nearest_block_msg.size = closest_block.size
@@ -47,13 +48,19 @@ def handle_msg(image, pcl_data):
         # nearest_block_pix_size_pub.publish(nearest_block_msg)
         
 
+def point_magnitude(point):
+    return sum([a**2 for a in [point.x, point.y, point.z]])
+     
+        
 def draw_keypoints(image, keypoints, color = (255, 0, 0)):
     for x,y,size in keypoints:
         cv2.circle(image, (int(x), int(y)), 30, color)
 
+
 def keypoints_to_block_locations(keypoints, pcl_data):
     global listener
-    locations = []
+    odom_locations = []
+    base_locations = [] # wrt to robot base
     for keypoint_x, keypoint_y, size in keypoints:
         keypoint = read_point(keypoint_x, keypoint_y, pcl_data)
         if any(math.isnan(k) for k in keypoint):
@@ -61,9 +68,11 @@ def keypoints_to_block_locations(keypoints, pcl_data):
         pt = PointStamped()
         pt.header = pcl_data.header
         pt.point.x,pt.point.y,pt.point.z = keypoint
-        pt_base = listener.transformPoint("odom", pt)
-        locations.append(pt_base.point)
-    return locations
+        pt_odom = listener.transformPoint("odom", pt)
+        pt_base = listener.transformPoint("base", pt)
+        odom_locations.append(pt_odom.point)
+        base_locations.append(pt_base.point)
+    return (odom_locations, base_locations)
 
 def read_point(width, height, data) :
     # read function
