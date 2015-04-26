@@ -2,6 +2,7 @@
 import rospy
 import math
 from geometry_msgs.msg import Twist
+from orc.msg import NearestBlock
 
 TARGET_BLOCK_SIZE = 400
 IMAGE_WIDTH = 640
@@ -15,7 +16,7 @@ def handle_block_msg(block_msg):
     rotation_vel = angle_error * ROTATION_GAIN
     
 def main():
-    nearest_block_sub = rospy.Subscriber("")
+    nearest_block_sub = rospy.Subscriber("nearest_block", NearestBlock, handle_block_msg)
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
     rospy.spin()
 
