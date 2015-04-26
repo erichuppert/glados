@@ -12,7 +12,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, PointCloud2
 from geometry_msgs.msg import Point, PointStamped
 from roslib import message
-from orc.msg import NearestBlock
+# from orc.msg import NearestBlock
 
 bridge = CvBridge()
 block_locations = []
@@ -115,7 +115,7 @@ def main():
     pcl_sub = message_filters.Subscriber("/camera/depth/points", PointCloud2)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub], 1, 0.1)
     ts.registerCallback(handle_msg)
-    nearest_block_pix_size_pub = rospy.Publisher("")
+    # nearest_block_pix_size_pub = rospy.Publisher("")
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
     block_location_pub = rospy.Publisher("block_location", Point)
     listener = tf.TransformListener();

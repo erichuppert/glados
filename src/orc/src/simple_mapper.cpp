@@ -13,9 +13,9 @@
 
 #define DEFAULT_WIDTH 300 // X direction
 #define DEFAULT_HEIGHT 300 // Y direction
-#define DEFAULT_X_MIN -10.0
-#define DEFAULT_Y_MIN -10.0
-#define DEFAULT_DELTA 0.01 // grid side length
+#define DEFAULT_X_MIN -5.0
+#define DEFAULT_Y_MIN -5.0
+#define DEFAULT_DELTA 0.1 // grid side length
 #define DEFAULT_BASE_LINK "base_link"
 #define DEFAULT_ODOM_FRAME "odom"
 
@@ -95,11 +95,10 @@ void update_map(const sensor_msgs::LaserScan::ConstPtr& input) {
         pt_robot.point.z = 0;
         transformer->transformPoint(odom_frame,pt_robot,pt_odom);
 
-        clear_line(pt_odom, range, angle);
-
         int x = 1./delta * (pt_odom.point.x-x_min);
         int y = 1./delta * (pt_odom.point.y-y_min);
         if (input->range_min < range && range < input->range_max) {
+            //clear_line(pt_odom, range, angle);
             update_cell(x,y);
         }
     }
@@ -118,6 +117,9 @@ void clear_line(geometry_msgs::PointStamped pt_odom, double range, double angle)
         int c = 1./delta * (y-y_min);
         if (r != r_pt || c != c_pt) {
             double prior = map[INDEX(r,c)]/100.0;
+            if (prior > 0.999) {
+                prior = 0.999;
+            }
             if (prior < 0) {
                 map[INDEX(r,c)] = (1-p_wall_g_nwall) * 100;
             } else {
@@ -131,6 +133,9 @@ void clear_line(geometry_msgs::PointStamped pt_odom, double range, double angle)
 
 void update_cell(int x, int y) {
     double prior = map[INDEX(x,y)]/100.0;
+    if (prior > 0.999) {
+        prior = 0.999;
+    }
     if (prior < 0) {
         map[INDEX(x,y)] = p_wall_g_wall*100;
     } else {
