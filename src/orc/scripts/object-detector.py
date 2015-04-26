@@ -40,12 +40,7 @@ def handle_msg(image, pcl_data):
                 save_block_location(location)
         if base_block_locations:
             closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
-            print closest_block_point
-        # nearest_block_msg = NearestBlock()
-        # nearest_block_msg.size = closest_block.size
-        # nearest_block_msg.x_location = round(closest_block.pt.x)
-        # nearest_block_msg.y_location = round(closest_block.pt.y)
-        # nearest_block_pix_size_pub.publish(nearest_block_msg)
+            nearest_block_pub.publish(closest_block_point)
         
 
 def point_magnitude(point):
@@ -124,7 +119,7 @@ def main():
     pcl_sub = message_filters.Subscriber("/camera/depth/points", PointCloud2)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub], 1, 0.1)
     ts.registerCallback(handle_msg)
-    # nearest_block_pix_size_pub = rospy.Publisher("")
+    nearest_block_pub = rospy.Publisher("nearest_block", Point, queue_size=10)
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
     block_location_pub = rospy.Publisher("block_location", Point)
     listener = tf.TransformListener();
