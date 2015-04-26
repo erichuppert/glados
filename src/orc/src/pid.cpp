@@ -64,7 +64,7 @@ void controller(OrcStatus* ost, MotorStatus* mot) {
     right_wheel.setObjective(0);
 
     ros::NodeHandle n;
-    ros::Subscriber vel_sub = n.subscribe("cmd_vel",10,update_objective);
+    ros::Subscriber vel_sub = n.subscribe("/cmd_vel",10,update_objective);
 
     while(ros::ok()) {
         current_time = ros::Time::now();

@@ -1,6 +1,6 @@
 // OccupancyGrid mapper, no localization
 //
-#include "ros/ros.h"
+ #include "ros/ros.h"
 #include "nav_msgs/OccupancyGrid.h"
 #include "sensor_msgs/LaserScan.h"
 #include "geometry_msgs/PointStamped.h"
@@ -46,7 +46,7 @@ std::string map_topic;
 int8_t* map; // probability of occupied cell, 0-100; -1 for unknown
 
 ros::Publisher map_pub;
-tf::TransformListener transformer;
+tf::TransformListener *transformer;
 
 void update_map(const sensor_msgs::LaserScan::ConstPtr&);
 void clear_line(geometry_msgs::PointStamped,double,double);
@@ -79,7 +79,7 @@ void scan_handler(const sensor_msgs::LaserScan::ConstPtr& input) {
 }
 
 void update_map(const sensor_msgs::LaserScan::ConstPtr& input) {
-    transformer.waitForTransform(odom_frame, input->header.frame_id, ros::Time(input->header.stamp), ros::Duration(5.0));
+    transformer->waitForTransform(odom_frame, input->header.frame_id, ros::Time(input->header.stamp), ros::Duration(5.0));
 
     geometry_msgs::PointStamped pt_robot;
     geometry_msgs::PointStamped pt_odom;
@@ -93,7 +93,7 @@ void update_map(const sensor_msgs::LaserScan::ConstPtr& input) {
         pt_robot.point.x = range*cos(angle);
         pt_robot.point.y = range*sin(angle);
         pt_robot.point.z = 0;
-        transformer.transformPoint(odom_frame,pt_robot,pt_odom);
+        transformer->transformPoint(odom_frame,pt_robot,pt_odom);
 
         clear_line(pt_odom, range, angle);
 
@@ -141,11 +141,6 @@ void update_cell(int x, int y) {
 }
 
 int main(int argc, char** argv) {
-    // Initialize map
-    // All unknown
-    //
-    memset(map,-1,sizeof(map));
-
     // Initialize ROS
     //
     ros::init(argc, argv, "simple_mapper");
@@ -166,9 +161,17 @@ int main(int argc, char** argv) {
     nh.param<std::string>("map_topic", map_topic, DEFAULT_MAP_TOPIC);
 
     map = (int8_t*)malloc(sizeof(int8_t)*width*height);
+    // Initialize map
+    // All unknown
+    //
+    memset(map,-1,sizeof(int8_t)*width*height);
 
     // Create subscriber to /scan topic
     //
     ros::Subscriber scan_sub = nh.subscribe(scan_topic, 1, scan_handler);
     map_pub = nh.advertise<nav_msgs::OccupancyGrid>(map_topic, 1);
+    transformer = new tf::TransformListener();
+
+    ros::spin();
+    free(map);
 }

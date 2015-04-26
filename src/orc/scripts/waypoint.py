@@ -5,7 +5,6 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Path,Odometry
 from tf.transformations import euler_from_quaternion
 from Queue import Queue
-from threading import Lock
 from math import atan2,sin,cos,sqrt,pi
 
 l = Lock()
@@ -31,7 +30,6 @@ def odom_update(odometry):
 
     with l:
         if current_wp is None and q.empty():
-            vel_pub.publish(Twist())
             return
         current_wp = current_wp or q.get_nowait()
         wp = current_wp
@@ -63,6 +61,8 @@ def odom_update(odometry):
         omega = ka*d_angle
     else:
         current_wp = None
+        if q.empty():
+            vel_pub.publish(Twist())
         rospy.loginfo("DONE")
     msg = Twist()
     msg.linear.x = v
@@ -89,10 +89,10 @@ def main():
     global q,vel_pub,current_wp
     q = Queue()
     current_wp = None
+    rospy.init_node("waypoint_nav")
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
     rospy.Subscriber("odom", Odometry, odom_update)
     rospy.Subscriber("waypoints", Path, new_path)
-    rospy.init_node("waypoint_nav")
     rospy.spin()
 
 if __name__ == '__main__':

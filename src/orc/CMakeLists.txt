@@ -48,6 +48,22 @@ add_library(orc_utils
   src/uorc.c
 )
 
+add_executable(orc_pcl src/pcl_to_laserscan.cpp)
+
+add_dependencies(orc_pcl ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(orc_pcl
+  ${catkin_LIBRARIES}
+)
+
+add_executable(orc_mapper src/simple_mapper.cpp)
+
+add_dependencies(orc_mapper ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(orc_mapper
+  ${catkin_LIBRARIES}
+)
+
 add_executable(orc src/main.cpp)
 
 add_dependencies(orc orc_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
@@ -60,22 +76,6 @@ target_link_libraries(orc
   orc_touch
   orc_pid
   pthread
-  ${catkin_LIBRARIES}
-)
-
-add_executable(orc_mapper src/simple_mapper.cpp)
-
-add_dependencies(orc_mapper ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(orc_mapper
-  ${catkin_LIBRARIES}
-)
-
-add_executable(orc_pcl src/pcl_to_laserscan.cpp)
-
-add_dependencies(orc_pcl ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(orc_pcl
   ${catkin_LIBRARIES}
 )
 
