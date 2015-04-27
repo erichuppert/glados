@@ -55,7 +55,7 @@ bool Servo::isDone() {
     return done;
 }
 
-#define STEP_DURATION 0.5
+#define STEP_DURATION 0.1
 #define SIGN(A) ((A)<0?-1:1)
 void Servo::operator () (uorc_t* uorc) {
     int delta_pwm;
