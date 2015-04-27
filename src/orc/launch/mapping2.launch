@@ -3,6 +3,6 @@
 <launch>
   <include file="$(find orc)/launch/config.launch" />
   <node pkg="orc" name="glados_orc_pcl" type="orc_pcl" machine="glados" />
-  <node name="scan_throttler" type="throttle" pkg="topic_tools" args="messages /pcl_scan 3 /scan" />
+  <node name="scan_throttler" type="throttle" pkg="topic_tools" args="messages /pcl_scan 5 /scan" />
   <!--<node pkg="orc" name="simple_mapper" type="orc_mapper" machine="glados"/>-->
 </launch>
