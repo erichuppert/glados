@@ -33,7 +33,7 @@ def handle_msg(image, pcl_data):
         try:
             odom_block_locations, base_block_locations = keypoints_to_block_locations(keypoints, pcl_data)
         except:
-            # print("Failed to convert to block locations")
+            print("Failed to convert to block locations")
             return
         for location in odom_block_locations:
             if not block_already_seen(location):
@@ -41,6 +41,11 @@ def handle_msg(image, pcl_data):
         if base_block_locations:
             closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
             nearest_block_pub.publish(closest_block_point)
+            print closest_block_point
+            
+        else:
+            print "can't publish block location"
+            
         
 
 def point_magnitude(point):
@@ -64,7 +69,7 @@ def keypoints_to_block_locations(keypoints, pcl_data):
         pt.header = pcl_data.header
         pt.point.x,pt.point.y,pt.point.z = keypoint
         pt_odom = listener.transformPoint("odom", pt)
-        pt_base = listener.transformPoint("base", pt)
+        pt_base = listener.transformPoint("base_link", pt)
         odom_locations.append(pt_odom.point)
         base_locations.append(pt_base.point)
     return (odom_locations, base_locations)
@@ -79,6 +84,7 @@ def read_point(width, height, data) :
 color_boundaries = [
     (np.array([170, 100, 100]), np.array([180, 255, 255])), # red
     (np.array([18, 180, 80]), np.array([30, 255, 255])), # yellow
+    (np.array([44, 100, 80]), np.array([56, 255, 255]))
 ]
 def find_keypoints(hsv_image):
     keypoints = []
@@ -112,14 +118,14 @@ def save_block_location(location):
     block_locations.append(location)
 
 def main():
-    global blob_image_pub,block_location_pub,listener
+    global blob_image_pub,block_location_pub,listener, nearest_block_pub
     rospy.init_node('object_detector')
 
     image_sub = message_filters.Subscriber("/camera/rgb/image_raw", Image)
     pcl_sub = message_filters.Subscriber("/camera/depth/points", PointCloud2)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub], 1, 0.1)
-    ts.registerCallback(handle_msg)
     nearest_block_pub = rospy.Publisher("nearest_block", Point, queue_size=10)
+    ts.registerCallback(handle_msg)
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
     block_location_pub = rospy.Publisher("block_location", Point)
     listener = tf.TransformListener();
