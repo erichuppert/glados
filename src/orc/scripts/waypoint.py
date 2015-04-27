@@ -10,9 +10,9 @@ from math import atan2,sin,cos,sqrt,pi
 l = Lock()
 straightness = 100
 d_threshold = 0.01
-a_threshold = 0.05
-ka = -0.5
-kd = 0.5
+a_threshold = 0.1
+ka = 0.5
+kd = 0.8
 
 distance_error = lambda p1,p2: sqrt(sum((x1-x2)**2 for x1,x2 in zip(p1[:2],p2[:2])))
 angle_error = lambda p1,p2: atan2(sin(p2[2]-p1[2]), cos(p2[2]-p1[2]))
@@ -56,6 +56,7 @@ def odom_update(odometry):
         omega = ka*angle_to_wp
         rospy.loginfo("Distance: %f" % distance)
     elif abs(d_angle) > a_threshold and q.empty():
+        current_wp = (pose.position.x,pose.position.y,theta)
         v = 0
         rospy.loginfo(d_angle)
         omega = ka*d_angle

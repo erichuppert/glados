@@ -81,7 +81,7 @@ void controller(OrcStatus* ost, MotorStatus* mot) {
 
 void update_objective(const geometry_msgs::Twist::ConstPtr& msg) {
     double v = MAX(MIN(msg->linear.x, MAX_SPEED),MIN_SPEED);
-    double omega = msg->angular.z;
+    double omega = (msg->angular.z)*-1;
     double v_diff = omega*WHEEL_BASE/2.0;
     left_wheel.setObjective(v+v_diff);
     right_wheel.setObjective(v-v_diff);
