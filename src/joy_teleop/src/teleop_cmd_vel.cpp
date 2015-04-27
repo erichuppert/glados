@@ -72,7 +72,7 @@ void Teleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joint_pub_.publish(joint);
 
         joint.joint_name = "shoulder_to_wrist";
-        joint.angle = 1.14;
+        joint.angle = 1.24;
         joint_pub_.publish(joint);
 
         joint.joint_name = "wrist_to_gripper";
@@ -84,7 +84,7 @@ void Teleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joint_pub_.publish(joint);
 
         joint.joint_name = "shoulder_to_wrist";
-        joint.angle = 1.14;
+        joint.angle = 1.24;
         joint_pub_.publish(joint);
 
         joint.joint_name = "wrist_to_gripper";
