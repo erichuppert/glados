@@ -4,7 +4,7 @@ import math
 from orc.msg import JointSet
 
 global state
-state= start
+state= "start"
 joint = JointSet()
 
 def handleAngleMessage(jointState):
