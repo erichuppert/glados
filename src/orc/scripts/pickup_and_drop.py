@@ -57,7 +57,7 @@ def nextState (state):
 def main():
 	global joint_pub_
 	rospy.init_node('Pickup_and_drop')
-	joint_pub_=rospy.Publisher("/joint_set",100)
+	joint_pub_=rospy.Publisher("joint_set",100)
         rospy.Subscriber("joint_state",JointState, handleAngleMessage)
 if __name__ == "__main__":
     main()
