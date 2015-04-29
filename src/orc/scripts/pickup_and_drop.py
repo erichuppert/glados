@@ -3,16 +3,20 @@ import rospy
 import math
 from orc.msg import JointSet
 
-
-
+global state
+state= start
 joint = JointSet()
 
 def handleAngleMessage(jointState):
     name = jointState.name
     angle = jointState.angle
     angleStates[name] = angle
-    if checkAngles():
-        # move to next state
+    if state == "start"
+    	a= True
+    else 
+    	a= checkAngles()
+    if a:
+    	# move to next state
          state = nextState(state)
         
 angleStates = {
@@ -45,7 +49,7 @@ stateAngles = {
 def nextState (state):
     currentIndex = states.index(state)
     if currentIndex == len(states)-1:
-        raise "Foo"
+    	raise "Foo"
     newState = states[currentIndex + 1]
     set_angle("base_to_shoulder", stateAngles[newState][0])
     set_angle("shoulder_to_wrist",stateAngles[newState][1])
