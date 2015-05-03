@@ -48,6 +48,12 @@ add_library(orc_utils
   src/uorc.c
 )
 
+add_service_files(
+  FILES
+  OpenCloseDoor.srv
+  PickupBlock.srv
+)
+
 add_executable(orc_pcl src/pcl_to_laserscan.cpp)
 
 add_dependencies(orc_pcl ${catkin_EXPORTED_TARGETS})
