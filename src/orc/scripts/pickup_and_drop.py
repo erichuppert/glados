@@ -3,9 +3,18 @@ import rospy
 import math
 from orc.msg import JointSet
 from sensor_msgs.msg import JointState
+from orc.srv import PickupBlock, PickupBlockResponse
 
-state= "start"
+state= "waiting"
 joint = JointSet()
+
+def pickupAndDrop(req):
+    loop = rospy.Rate(30)
+    req.state = "start"
+    while req.state != "stop":
+        loop.sleep()
+    req.state = "waiting"
+    return PickupBlockResponse()
 
 def handleAngleMessage(jointState):
     global state,angleStates
@@ -43,7 +52,7 @@ def set_angle(name,angle):
     joint.angle=angle
     joint_pub_.publish(joint)
 
-states = ["start", "findblock","grip","pickup","drop","stop"]
+states = ["start", "findblock","grip","pickup","drop","stop","waiting"]
 joint_names = ["base_to_shoulder", "shoulder_to_wrist", "wrist_to_gripper"]
 stateAngles = {
     "findblock" : (-1.3,0.80,0.8),
@@ -60,7 +69,8 @@ def nextState (state):
 
 def main():
 	global joint_pub_
-	rospy.init_node('Pickup_and_drop')
+	rospy.init_node('Pickup_and_drop_server')
+    s = rospy.Service('PickupAndDrop', PickupBlock, pickupAndDrop)
 	joint_pub_=rospy.Publisher("joint_set",JointSet, queue_size=100)
         rospy.Subscriber("joint_states",JointState, handleAngleMessage)
         rospy.spin()
