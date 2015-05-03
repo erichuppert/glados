@@ -22,7 +22,6 @@ def open_close_door(req):
     loop = rospy.Rate(30)
     desired_angle = state_vals[req.state]
     while abs(door_angle - desired_angle) > EPSILON:
-        print door_angle,desired_angle
         joint = JointSet()
         joint.joint_name=DOOR_NAME
         joint.angle=desired_angle
