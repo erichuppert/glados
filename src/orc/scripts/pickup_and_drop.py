@@ -4,8 +4,15 @@ import math
 from orc.msg import JointSet
 
 
-state= "start"
+state= "waiting"
 joint = JointSet()
+
+def pickupAndDrop(request):
+    state = "start"
+    while state != "stop":
+        pass
+    state = "waiting"
+    return 
 
 def handleAngleMessage(jointState):
     global state
@@ -38,7 +45,7 @@ def set_angle(name,angle):
     joint.angle=angle
     joint_pub_.publish(joint)
     
-states = [ "findblock","grip","pickup","drop","stop"] 
+states = [ "findblock","grip","pickup","drop","stop","waiting"] 
 stateAngles = {
     "findblock" : (-1.3,0.8,0.8),"grip":(2.0,1.24,0.55),"pickup":(2.0,1.24,0.55),"drop":(2.0,1.24,0.8)
     }
