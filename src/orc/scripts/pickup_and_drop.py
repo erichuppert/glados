@@ -15,6 +15,13 @@ def pickupAndDrop(req):
     while state != "stop":
         loop.sleep()
     state = "waiting"
+    #calling door service
+    rospy.wait_for_service('open_close_door')
+    try:
+        open_close_door = rospy.ServiceProxy('open_close_door',OpenCloseDoor)
+        open_close_door(2)
+    except rospy.ServiceException, e:
+        print "Service call failed"
     return PickupBlockResponse()
 
 def handleAngleMessage(jointState):
