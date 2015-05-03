@@ -17,6 +17,12 @@ add_message_files(
   TouchState.msg
 )
 
+add_service_files(
+  FILES
+  OpenCloseDoor.srv
+  PickupBlock.srv
+)
+
 generate_messages (
   DEPENDENCIES
   std_msgs
@@ -46,12 +52,6 @@ add_library(orc_utils
   src/udp_util.c
   src/varray.c
   src/uorc.c
-)
-
-add_service_files(
-  FILES
-  OpenCloseDoor.srv
-  PickupBlock.srv
 )
 
 add_executable(orc_pcl src/pcl_to_laserscan.cpp)
