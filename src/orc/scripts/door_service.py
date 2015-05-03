@@ -6,18 +6,21 @@ from sensor_msgs.msg import JointState
 
 OPEN_ANGLE = math.pi/2.0
 CLOSED_ANGLE = 0.0
+HALF_ANGLE = math.pi/4.0
 
 EPSILON = 0.1
 DOOR_NAME = "door"
 door_angle = -0.1
 
-def open_close_door(req):
-    if req.state == 1:
-        desired_angle = OPEN_ANGLE
-    else:
-        desired_angle = CLOSED_ANGLE
+state_vals = {
+    0 : OPEN_ANGLE,
+    1 : CLOSED_ANGLE,
+    2 : HALF_ANGLE
+}
 
+def open_close_door(req):
     loop = rospy.Rate(30)
+    desired_angle = state_vals[req.state]
     while abs(door_angle - desired_angle) > EPSILON:
         print door_angle,desired_angle
         joint = JointSet()
