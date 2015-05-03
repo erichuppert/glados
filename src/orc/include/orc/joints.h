@@ -42,6 +42,15 @@
 
 #define GRIPPER_SPEED 1.0
 
+#define DOOR_INDEX 3
+#define DOOR_MIN_PWM 1700
+#define DOOR_MAX_PWM 2225
+
+#define DOOR_ALPHA 334.23
+#define DOOR_BETA 1700
+
+#define DOOR_SPEED M_PI/2
+
 #include "orc/uorc.h"
 #include <thread>
 #include <mutex>

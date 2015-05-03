@@ -24,6 +24,11 @@ Servo gripper(GRIPPER_INDEX,
               GRIPPER_ALPHA, GRIPPER_BETA,
               GRIPPER_SPEED);
 
+Servo door(DOOR_INDEX,
+           DOOR_MIN_PWM, DOOR_MAX_PWM,
+           DOOR_ALPHA, DOOR_BETA,
+           DOOR_SPEED);
+
 double Servo::theta(int pwm) {
     pwm == 0 && (pwm = min_pwm);
     return (pwm-beta)/alpha;
@@ -158,6 +163,8 @@ void joint_set(const orc::JointSet::ConstPtr& msg) {
         wrist.setAngle(msg->angle, g_status->uorc());
     } else if(msg->joint_name == "wrist_to_gripper") {
         gripper.setAngle(msg->angle, g_status->uorc());
+    } else if(msg->joint_name == "door") {
+        door.setAngle(msg->angle, g_status->uorc());
     } else {
         ROS_WARN("Invalid joint name");
     }
