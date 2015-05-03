@@ -2,6 +2,7 @@
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/Joy.h"
 #include "orc/JointSet.h"
+#include <cmath>
 
 class Teleop
 {
@@ -64,7 +65,7 @@ void Teleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joint_pub_.publish(joint);
 
         joint.joint_name = "wrist_to_gripper";
-        joint.angle = 0.55;
+        joint.angle = 0.4;
         joint_pub_.publish(joint);
     } else if(joy->buttons[3]) { // Pick-up
         joint.joint_name = "base_to_shoulder";
@@ -76,7 +77,7 @@ void Teleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
         joint_pub_.publish(joint);
 
         joint.joint_name = "wrist_to_gripper";
-        joint.angle = 0.55;
+        joint.angle = 0.4;
         joint_pub_.publish(joint);
     } else if(joy->buttons[1]) { // Drop
         joint.joint_name = "base_to_shoulder";
@@ -89,6 +90,14 @@ void Teleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
         joint.joint_name = "wrist_to_gripper";
         joint.angle = 0.8;
+        joint_pub_.publish(joint);
+    } else if(joy->axes[5] < 0) { // Open door
+        joint.joint_name = "door";
+        joint.angle = M_PI/2.0;
+        joint_pub_.publish(joint);
+    } else if(joy->axes[2] < 0) { // Close door
+        joint.joint_name = "door";
+        joint.angle = 0;
         joint_pub_.publish(joint);
     }
 }

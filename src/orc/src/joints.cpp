@@ -148,6 +148,11 @@ void joints(OrcStatus* ost, MotorStatus* mot) {
         msg.name.push_back("wrist_to_gripper");
         msg.position.push_back(gripper.current());
 
+        // Door position
+        //
+        msg.name.push_back("door");
+        msg.position.push_back(door.current());
+
         joint_pub.publish(msg);
 
         ros::spinOnce();
