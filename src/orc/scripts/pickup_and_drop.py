@@ -9,17 +9,18 @@ state= "waiting"
 joint = JointSet()
 
 def pickupAndDrop(req):
+    global state
     loop = rospy.Rate(30)
-    req.state = "start"
-    while req.state != "stop":
+    state = "start"
+    while state != "stop":
         loop.sleep()
-    req.state = "waiting"
+    state = "waiting"
     return PickupBlockResponse()
 
 def handleAngleMessage(jointState):
     global state,angleStates
     angleStates = dict(zip(jointState.name,jointState.position))
-    if (state == "stop"):
+    if (state == "stop" or state == "waiting"):
         return
     if state == "start" or checkAngles():
     	# move to next state
@@ -52,7 +53,7 @@ def set_angle(name,angle):
     joint.angle=angle
     joint_pub_.publish(joint)
 
-states = ["start", "findblock","grip","pickup","drop","stop","waiting"]
+states = ["waiting", "start", "findblock","grip","pickup","drop","stop"]
 joint_names = ["base_to_shoulder", "shoulder_to_wrist", "wrist_to_gripper"]
 stateAngles = {
     "findblock" : (-1.3,0.80,0.8),
@@ -70,7 +71,7 @@ def nextState (state):
 def main():
 	global joint_pub_
 	rospy.init_node('Pickup_and_drop_server')
-    s = rospy.Service('PickupAndDrop', PickupBlock, pickupAndDrop)
+        s = rospy.Service('PickupAndDrop', PickupBlock, pickupAndDrop)
 	joint_pub_=rospy.Publisher("joint_set",JointSet, queue_size=100)
         rospy.Subscriber("joint_states",JointState, handleAngleMessage)
         rospy.spin()
