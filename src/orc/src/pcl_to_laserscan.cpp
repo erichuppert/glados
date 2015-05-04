@@ -66,18 +66,19 @@ void cloud_cb(const sensor_msgs::PointCloud2::ConstPtr& input) {
             int bucket = (angle-output.angle_min)*num_readings/(output.angle_max-output.angle_min);
             double range = sqrt(it->x*it->x + it->y*it->y);
             if (range_num[bucket] == 0) {
-                output.ranges[bucket] = 0;
+                output.ranges[bucket] = range;
+            } else {
+                output.ranges[bucket] = fmin(range,output.ranges[bucket]);
             }
-            output.ranges[bucket] += range;
             range_num[bucket]++;
         }
     }
     for(int i = 0; i < num_readings; i++) {
         if (range_num[i]==0) {
             output.ranges[i] = 0;
-        } else {
-            output.ranges[i] /= (double)range_num[i];
-        }
+        } //else {
+        //output.ranges[i] /= (double)range_num[i];
+        //}
     }
     scan_pub.publish(output);
 }
