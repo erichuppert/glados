@@ -76,9 +76,10 @@ def new_waypoint(waypoint):
     rospy.loginfo("New waypoint received!")
     with q.mutex,l:
         if waypoint.reset:
+            print "RESET received"
             q.queue.clear()
             current_wp = None
-            return
+            return WaypointResponse()
     q.put((waypoint.x,waypoint.y,waypoint.theta))
     if (waypoint.block):
         loop = rospy.Rate(30)

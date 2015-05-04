@@ -6,5 +6,6 @@
   <node pkg="orc" name="pickup_and_drop" type="pickup_and_drop.py" />
   <node pkg="orc" name="state_machine" type="state_machine.py" />
   <node pkg="orc" name="door_service" type="door_service.py" />
+  <node pkg="orc" name="waypoints" type="waypoint.py" />
   <node pkg="orc" name="explorer" type="explorer.py" />
 </launch>

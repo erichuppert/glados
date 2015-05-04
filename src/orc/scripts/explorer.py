@@ -34,7 +34,14 @@ def update(scan,odom):
     if state == SLEEPING: # Don't do anything if we're sleeping
         return
 
-    pose = odometry.pose.pose
+    print "going to random waypoint"
+    pose = odom.pose.pose
+    quat = (pose.orientation.x,
+            pose.orientation.y,
+            pose.orientation.z,
+            pose.orientation.w)
+    _,_,r_theta = euler_from_quaternion(quat)
+
     (rx,ry) = (pose.position.x,pose.position.y)
 
     valid_scan = [(scan.ranges[i], index_to_angle(i,scan)) for i in range(0,len(scan.ranges)) if scan.range_min < scan.ranges[i] < scan.range_max]
@@ -49,13 +56,14 @@ def update(scan,odom):
         collides = True
         while collides:
             # Choose random point
-            r,theta = random.choice(seq)
-            dest_theta = random.rand()*2*pi
-            alpha = random.rand()
+            r,theta = 2.0,(random.random()*pi/2.0)-pi/4.0
+            r,theta = random.choice(valid_scan)
+            dest_theta = random.random()*2*pi
+            alpha = random.random()
             # Does path collide with any point?
-            (y_min,y_max,x_min,x_max) = (-ROBOT_WIDTH/2.0, ROBOT_WIDTH/2.0, -ROBOT_LENGTH, r+ROBOT_LENGTH)
+            (y_min,y_max,x_min,x_max) = (-ROBOT_WIDTH/2.0, ROBOT_WIDTH/2.0, -ROBOT_LENGTH/2.0, alpha*r+ROBOT_LENGTH/2.0)
             collides = False
-            for r2,theta2 in points:
+            for r2,theta2 in valid_scan:
                 t_theta = theta2-theta
                 (x,y) = (r2*cos(t_theta),r2*sin(t_theta))
 
@@ -65,7 +73,7 @@ def update(scan,odom):
                     break
 
                 # Check if we can rotate at the destination
-                if -RADIUS_SIMPLE < x < RADIUS_SIMPLE and r-RADIUS_SIMPLE < y < r+RADIUS_SIMPLE:
+                if -RADIUS_SIMPLE < x < RADIUS_SIMPLE and alpha*r-RADIUS_SIMPLE < y < alpha*r+RADIUS_SIMPLE:
                     collides = True
                     break
 
@@ -79,22 +87,24 @@ def update(scan,odom):
                 if collides:
                     break
 
-        (x,y) = (rx+r*cos(theta),ry+r*sin(theta))
-        waypoint(False,True,x,y,dest_theta)
+        (x,y) = (rx+alpha*r*cos(theta+r_theta),ry+alpha*r*sin(theta+r_theta))
+        print (x,y),(rx,ry)
+        rospy.wait_for_service("waypoints")
+        waypoint_service = rospy.ServiceProxy("waypoints",Waypoint)
+        waypoint_service(False,True,x,y,dest_theta)
 
 def change_state(new_state):
     global state, vel_pub
     state = new_state.data
-    if state == SLEEPING:
-        waypoint_service(True,False,0,0,0)
-        vel_pub.Publish(Twist())
-
-def main():
-    global vel_pub,state,waypoint_service
-    rospy.init_node("explorer")
-
     rospy.wait_for_service("waypoints")
     waypoint_service = rospy.ServiceProxy("waypoints",Waypoint)
+    if state == SLEEPING:
+        waypoint_service(True,False,0,0,0)
+        vel_pub.publish(Twist())
+
+def main():
+    global vel_pub,state
+    rospy.init_node("explorer")
 
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
 
