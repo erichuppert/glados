@@ -15,8 +15,8 @@ FORWARD_GAIN = .5
 DESIRED_DIST = 0.15 # Experimental
 STRAIGHTNESS = 100
 
-paused = true
-done = false
+paused = True
+done = False
 
 def handle_block_msg(block_msg):
     if not paused:
@@ -36,7 +36,7 @@ def handle_bump_msg(bump_msg):
         vel_pub.publish(Twist())
     # call the pickup and drop service here
     if not paused:
-        done = true
+        done = True
         pickup_block()
 
 def pickup_block():
@@ -63,8 +63,8 @@ def drop_arm():
 def visual_servo_service(req):
     global paused, done
     drop_arm()
-    paused = false
-    done = false
+    paused = False
+    done = False
     loop = rospy.rate(30)
     while not done:
         loop.sleep()
