@@ -19,12 +19,13 @@ def change_wall_follow_state(val):
 def pickup_block():
     # this should synchronously call visual servoing to start, which should make the arm
     # pickup the block when the bump sensors are triggered
-   rospy.wait_for_service('VisualServo')
+    rospy.wait_for_service('VisualServo')
     try:
         visual_servo_service = rospy.ServiceProxy('VisualServo',visual_servo_service)
-            visual_servo_service()
-        except rospy.ServiceException, e:
-        print "Service call failed"    
+        visual_servo_service()
+    except rospy.ServiceException, e:
+        print "Service call failed"
+    return True
     
 def change_door_state(state):
     rospy.wait_for_service('open_close_door')
