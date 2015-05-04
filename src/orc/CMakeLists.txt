@@ -21,6 +21,7 @@ add_service_files(
   FILES
   OpenCloseDoor.srv
   PickupBlock.srv
+  VisualServo.srv
 )
 
 generate_messages (
