@@ -22,6 +22,7 @@ add_service_files(
   OpenCloseDoor.srv
   PickupBlock.srv
   VisualServo.srv
+  Waypoint.srv
 )
 
 generate_messages (

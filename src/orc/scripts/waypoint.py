@@ -2,10 +2,11 @@
 import rospy
 from threading import Lock
 from geometry_msgs.msg import Twist
-from nav_msgs.msg import Path,Odometry
+from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from Queue import Queue
 from math import atan2,sin,cos,sqrt,pi
+from orc.srv import Waypoint,WaypointResponse
 
 l = Lock()
 straightness = 100
@@ -70,21 +71,20 @@ def odom_update(odometry):
     msg.angular.z = omega
     vel_pub.publish(msg)
 
-def new_path(path):
+def new_waypoint(waypoint):
     global q,current_wp
-    rospy.loginfo("New path received!")
+    rospy.loginfo("New waypoint received!")
     with q.mutex,l:
-        q.queue.clear()
-        current_wp = None
-    for pose in (p.pose for p in path.poses):
-        quat = (pose.orientation.x,
-                pose.orientation.y,
-                pose.orientation.z,
-                pose.orientation.w)
-        _,_,theta = euler_from_quaternion(quat)
-        rospy.loginfo(pose)
-        rospy.loginfo(theta)
-        q.put((pose.position.x,pose.position.y,theta))
+        if waypoint.reset:
+            q.queue.clear()
+            current_wp = None
+            return
+    q.put((waypoint.x,waypoint.y,waypoint.theta))
+    if (waypoint.block):
+        loop = rospy.Rate(30)
+        while not q.empty():
+            loop.sleep()
+    return WaypointResponse()
 
 def main():
     global q,vel_pub,current_wp
@@ -93,7 +93,7 @@ def main():
     rospy.init_node("waypoint_nav")
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
     rospy.Subscriber("odom", Odometry, odom_update)
-    rospy.Subscriber("waypoints", Path, new_path)
+    rospy.Service("waypoints", Waypoint, new_waypoint)
     rospy.spin()
 
 if __name__ == '__main__':
