@@ -84,7 +84,8 @@ def read_point(width, height, data) :
 color_boundaries = [
     (np.array([170, 100, 100]), np.array([180, 255, 255])), # red
     (np.array([18, 180, 80]), np.array([30, 255, 255])), # yellow
-    (np.array([44, 100, 80]), np.array([56, 255, 255]))
+    (np.array([44, 100, 80]), np.array([56, 255, 255])), # green
+    (np.array([110, 50, 30]), np.array([125, 255, 255])) # blue
 ]
 def find_keypoints(hsv_image):
     keypoints = []
