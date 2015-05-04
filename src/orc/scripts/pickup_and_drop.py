@@ -3,39 +3,41 @@ import rospy
 import math
 from orc.msg import JointSet
 from sensor_msgs.msg import JointState
-from orc.srv import PickupBlock, PickupBlockResponse
+from orc.srv import PickupBlock, PickupBlockResponse, OpenCloseDoor
 
 state= "waiting"
 joint = JointSet()
 
 def pickupAndDrop(req):
     global state
+    print state,req.state
+    if req.state not in stateAngles or state != "waiting":
+        return
+    state = req.state
     loop = rospy.Rate(30)
-    state = "start"
-    while state != "stop":
+    while state != "waiting":
         loop.sleep()
-    state = "waiting"
     #calling door service
-    rospy.wait_for_service('open_close_door')
-    try:
-        open_close_door = rospy.ServiceProxy('open_close_door',OpenCloseDoor)
-        open_close_door(2)
-    except rospy.ServiceException, e:
-        print "Service call failed"
+    if req.state == "drop":
+        rospy.wait_for_service('open_close_door')
+        try:
+            open_close_door = rospy.ServiceProxy('open_close_door',OpenCloseDoor)
+            open_close_door(2)
+            open_close_door(1)
+        except rospy.ServiceException, e:
+            print "Service call failed"
     return PickupBlockResponse()
 
 def handleAngleMessage(jointState):
     global state,angleStates
     angleStates = dict(zip(jointState.name,jointState.position))
-    if (state == "stop" or state == "waiting"):
-        return
-    if state == "start" or checkAngles():
-    	# move to next state
-        state = nextState(state)
-    if (state == "stop"):
+    if state == "waiting":
         return
     for (name, angle) in zip(joint_names,stateAngles[state]):
         set_angle(name,angle)
+    if checkAngles():
+    	# move to next state
+        state = "waiting"
 
 angleStates = {
     "base_to_shoulder" : None,
@@ -60,7 +62,6 @@ def set_angle(name,angle):
     joint.angle=angle
     joint_pub_.publish(joint)
 
-states = ["waiting", "start", "findblock","grip","pickup","drop","stop"]
 joint_names = ["base_to_shoulder", "shoulder_to_wrist", "wrist_to_gripper"]
 stateAngles = {
     "findblock" : (-1.3,0.80,0.8),
@@ -68,12 +69,6 @@ stateAngles = {
     "pickup"    : ( 2.0,1.24,0.4),
     "drop"      : ( 2.0,1.24,0.8)
 }
-
-def nextState (state):
-    currentIndex = states.index(state)
-    if currentIndex == len(states)-1:
-    	raise "Foo"
-    return states[currentIndex + 1]
 
 def main():
 	global joint_pub_
