@@ -4,16 +4,19 @@ import math
 from orc.msg import JointSet
 from sensor_msgs.msg import JointState
 from orc.srv import PickupBlock, PickupBlockResponse, OpenCloseDoor
+from threading import Lock
 
 state= "waiting"
 joint = JointSet()
+l = Lock()
 
 def pickupAndDrop(req):
     global state
-    print state,req.state
-    if req.state not in stateAngles or state != "waiting":
-        return
-    state = req.state
+    with l:
+        if req.state not in stateAngles or state != "waiting":
+            return
+        state = req.state
+
     loop = rospy.Rate(30)
     while state != "waiting":
         loop.sleep()
