@@ -37,6 +37,10 @@ def handle_bump_msg(bump_msg):
     # call the pickup and drop service here
     if not paused:
         done = true
+        pickup_block()
+
+def pickup_block():
+    pass
 
 def visual_servo_service(req):
     global paused, done
