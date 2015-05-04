@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+  <node pkg="orc" name="visual_servo" type="visual-servo.py" />
+  <node pkg="orc" name="object_detector" type="object-detector.py"/>
+  <node pkg="orc" name="pickup_and_drop" type="pickup_and_drop.py" />
+  <node pkg="orc" name="state_machine" type="state_machine.py" />
+  <node pkg="orc" name="door_service" type="door_service.py" />
+</launch>
