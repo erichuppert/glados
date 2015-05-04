@@ -40,10 +40,29 @@ def handle_bump_msg(bump_msg):
         pickup_block()
 
 def pickup_block():
-    pass
+  states = ["findblock","grip","pickup","drop"]
+    for state in states:
+        rospy.wait_for_service('PickupAndDrop')
+        try:
+            pickupAndDrop = rospy.ServiceProxy('PickupAndDrop',PickupBlock)
+            pickupAndDrop(state)
+        except rospy.ServiceException, e:
+        print "Service call failed"
 
+
+
+def drop_arm():
+    # use the pick_up_and_drop service to move the arm to the down state
+    rospy.wait_for_service('PickupAndDrop')
+    try:
+        pickupAndDrop = rospy.ServiceProxy('PickupAndDrop',PickupBlock)
+            pickupAndDrop("findblock")
+        except rospy.ServiceException, e:
+        print "Service call failed"
+        
 def visual_servo_service(req):
     global paused, done
+    drop_arm()
     paused = false
     done = false
     loop = rospy.rate(30)

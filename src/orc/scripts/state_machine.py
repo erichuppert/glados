@@ -19,12 +19,20 @@ def change_wall_follow_state(val):
 def pickup_block():
     # this should synchronously call visual servoing to start, which should make the arm
     # pickup the block when the bump sensors are triggered
-    pass
-
-def change_door_state():
-    # this should synchronously open or close the gate using a service (that needs to be
-    # built)
-    pass
+   rospy.wait_for_service('VisualServo')
+    try:
+        visual_servo_service = rospy.ServiceProxy('VisualServo',visual_servo_service)
+            visual_servo_service()
+        except rospy.ServiceException, e:
+        print "Service call failed"    
+    
+def change_door_state(state):
+    rospy.wait_for_service('open_close_door')
+    try:
+        open_close_door = rospy.ServiceProxy('open_close_door',OpenCloseDoor)
+        open_close_door(2) # not sure about this.
+    except rospy.ServiceException, e:
+        print "Service call failed"
 
 def handle_nearest_block_msg(msg):
     change_wall_follow_state(WALL_FOLLOW_OFF)
