@@ -86,15 +86,15 @@ def change_state(new_state):
     global state, vel_pub
     state = new_state.data
     if state == SLEEPING:
-        waypoint_service(true,false,0,0,0)
+        waypoint_service(True,False,0,0,0)
         vel_pub.Publish(Twist())
 
 def main():
     global vel_pub,state,waypoint_service
     rospy.init_node("explorer")
 
-    rospy.wait_for_service("waypoint")
-    waypoint_service = rospy.ServiceProxy("waypoint",Waypoint)
+    rospy.wait_for_service("waypoints")
+    waypoint_service = rospy.ServiceProxy("waypoints",Waypoint)
 
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
 

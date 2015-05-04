@@ -26,7 +26,7 @@ def pickupAndDrop(req):
         try:
             open_close_door = rospy.ServiceProxy('open_close_door',OpenCloseDoor)
             open_close_door(2)
-            open_close_door(1)
+            open_close_door(0)
         except rospy.ServiceException, e:
             print "Service call failed"
     return PickupBlockResponse()

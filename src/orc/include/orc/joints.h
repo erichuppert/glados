@@ -40,9 +40,9 @@
 #define GRIPPER_ALPHA 911.52
 #define GRIPPER_BETA 1004.55
 
-#define GRIPPER_SPEED 0.2
+#define GRIPPER_SPEED 0.1
 
-#define DOOR_INDEX 3
+#define DOOR_INDEX 6
 #define DOOR_MIN_PWM 1700
 #define DOOR_MAX_PWM 2225
 
