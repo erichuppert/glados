@@ -13,8 +13,8 @@ DOOR_NAME = "door"
 door_angle = -0.1
 
 state_vals = {
-    0 : OPEN_ANGLE,
-    1 : CLOSED_ANGLE,
+    0 : CLOSED_ANGLE,
+    1 : OPEN_ANGLE,
     2 : HALF_ANGLE
 }
 
