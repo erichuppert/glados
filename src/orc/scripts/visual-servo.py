@@ -3,7 +3,7 @@ import rospy
 import math
 from geometry_msgs.msg import Twist, Point
 from orc.msg import TouchState
-from orc.srv import VisualServoResponse, VisualServo
+from orc.srv import VisualServoResponse, VisualServo, PickupBlock, PickupBlockRequest, PickupBlockResponse
 
 TARGET_BLOCK_SIZE = 1100
 ALIGNED_WIDTH = 250
@@ -41,13 +41,13 @@ def handle_bump_msg(bump_msg):
 
 def pickup_block():
   states = ["findblock","grip","pickup","drop"]
-    for state in states:
-        rospy.wait_for_service('PickupAndDrop')
-        try:
-            pickupAndDrop = rospy.ServiceProxy('PickupAndDrop',PickupBlock)
-            pickupAndDrop(state)
-        except rospy.ServiceException, e:
-        print "Service call failed"
+  for state in states:
+      rospy.wait_for_service('PickupAndDrop')
+      try:
+          pickupAndDrop = rospy.ServiceProxy('PickupAndDrop',PickupBlock)
+          pickupAndDrop(state)
+      except rospy.ServiceException, e:
+          print "Service call failed"
 
 
 
@@ -56,8 +56,8 @@ def drop_arm():
     rospy.wait_for_service('PickupAndDrop')
     try:
         pickupAndDrop = rospy.ServiceProxy('PickupAndDrop',PickupBlock)
-            pickupAndDrop("findblock")
-        except rospy.ServiceException, e:
+        pickupAndDrop("findblock")
+    except rospy.ServiceException, e:
         print "Service call failed"
         
 def visual_servo_service(req):

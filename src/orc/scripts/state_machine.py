@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import UInt16
 from geometry_msgs.msg import Point
+from orc.srv import OpenCloseDoorResponse, OpenCloseDoor, OpenCloseDoorRequest, VisualServo, VisualServoRequest
 
 blocks_held = 0
 
@@ -19,6 +20,7 @@ def change_wall_follow_state(val):
 def pickup_block():
     # this should synchronously call visual servoing to start, which should make the arm
     # pickup the block when the bump sensors are triggered
+
     rospy.wait_for_service('VisualServo')
     try:
         visual_servo_service = rospy.ServiceProxy('VisualServo',visual_servo_service)
@@ -53,6 +55,7 @@ def main():
     wall_follow_state_pub = rospy.Publisher("wall_follow_state", UInt16, queue_size=10)
     nearest_block_sub = rospy.Subscriber("nearest_block", Point, handle_nearest_block_msg, queue_size=1)
     change_wall_follow_state(WALL_FOLLOW_ON)
+    rospy.spin()
     
     
 if __name__ == "__main__":
