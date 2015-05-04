@@ -82,7 +82,7 @@ def new_waypoint(waypoint):
     q.put((waypoint.x,waypoint.y,waypoint.theta))
     if (waypoint.block):
         loop = rospy.Rate(30)
-        while not q.empty():
+        while not (q.empty() and current_wp is None):
             loop.sleep()
     return WaypointResponse()
 
