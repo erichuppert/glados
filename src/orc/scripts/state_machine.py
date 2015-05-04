@@ -9,13 +9,13 @@ blocks_held = 0
 DOOR_OPEN = 1
 DOOR_CLOSED = 0
 
-WALL_FOLLOW_ON = 1
-WALL_FOLLOW_OFF = 0
+EXPLORER_ON = 1
+EXPLORER_OFF = 0
 
-def change_wall_follow_state(val):
+def change_explorer_state(val):
     msg = UInt16()
     msg.data = val
-    wall_follow_state_pub.publish(msg)
+    explorer_state_pub.publish(msg)
 
 def pickup_block():
     # this should synchronously call visual servoing to start, which should make the arm
@@ -38,7 +38,7 @@ def change_door_state(state):
         print "Service call failed"
 
 def handle_nearest_block_msg(msg):
-    change_wall_follow_state(WALL_FOLLOW_OFF)
+    change_explorer_state(EXPLORER_OFF)
     # after we release the tower, we don't close the door, so make sure its closed before we put a block inside
     change_door_state(DOOR_CLOSED)
     if pickup_block():
@@ -46,15 +46,15 @@ def handle_nearest_block_msg(msg):
         if blocks_held == 6:
             change_door_state(DOOR_OPEN)
             blocks_held = 0
-    change_wall_follow_state(WALL_FOLLOW_ON)
+    change_explorer_state(EXPLORER_ON)
     
 
 def main():
-    global nearest_block_sub, wall_follow_state_pub
+    global nearest_block_sub, explorer_state_pub
     rospy.init_node('state_machine')
-    wall_follow_state_pub = rospy.Publisher("wall_follow_state", UInt16, queue_size=10)
+    explorer_state_pub = rospy.Publisher("explorer_state", UInt16, queue_size=10)
     nearest_block_sub = rospy.Subscriber("nearest_block", Point, handle_nearest_block_msg, queue_size=1)
-    change_wall_follow_state(WALL_FOLLOW_ON)
+    change_explorer_state(EXPLORER_ON)
     rospy.spin()
     
     
