@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 import rospy
 import math
-from geometry_msgs.msg import Twist, Point
+from geometry_msgs.msg import Twist, Point, PointStamped
 from orc.msg import TouchState
 from orc.srv import VisualServoResponse, VisualServo, PickupBlock, PickupBlockRequest, PickupBlockResponse, OpenCloseDoor
 
@@ -21,7 +21,8 @@ PICKING_UP = 2
 DONE = 3
 state = WAITING
 
-def handle_block_msg(block_msg):
+def handle_block_msg(stamped_block_msg):
+    block_msg = stamped_block_msg.point
     if state == SERVOING:
         angle_error = (block_msg.y - DESIRED_ROTATION)
         distance_error = (block_msg.x - DESIRED_DIST)
@@ -80,7 +81,7 @@ def visual_servo_service(req):
 def main():
     global vel_pub
     rospy.init_node("visual_servo")
-    nearest_block_sub = rospy.Subscriber("nearest_block", Point, handle_block_msg)
+    nearest_block_sub = rospy.Subscriber("nearest_block", PointStamped, handle_block_msg)
     bump_sub = rospy.Subscriber("touch", TouchState, handle_bump_msg)
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=5)
     s = rospy.Service('VisualServo', VisualServo, visual_servo_service)

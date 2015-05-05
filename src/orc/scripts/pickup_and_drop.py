@@ -12,6 +12,7 @@ l = Lock()
 
 def pickupAndDrop(req):
     global state
+    print "Moving arm to state: %s" % req.state
     with l:
         if req.state not in stateAngles or state != "waiting":
             return
@@ -28,7 +29,7 @@ def pickupAndDrop(req):
             open_close_door(2)
             open_close_door(0)
         except rospy.ServiceException, e:
-            print "Service call failed"
+            print "Door service call failed"
     return PickupBlockResponse()
 
 def handleAngleMessage(jointState):

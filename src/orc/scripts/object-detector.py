@@ -47,8 +47,8 @@ def handle_msg(image, pcl_data):
         else:
             nearest_block_count = 0
 
-def point_magnitude(point):
-    return sum([a**2 for a in [point.x, point.y, point.z]])
+def point_magnitude(ps):
+    return sum([a**2 for a in [ps.point.x, ps.point.y, ps.point.z]])
      
         
 def draw_keypoints(image, keypoints, color = (255, 0, 0)):
@@ -69,8 +69,8 @@ def keypoints_to_block_locations(keypoints, pcl_data):
         pt.point.x,pt.point.y,pt.point.z = keypoint
         pt_odom = listener.transformPoint("odom", pt)
         pt_base = listener.transformPoint("base_link", pt)
-        odom_locations.append(pt_odom.point)
-        base_locations.append(pt_base.point)
+        odom_locations.append(pt_odom)
+        base_locations.append(pt_base)
     return (odom_locations, base_locations)
 
 def read_point(width, height, data) :
@@ -84,7 +84,7 @@ color_boundaries = [
     (np.array([170, 100, 100]), np.array([180, 255, 255])), # red
     (np.array([18, 180, 80]), np.array([30, 255, 255])), # yellow
     (np.array([44, 100, 80]), np.array([56, 255, 255])), # green
-    (np.array([110, 50, 30]), np.array([125, 255, 255])) # blue
+    (np.array([110, 60, 40]), np.array([125, 255, 255])) # blue
 ]
 def find_keypoints(hsv_image):
     keypoints = []
@@ -111,9 +111,9 @@ def find_contours(img):
 BLOCK_DISTANCE_THRESHOLD = 0.3
 Z_THRESHOLD = 0.1
 def block_already_seen(block_location):
-    distance_evals = [(location.x-block_location.x)**2 + (location.y-block_location.y)**2 < BLOCK_DISTANCE_THRESHOLD
+    distance_evals = [(location.point.x-block_location.point.x)**2 + (location.point.y-block_location.point.y)**2 < BLOCK_DISTANCE_THRESHOLD
                       for location in block_locations]
-    return any(distance_evals) or block_location.z > Z_THRESHOLD
+    return any(distance_evals) or block_location.point.z > Z_THRESHOLD
 
 def save_block_location(location):
     block_location_pub.publish(location)
@@ -129,7 +129,7 @@ def main():
     nearest_block_pub = rospy.Publisher("nearest_block", PointStamped, queue_size=10)
     ts.registerCallback(handle_msg)
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
-    block_location_pub = rospy.Publisher("block_location", Point)
+    block_location_pub = rospy.Publisher("block_location", PointStamped)
     listener = tf.TransformListener();
 
     rospy.spin()
