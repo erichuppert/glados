@@ -55,7 +55,7 @@ def will_colide_with(point_msg):
     collision_service = rospy.ServiceProxy("collides", Collides)
     destination_pose_base_frame = get_destination_pose_msg(point_msg)
     odometry_pose = listener.transformPose("odom", destination_pose_base_frame)
-    destination_angle = math.atan2(destination_pose_base_frame.pose.orientation.y, destination_pose_base_frame.pose.orientation.x)
+    destination_angle = math.atan2(odometry_pose.pose.orientation.y, odometry_pose.pose.orientation.x)
     collision_response = collision_service(odometry_pose.pose.position.x, odometry_pose.pose.position.y, destination_angle)
     print "Collision detection result: " +  str(collision_response.collides)
     return collision_response.collides
