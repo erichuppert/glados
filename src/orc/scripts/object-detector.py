@@ -126,7 +126,7 @@ def main():
     image_sub = message_filters.Subscriber("/camera/rgb/image_raw", Image)
     pcl_sub = message_filters.Subscriber("/camera/depth/points", PointCloud2)
     ts = message_filters.ApproximateTimeSynchronizer([image_sub, pcl_sub], 1, 0.1)
-    nearest_block_pub = rospy.Publisher("nearest_block", Point, queue_size=10)
+    nearest_block_pub = rospy.Publisher("nearest_block", PointStamped, queue_size=10)
     ts.registerCallback(handle_msg)
     blob_image_pub = rospy.Publisher("blobs", Image, queue_size=10)
     block_location_pub = rospy.Publisher("block_location", Point)
