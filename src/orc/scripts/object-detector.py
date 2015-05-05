@@ -16,9 +16,10 @@ from roslib import message
 
 bridge = CvBridge()
 block_locations = []
+nearest_block_count = 0
 
 def handle_msg(image, pcl_data):
-    global blob_image_pub
+    global blob_image_pub,nearest_block_count
     # get the image and find the blobs
     cv_image = bridge.imgmsg_to_cv2(image, "bgr8")
     cv_image = cv2.GaussianBlur(cv_image, (5,5), 0)
@@ -39,14 +40,12 @@ def handle_msg(image, pcl_data):
             if not block_already_seen(location):
                 save_block_location(location)
         if base_block_locations:
-            closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
-            nearest_block_pub.publish(closest_block_point)
-            print closest_block_point
-            
+            nearest_block_count += 1
+            if nearest_block_count > 10:
+                closest_block_point = min(base_block_locations, key=lambda x: point_magnitude(x))
+                nearest_block_pub.publish(closest_block_point)
         else:
-            print "can't publish block location"
-            
-        
+            nearest_block_count = 0
 
 def point_magnitude(point):
     return sum([a**2 for a in [point.x, point.y, point.z]])
@@ -95,6 +94,8 @@ def find_keypoints(hsv_image):
 
     return keypoints
 
+PIXEL_AREA_THRESHOLD = 400
+
 # returns tuple that is (center_x, center_y, size)
 def find_contours(img):
     contours, _ = cv2.findContours(img.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_TC89_L1)
@@ -102,13 +103,13 @@ def find_contours(img):
     for contour in contours:
         moments = cv2.moments(contour)
         moment_area = cv2.contourArea(contour)
-        if moments['m00'] != 0 and moment_area > 150:
+        if moments['m00'] != 0 and moment_area > PIXEL_AREA_THRESHOLD:
             centers.append((int(moments['m10']/moments['m00']),
                             int(moments['m01']/moments['m00']), moment_area))
     return centers
 
 BLOCK_DISTANCE_THRESHOLD = 0.3
-Z_THRESHOLD = 0.2
+Z_THRESHOLD = 0.1
 def block_already_seen(block_location):
     distance_evals = [(location.x-block_location.x)**2 + (location.y-block_location.y)**2 < BLOCK_DISTANCE_THRESHOLD
                       for location in block_locations]
