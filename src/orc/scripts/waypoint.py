@@ -66,7 +66,7 @@ def odom_update(odometry):
         omega = ka*angle_to_wp
         rospy.loginfo("Distance: %f" % distance)
     elif abs(d_angle) > a_threshold and q.empty():
-        current_wp = (pose.position.x,pose.position.y,theta)
+        current_wp = (pose.position.x,pose.position.y,wp[2])
         v = 0
         rospy.loginfo(d_angle)
         omega = ka*d_angle
