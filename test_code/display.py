@@ -131,7 +131,7 @@ def update(scan,odom):
 
     (rx,ry) = (pose.position.x,pose.position.y)
 
-    simulator.stdin.write("%f %f %f\n" % (rx,ry,r_theta))
+    simulator.stdin.write("%f %f %f\n" % (rx+0.6,ry+0.6,r_theta))
     for r in scan.ranges:
         simulator.stdin.write("%f ")
     simulator.stdin.write("\n")
