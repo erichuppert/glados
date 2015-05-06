@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
     random_device rng;
 
     cin >> rx >> ry >> r_theta;
-    vector<Pose> particles(n_particles, {{fx,fy},f_theta});
+    vector<Pose> particles(n_particles, {{rx,ry},r_theta});
     Particles particle_filter(particles.begin(),particles.end(),DEV_PER_M,ROBOT_WIDTH,trans_particles);
     while(true) {
         double delta_x,delta_y,delta_theta;
@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
                 if (range < max_range) {
                     observations.push_back({range*cos(theta-r_theta),range*sin(theta-r_theta)});
                 }
-                ray = {{rx,ry}, {rx+range*cos(theta),ry+range*sin(theta)}};
+                Segment ray = {{rx,ry}, {rx+range*cos(theta),ry+range*sin(theta)}};
                 cout << "Segment " << (range < max_range ? "green":"red") << " " << ray.p1.x << " " << ray.p1.y << " " << ray.p2.x << " " << ray.p2.y << endl;
             }
             particle_filter.observe(field,observations);
