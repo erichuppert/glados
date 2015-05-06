@@ -10,10 +10,10 @@ from orc.srv import Waypoint,WaypointResponse,Collides
 
 l = Lock()
 straightness = 100
-d_threshold = 0.01
+d_threshold = 0.03
 a_threshold = 0.1
 ka = 0.5
-kd = 0.8
+kd = 0.6
 
 distance_error = lambda p1,p2: sqrt(sum((x1-x2)**2 for x1,x2 in zip(p1[:2],p2[:2])))
 angle_error = lambda p1,p2: atan2(sin(p2[2]-p1[2]), cos(p2[2]-p1[2]))
