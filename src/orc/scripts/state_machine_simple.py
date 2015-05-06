@@ -5,6 +5,7 @@ from geometry_msgs.msg import Point, PointStamped, PoseStamped, Quaternion, Pose
 from orc.srv import OpenCloseDoorResponse, OpenCloseDoor, OpenCloseDoorRequest, VisualServo, VisualServoRequest, Waypoint
 import tf
 import math
+from math import pi
 
 DOOR_OPEN = 1
 DOOR_CLOSED = 0
@@ -18,25 +19,28 @@ def change_door_state(state):
         print "Door service call failed"
 
 def go_to_point():
-    wp = [(0.6  , 0.6 ,  0      , True ),
-          (0.6  , 0.6 ,  0.785  , True ),
-          (1.5  , 0.6 ,  0.523  , True ),
-          (2.7  , 1.0 ,  0      , True ),
-          (3.0  , 1   , -0.785  , True ),
-          (3.7  , 1.0 ,  0      , True ),
-          (4.1  , 1.0 ,  0      , False),
-          (4.3  , 1.5 ,  0.800  , True ),
-          (4.3  , 2.3 ,  1.5707 , True ),
-          (3.5  , 2.6 ,  1.5707 , False),
-          (3.5  , 2.7 ,  3.141  , True ),
-          (2.8  , 1.5 , -1.5707 , False),
-          (2.0  , 1.5 ,  3.141  , False),
-          (1.7  , 2.0 ,  1.5707 , True ),
-          (1.5  , 2.0 ,  3.141  , True ),
-          (1.0  , 2.5 ,  1.5707 , True ),
-          (0.95 , 2.6 ,  2.35   , True )
+    wp = [(0.6  ,0.6 ,0           ,True  ) ,
+          (0.6  ,0.6 ,0.785       ,True  ) ,
+          (1.5  ,0.6 ,0.523       ,True  ) ,
+          (2.7  ,1.0 ,0           ,True  ) ,
+          (3.0  ,1   ,-0.785      ,True  ) ,
+          (3.7  ,1.0 ,0           ,True  ) ,
+          (4.27 ,1.0 ,0           ,False ) ,
+          (4.3  ,1.5 ,0.880       ,True  ) ,
+          (4.4  ,1.7 ,+1.57       ,False ) ,
+          (4.3  ,2.3 ,1.5707      ,True  ) ,
+          (4.3  ,2.7 ,pi/2.0+0.880 ,False ) ,
+          (3.5  ,2.7 ,3.141       ,True  ) ,
+          (2.65 ,2.6 ,-1.5707     ,False ) ,
+          (2.65 ,1.6 ,-1.5707     ,False ) ,
+          (2.0  ,1.6 ,3.141-pi/4.0 ,False ) ,
+          (1.7  ,2.0 ,0           ,True  ) ,
+          (1.5  ,2.0 ,3.141       ,True  ) ,
+          (1.0  ,2.0 ,3.141       ,False ) ,
+          (1.0  ,2.5 ,1.5707      ,True  ) ,
+          (0.95 ,2.6 ,2.35        ,True  )
     ]
-    wp = [(x-0.6,y-0.6,theta,servo) for (x,y,theta,servo) in wp]
+    wp = [(x-0.6,  y-0.6, theta,        servo) for (x, y, theta, servo) in wp]
 
     n_blocks = 0
 
