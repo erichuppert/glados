@@ -1,12 +1,17 @@
 <?xml version="1.0"?>
 
 <launch>
-  <node pkg="orc" name="visual_servo" type="visual-servo.py"/>
-  <node pkg="orc" name="object_detector" type="object-detector.py"/>
-  <node pkg="orc" name="door_service" type="door_service.py" />
+  <include file="$(find orc)/launch/basics.launch"/>
+
+  <include file="$(find orc)/launch/mapping2.launch"/>
   <node pkg="orc" name="collision_detector" type="local_collision.py" />
-  <node pkg="orc" name="waypoints" type="waypoint.py" />
+
+  <include file="$(find openni2_launch)/launch/openni2.launch"/>
+  <node pkg="orc" name="object_detector" type="object-detector.py"/>
+  <node pkg="orc" name="visual_servo" type="visual-servo.py"/>
+  <node pkg="orc" name="door_service" type="door_service.py" />
   <node pkg="orc" name="pickup_and_drop" type="pickup_and_drop.py" />
-  <node pkg="orc" name="explorer" type="explorer.py" />
-  <node pkg="orc" name="state_machine" type="state_machine.py" output="screen" />
+
+  <node pkg="orc" name="waypoints" type="waypoint.py" />
+  <node pkg="orc" name="state_machine" type="state_machine_simple.py" output="screen" />
 </launch>
