@@ -7,6 +7,13 @@ from math import *
 from subprocess import Popen,PIPE
 import re
 
+import rospy
+from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+
+from tf.transformations import euler_from_quaternion
+import message_filters
+
 # Robot Dimensions
 M_PER_INCH = 0.0254
 ROBOT_WIDTH_INCHES = 15
@@ -113,6 +120,25 @@ def get_input_objects():
         else:
             print inp,"INVALID SYNTAX"
 
+def update(scan,odom):
+    global simulator
+    pose = odom.pose.pose
+    quat = (pose.orientation.x,
+            pose.orientation.y,
+            pose.orientation.z,
+            pose.orientation.w)
+    _,_,r_theta = euler_from_quaternion(quat)
+
+    (rx,ry) = (pose.position.x,pose.position.y)
+
+    simulator.stdin.write("%f %f %f\n" % (rx,ry,r_theta))
+    for r in scan.ranges:
+        simulator.stdin.write("%f ")
+    simulator.stdin.write("\n")
+
+def spin_thread():
+    rospy.spin()
+
 def main(args):
     global drawables,done,simulator
     pygame.init()
@@ -126,45 +152,24 @@ def main(args):
     comm_thread = Thread(target=get_input_objects)
     comm_thread.start()
 
-    segments = []
-    start = True
+    rospy.init_node("localization")
+    scan_sub = message_filters.Subscriber("pcl_scan", LaserScan, queue_size=1)
+    odom_sub = message_filters.Subscriber("odom", Odometry, queue_size=1)
+    ts = message_filters.ApproximateTimeSynchronizer([scan_sub,odom_sub], 1, 0.1)
+    ts.registerCallback(update)
+    Thread(target=spin_thread).start()
 
     while not done:
-        mousex,mousey = pygame.mouse.get_pos()
         surface.fill(white)
-        list(pygame.draw.lines(surface,blue,False,s) for s in segments if len(s) >= 2)
         with surface_lock:
             list(d(surface) for d in drawables)
 
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
-            elif event.type == MOUSEBUTTONDOWN and len(args) > 1 and args[1] == "draw":
-                if event.button == 1:
-                    if start:
-                        segments.append([])
-                        start = False
-                    segments[-1].append(event.pos)
-                elif event.button == 3:
-                    start = True
 
-        simulator.stdin.write("%f %f\n" % screen_to_coords(mousex,mousey))
         fpsClock.tick(FPS)
         pygame.display.update()
-
-    # Codegen
-    if len(args) > 1 and args[1] == "draw":
-        print "void build_map() {"
-        for seg_points in segments:
-            prev_point = None
-            for point in seg_points:
-                if prev_point is not None:
-                    x1,y1 = screen_to_coords(*prev_point)
-                    x2,y2 = screen_to_coords(*point)
-                    print "    field.push_back({{%f,%f},{%f,%f}});" % (x1,y1,x2,y2)
-                    print "    cout << \"Segment blue %f %f %f %f\" << endl;" % (x1,y1,x2,y2)
-                prev_point = point
-        print "}"
 
     pygame.quit()
     simulator.terminate()

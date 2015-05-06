@@ -108,76 +108,46 @@ void build_map() {
 int main(int argc, char** argv) {
     build_map();
     double rx=0,ry=0,r_theta=0;
-    double fx=0,fy=0,f_theta=0;
     bool first = true;
 
     random_device rng;
-    normal_distribution<double> noise_gen(0,DEV_PER_M);
-    normal_distribution<double> laser_noise(0,0.001);
 
-    cin >> rx >> ry;
-    fx = rx;
-    fy = ry;
-    vector<Pose> particles(n_particles, {{fx,fy},r_theta});
+    cin >> rx >> ry >> r_theta;
+    vector<Pose> particles(n_particles, {{fx,fy},f_theta});
     Particles particle_filter(particles.begin(),particles.end(),DEV_PER_M,ROBOT_WIDTH,trans_particles);
-    int previous_visible = 0;
     while(true) {
         double delta_x,delta_y,delta_theta;
-        // Calculate robot position, and deltas
+        // Get robot position, calculate deltas
         //
         {
             double new_x, new_y, new_theta;
-            cin >> new_x >> new_y;
-            new_theta = r_theta;
+            cin >> new_x >> new_y >> new_theta;
+
             delta_x = new_x-rx;
             delta_y = new_y-ry;
-            if (delta_x * delta_x + delta_y * delta_y > 0.0001) {
-                new_theta = atan2(delta_y,delta_x);
-            }
             delta_theta = new_theta-r_theta;
             rx = new_x;
             ry = new_y;
             r_theta = new_theta;
+            particle_filter.transition({{delta_x,delta_y},delta_theta});
         }
 
-        // Calculate fake odometry
-        //
-        {
-            double r = sqrt(delta_x * delta_x + delta_y * delta_y);
-            r += noise_gen(rng)*r;
-            double delta_theta_noise = delta_theta + noise_gen(rng)*delta_theta;
-            f_theta += delta_theta_noise;
-
-            double delta_x_noise = r*cos(f_theta);
-            double delta_y_noise = r*sin(f_theta);
-            fx += delta_x_noise;
-            fy += delta_y_noise;
-            particle_filter.transition({{delta_x_noise,delta_y_noise},delta_theta_noise});
-        }
-
-        // Calculate the real sonar readings
+        // Get laser scan, calculate points
         //
         double max_range = 2.0;
-        int n_points = 40;
+        int n_points = 100;
         vector<Segment> visible_segments;
         {
             // We have n_points points going from -pi/2 to pi/2
             //
             vector<Point> observations;
-            double delta_angle = (M_PI/2.0-(-M_PI/2.0)) / (n_points-1);
+            double delta_angle = 2*M_PI /n_points;
             Point robot = {rx,ry};
             for (int i = 0; i < n_points; i++) {
-                double theta = r_theta + i*delta_angle + (-M_PI/2.0);
-                Segment ray = {{rx,ry},{rx+max_range*cos(theta),ry+max_range*sin(theta)}};
-                double range = max_range*2.0;
-                for (vector<Segment>::iterator j = field.begin(); j != field.end(); j++) {
-                    if(ray.intersects(*j)) {
-                        Point intersection = ray.intersection_point(*j);
-                        range = fmin(range,intersection.distance(robot));
-                    }
-                }
-                range = fmin(range+laser_noise(rng),max_range);
-                if (range < max_range-0.001) {
+                double theta = r_theta + i*delta_angle - M_PI;
+                double range;
+                cin >> range;
+                if (range < max_range) {
                     observations.push_back({range*cos(theta-r_theta),range*sin(theta-r_theta)});
                 }
                 ray = {{rx,ry}, {rx+range*cos(theta),ry+range*sin(theta)}};
@@ -187,7 +157,6 @@ int main(int argc, char** argv) {
         }
 
         cout << "Robot blue " << rx << " " << ry << " " << r_theta << endl;
-        cout << "Robot green " << fx << " " << fy << " " << f_theta << endl;
 
         for(vector<Pose>::iterator p = particle_filter.particles.begin();
             p != particle_filter.particles.end();
@@ -196,7 +165,7 @@ int main(int argc, char** argv) {
         }
         // Pose mean = particle_filter.mean();
         // cout << "Robot red " << mean.loc.x << " " << mean.loc.y << " " << mean.theta << endl;
-        int drawn = n_points+2+particle_filter.particles.size();
+        int drawn = n_points+1+particle_filter.particles.size();
         for(int i = 0; !first && i < drawn; i++) {
             cout << "RESET " << -drawn-1 << endl;
         }

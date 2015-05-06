@@ -45,7 +45,7 @@ void cloud_cb(const sensor_msgs::PointCloud2::ConstPtr& input) {
     output.header.stamp = (*input).header.stamp;
     output.header.frame_id = base_link;
 
-    unsigned int num_readings = 300;
+    unsigned int num_readings = 100;
     double laser_frequency = 10000;
 
     output.angle_min = -M_PI;
