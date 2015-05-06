@@ -6,7 +6,7 @@
 #include <map>
 #include <iterator>
 #include <random>
-#include <iostream>
+#include <mutex>
 
 struct Pose {
     Point loc;
@@ -51,7 +51,11 @@ public:
     inline void single(const Segment& visible) {
         singles.push_back(visible);
     }
-    void compute_scores(std::vector<Pose>& particles);
+    void scoring_thread(const std::vector<Pose>::const_iterator& start
+                        , const std::vector<Pose>::const_iterator& end
+                        , mutex& mtx
+        );
+    void compute_scores(const std::vector<Pose>& particles);
     bool operator()(const Pose& p1, const Pose& p2);
 };
 

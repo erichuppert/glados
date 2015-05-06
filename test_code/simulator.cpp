@@ -98,12 +98,12 @@ void build_map() {
     cout << "Segment blue 2.240000 3.050000 2.240000 1.830000" << endl;
 }
 
-#define x_min -5.0
-#define x_max  5.0
-#define y_min -5.0
-#define y_max  5.0
-#define n_particles 250
-#define trans_particles 4
+#define x_min 0.0
+#define x_max 4.6419
+#define y_min 0.0
+#define y_max 3.048
+#define n_particles 500
+#define trans_particles 6
 
 int main(int argc, char** argv) {
     build_map();
@@ -119,13 +119,6 @@ int main(int argc, char** argv) {
     fx = rx;
     fy = ry;
     vector<Pose> particles(n_particles, {{fx,fy},r_theta});
-    // vector<Pose> particles;
-    // for(int i = 0; i < n_particles; i++) {
-    //     double x = ((float)rng()-rng.min())/(rng.max()-rng.min()) * (x_max-x_min) + x_min;
-    //     double y = ((float)rng()-rng.min())/(rng.max()-rng.min()) * (y_max-y_min) + y_min;
-    //     double theta = ((float)rng()-rng.min())/(rng.max()-rng.min()) * 2*M_PI;
-    //     particles.push_back({{x,y},theta});
-    // }
     Particles particle_filter(particles.begin(),particles.end(),DEV_PER_M,ROBOT_WIDTH,trans_particles);
     int previous_visible = 0;
     while(true) {
