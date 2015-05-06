@@ -23,6 +23,7 @@ add_service_files(
   PickupBlock.srv
   VisualServo.srv
   Waypoint.srv
+  Collides.srv
 )
 
 generate_messages (

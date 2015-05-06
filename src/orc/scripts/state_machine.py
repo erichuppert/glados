@@ -14,10 +14,12 @@ DOOR_CLOSED = 0
 EXPLORER_ON = 1
 EXPLORER_OFF = 0
 
+TOWER_HEIGHT = 4
+
 def change_explorer_state(val):
     msg = UInt16()
     msg.data = val
-    # explorer_state_pub.publish(msg)
+    explorer_state_pub.publish(msg)
 
 def pickup_block():
     # this should synchronously call visual servoing to start, which should make the arm
@@ -71,7 +73,7 @@ def handle_nearest_block_msg(point_msg):
         if pickup_block():
             blocks_held += 1
             print "Now holding %d blocks" % blocks_held
-            if blocks_held == 6:
+            if blocks_held == TOWER_HEIGHT:
                 print "releasing tower now"
                 change_door_state(DOOR_OPEN)
                 blocks_held = 0

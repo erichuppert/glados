@@ -6,7 +6,7 @@ from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from Queue import Queue
 from math import atan2,sin,cos,sqrt,pi
-from orc.srv import Waypoint,WaypointResponse
+from orc.srv import Waypoint,WaypointResponse,Collides
 
 l = Lock()
 straightness = 100
@@ -34,6 +34,15 @@ def odom_update(odometry):
             return
         current_wp = current_wp or q.get_nowait()
         wp = current_wp
+
+    rospy.wait_for_service("collides")
+    collides = rospy.ServiceProxy("collides",Collides)
+    if collides(wp[0],wp[1],wp[2]).collides:
+        print "COLLISION"
+        with q.mutex,l:
+            q.queue.clear()
+            current_wp = None
+            return
 
     pose = odometry.pose.pose
     quat = (pose.orientation.x,

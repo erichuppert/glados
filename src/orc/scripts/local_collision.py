@@ -13,16 +13,16 @@ from math import *
 
 index_to_angle = lambda i,s: i * (s.angle_max - s.angle_min) / len(s.ranges) + s.angle_min
 
-HISTORY_MAX_SIZE = 10000
+HISTORY_MAX_SIZE = 200
 history = []
 odom = None
 l = Lock()
 
 # Keep track of points/odometry
 #
-def update(scan,odom):
+def update(scan,odometry):
     global history,odom
-    pose = odom.pose.pose
+    pose = odometry.pose.pose
     quat = (pose.orientation.x,
             pose.orientation.y,
             pose.orientation.z,
@@ -54,11 +54,16 @@ ANGLE_DELTA = 0.1
 
 ang = lambda theta: (theta+pi)%(2*pi) - pi
 def transform((ox,oy),theta,(x,y)):
+    theta = -theta
     x,y = x-ox,y-oy
     return (x*cos(theta)-y*sin(theta), x*sin(theta) + y*cos(theta))
 
-def collides(x,y,theta):
+def collides(req):
     global odom,history
+    x,y,theta = req.x,req.y,req.theta
+    print "Request for collision detection received"
+    if odom is None:
+        return CollidesResponse(False)
     with l:
         hist = history[:]
         rx,ry,r_theta = odom
@@ -72,27 +77,29 @@ def collides(x,y,theta):
         t_x,t_y = transform((rx,ry), d_theta, (x2,y2))
         # Check if trajectory collides
         if x_min < t_x < x_max and y_min < t_y < y_max:
-            return CollidesResponse(False)
+            print "Collides on trajectory, point: ", x2, y2, t_x, t_y
+            return CollidesResponse(True)
         # Check if we can rotate at the destination
-        s = ang(d_theta-r_theta) > 0 ? 1:-1
+        s = 1 if ang(d_theta-r_theta) > 0 else -1
         n_angles = int(abs((d_theta-r_theta)/ANGLE_DELTA))
         for delta in range(n_angles):
             t_x,t_y = transform((rx,ry), r_theta + s*delta*ANGLE_DELTA, (x2,y2))
             if -ROBOT_LENGTH/2.0 < t_x < ROBOT_LENGTH/2.0 and -ROBOT_WIDTH/2.0 < t_y < ROBOT_WIDTH/2.0:
-                return CollidesResponse(False)
+                print "Collides on rotation, point: ", x2, y2, t_x, t_y
+                return CollidesResponse(True)
         # Check if robot can rotate
-        s = ang(theta-d_theta) > 0 ? 1:-1
+        s = 1 if ang(theta-d_theta) > 0 else -1
         n_angles = int(abs((theta-d_theta)/ANGLE_DELTA))
-        for delta in range(n_angles)):
+        for delta in range(n_angles):
             t_x,t_y = transform((x,y), d_theta + s*delta*ANGLE_DELTA, (x2,y2))
             if -ROBOT_LENGTH/2.0 < t_x < ROBOT_LENGTH/2.0 and -ROBOT_WIDTH/2.0 < t_y < ROBOT_WIDTH/2.0:
-                return CollidesResponse(False)
-    return CollidesResponse(True)
+                return CollidesResponse(True)
+    return CollidesResponse(False)
 
 def main():
     rospy.init_node("local_collision")
 
-    scan_sub = message_filters.Subscriber("pcl_scan", LaserScan, queue_size=1)
+    scan_sub = message_filters.Subscriber("scan", LaserScan, queue_size=1)
     odom_sub = message_filters.Subscriber("odom", Odometry, queue_size=1)
     ts = message_filters.ApproximateTimeSynchronizer([scan_sub,odom_sub], 1, 0.1)
     ts.registerCallback(update)
