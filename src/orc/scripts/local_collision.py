@@ -59,6 +59,7 @@ def transform((ox,oy),theta,(x,y)):
     return (x*cos(theta)-y*sin(theta), x*sin(theta) + y*cos(theta))
 
 def collides(req):
+    return CollidesResponse(False)
     global odom,history
     x,y,theta = req.x,req.y,req.theta
     print "Request for collision detection received"
