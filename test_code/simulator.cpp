@@ -107,12 +107,11 @@ void build_map() {
 
 int main(int argc, char** argv) {
     build_map();
-    double rx=0,ry=0,r_theta=0;
+    double rx=0.6,ry=0.6,r_theta=0;
     bool first = true;
 
     random_device rng;
 
-    cin >> rx >> ry >> r_theta;
     vector<Pose> particles(n_particles, {{rx,ry},r_theta});
     Particles particle_filter(particles.begin(),particles.end(),DEV_PER_M,ROBOT_WIDTH,trans_particles);
     while(true) {

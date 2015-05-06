@@ -25,7 +25,7 @@ x_min = 0.0
 x_max = 4.6419
 y_min = 0.0
 y_max = 3.048
-width,height = 1500,1500
+width,height = 500,500
 coords_to_screen = lambda x,y: (
     int((x-x_min)*width/(x_max-x_min)),
     int((y_max-y)*height/(y_max-y_min))
@@ -133,7 +133,7 @@ def update(scan,odom):
 
     simulator.stdin.write("%f %f %f\n" % (rx+0.6,ry+0.6,r_theta))
     for r in scan.ranges:
-        simulator.stdin.write("%f ")
+        simulator.stdin.write("%f " % r)
     simulator.stdin.write("\n")
 
 def spin_thread():
