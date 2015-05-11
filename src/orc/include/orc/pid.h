@@ -9,8 +9,8 @@
 
 #define MAX(A,B) ((A)>(B)?(A):(B))
 #define MIN(A,B) ((A)<(B)?(A):(B))
-#define MAX_SPEED 0.1
-#define MIN_SPEED -0.1
+#define MAX_SPEED 0.07
+#define MIN_SPEED -0.07
 
 class PID {
 private:

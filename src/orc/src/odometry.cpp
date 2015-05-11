@@ -50,8 +50,8 @@ void MotorStatus::update() {
         return;
     }
 
-    int32_t left = uorc_encoder_get_position(&left_encoder, &status);
-    int32_t right = uorc_encoder_get_position(&right_encoder, &status);
+    int32_t left = uorc_encoder_get_position(&left_encoder, &status)/0.9887;
+    int32_t right = uorc_encoder_get_position(&right_encoder, &status)/0.9887; //magic
     left_angle = ANGLE(left);
     right_angle = ANGLE(right);
 

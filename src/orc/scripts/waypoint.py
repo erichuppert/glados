@@ -10,7 +10,7 @@ from orc.srv import Waypoint,WaypointResponse,Collides
 
 l = Lock()
 straightness = 100
-d_threshold = 0.03
+d_threshold = 0.01
 a_threshold = 0.1
 ka = 0.5
 kd = 0.6

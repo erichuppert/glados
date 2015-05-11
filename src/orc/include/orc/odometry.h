@@ -10,7 +10,7 @@
 #define GEAR_RATIO            65.5                                           // (MOTOR REV)/REV
 #define TICKS_PER_REVOLUTION  ENCODER_RESOLUTION*GEAR_RATIO                  // TICKS/REV
 #define WHEEL_METERS_PER_TICK (WHEEL_RADIUS)*(2*M_PI)/(TICKS_PER_REVOLUTION) // M/TICK
-#define WHEEL_BASE            0.38                                           // M
+#define WHEEL_BASE            0.381                                          // M
 
 #define ODO_FREQ              30                                             // UPDATES/SEC
 
